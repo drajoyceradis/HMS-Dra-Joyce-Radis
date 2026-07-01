@@ -111,5 +111,20 @@ textarea{resize:vertical;min-height:58px}
   <div class="footer">Uso pessoal da médica assistente · Dra. Joyce Radis de Souza de Oliveira · CRM-ES 21188</div>
 </div>
 <script src="app.js"></script>
+<script>
+(function(){
+  function setView(v){
+    document.body.setAttribute('data-mobile-view',v);
+    var a=document.getElementById('showForm');
+    var b=document.getElementById('showOutput');
+    if(a&&b){a.classList.toggle('on',v==='form');b.classList.toggle('on',v==='output');}
+  }
+  var a=document.getElementById('showForm');
+  var b=document.getElementById('showOutput');
+  if(a)a.addEventListener('click',function(){setView('form')});
+  if(b)b.addEventListener('click',function(){setView('output')});
+  setView('form');
+})();
+</script>
 </body>
 </html>
