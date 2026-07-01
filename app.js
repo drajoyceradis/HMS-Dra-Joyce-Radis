@@ -1,5 +1,7 @@
 const $=id=>document.getElementById(id);
-const clean=t=>String(t||'').replace(/[\u201C\u201D]/g,'"').replace(/[\u2018\u2019]/g,"'").replace(/[\u2013\u2014]/g,'-').replace(/[•●▪‣⁃*]/g,'-').replace(/[<>]/g,'').replace(/&/g,'E').replace(/https?:\/\/\S+/gi,'').replace(/Chave de acesso:\s*\S+/gi,'').replace(/Resultado completo acesse:\s*\S+/gi,'').replace(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE00}-\u{FE0F}]/gu,'').replace(/[^\S\r\n]+/g,' ').replace(/[ \t]+\n/g,'\n').replace(/\n{3,}/g,'\n\n').trim();
+const clean=t=>String(t||'').replace(/[\u201C\u201D]/g,'"').replace(/[\u2018\u2019]/g,"'").replace(/[\u2013\u2014]/g,'-').replace(/[•●▪‣⁃*]/g,'-').replace(/[<>]/g,'').replace(/&/g,'E').replace(/https?:\/\/\S+/gi,'').replace(/Chave de acesso:\s*\S+/gi,'').replace(/Resultado completo acesse:\s*\S+/gi,'').replace(/Assinado eletronicamente por[^\n]+/gi,'').replace(/Responsável técnico:[^\n]+/gi,'').replace(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE00}-\u{FE0F}]/gu,'').replace(/[^\S
+]+/g,' ').replace(/[ \t]+\n/g,'\n').replace(/\n{3,}/g,'\n\n').trim();
+const flat=t=>clean(t).replace(/\s+/g,' ').trim();
 const up=t=>clean(t).toUpperCase();
 const na=v=>clean(v)||'NA';
 const fmtLines=x=>{x=up(x);if(!x)return '- NA';return x.split('\n').map(s=>clean(s)).filter(Boolean).map(s=>s.startsWith('-')?s:'- '+s).join('\n')};
@@ -29,13 +31,73 @@ function exam(){return ['- GERAL: '+na(up(state.geral)),'- ACV: '+na(up(state.ac
 function nota(){let t=[];t.push('## '+state.modo+' PRONTO SOCORRO - HOSPITAL MERIDIONAL SERRA ##','');t.push('# QP: "'+(up(state.qp)||'[QUEIXA PRINCIPAL]')+'"','');t.push('# HDA:'); if(state.modo==='REAVALIAÇÃO'){t.push('HDA DA ADMISSÃO: '+hda(),'');t.push('# EM TEMPO:');t.push(na(up(state.emtempo)));}else t.push(hda());t.push('','# HPP:','- COMORBIDADES: '+na(up(state.comorb)),'- ALERGIAS: '+na(up(state.alerg)),medBlock(),'','# SINAIS VITAIS:',vit(),'','# EXAME FÍSICO:',exam());if(state.modo==='REAVALIAÇÃO'){t.push('','# EXAMES COMPLEMENTARES:',na(up(state.excomp||transformExams(state.raw))))}t.push('','# HIPÓTESE DIAGNÓSTICA:',fmtLines(state.hd),'','# CONDUTA:',fmtLines(state.conduta));return clean(t.join('\n'))}
 function adc(){const s=up(state.status)||'[STATUS]';let base='PACIENTE REAVALIADO(A), HEMODINAMICAMENTE ESTÁVEL NO MOMENTO, SEM SINAIS DE INSTABILIDADE CLÍNICA IMEDIATA. '+(state.emtempo?up(state.emtempo)+' ':'');if(/ALTA/.test(s))base+='APRESENTA CONDIÇÕES CLÍNICAS PARA ALTA NO MOMENTO. ORIENTADOS SINAIS DE ALARME, RETORNO IMEDIATO SE PIORA, ADESÃO À PRESCRIÇÃO E SEGUIMENTO AMBULATORIAL. ALTA MÉDICA.';else base+='MANTIDO(A) EM '+s+' PARA SEGUIMENTO, REAVALIAÇÃO E DEFINIÇÃO DE CONDUTA.';return clean(base)}
 function passagem(){return clean(['SITUAÇÃO:','- PACIENTE EM '+(up(state.status)||'ATENDIMENTO')+' POR '+(up(state.qp)||'[QUEIXA]')+'.','','BACKGROUND:','- '+hda(),'- COMORBIDADES: '+na(up(state.comorb))+'.','','AVALIAÇÃO:','- SINAIS VITAIS: FC '+na(up(state.fc))+' / FR '+na(up(state.fr))+' / STO2 '+na(up(state.sat))+' / PA '+na(up(state.pa))+' / TAX '+na(up(state.tax))+'.','- HD: '+na(up(state.hd)).replace(/\n/g,'; ')+'.','','RECOMENDAÇÃO:',fmtLines(state.conduta)].join('\n'))}
-function valAfter(label,t){const re=new RegExp(label+'\\s+([0-9][0-9.,]*)','i');const m=t.match(re);return m?m[1]:''}
-function transformExams(raw){let t=clean(raw);if(!t)return '';let out=[];if(/HEMOGRAMA|Hemoglobina|Leucócitos|Plaquetas/i.test(t)){let hb=valAfter('Hemoglobina',t),ht=valAfter('Hematócrito',t),leu=valAfter('Leucócitos',t),bast=valAfter('Bastonetes',t),seg=valAfter('Segmentados',t),plaq=(t.match(/Contagem de Plaquetas\s+([0-9.]+)/i)||[])[1];let hemo=[];if(hb)hemo.push('HB '+hb);if(ht)hemo.push('HT '+ht);if(leu)hemo.push('LEUCO '+leu);if(bast)hemo.push('BAST '+bast+'%');if(seg)hemo.push('SEG '+seg+'%');if(plaq)hemo.push('PLAQ '+plaq);if(hemo.length)out.push('- HEMOGRAMA: '+hemo.join(' / ')+'.')}
-let cr=(t.match(/CREATININA[\s\S]{0,100}?RESULTADO\s+([0-9.,]+)/i)||[])[1];let rfg=(t.match(/TAXA FILTRAÇÃO GLOMERULAR\s+([^\n.]+(?:mL\/min[^\s]*)?)/i)||[])[1];if(cr||rfg)out.push('- FUNÇÃO RENAL: CREATININA '+(cr||'NA')+(rfg?' / RFG '+clean(rfg):'')+'.');let ureia=(t.match(/UREIA\s+([0-9.,]+)\s*mg\/dL/i)||[])[1];if(ureia)out.push('- UREIA: '+ureia+' MG/DL.');let tgp=(t.match(/TRANSAMINASE GLUTAMICO PIRUVICA[\s\S]{0,100}?RESULTADO\s+([0-9.,]+)/i)||[])[1];let tgo=(t.match(/TRANSAMINASE GLUTAMICO OXALACETICA[\s\S]{0,100}?RESULTADO\s+([0-9.,]+)/i)||[])[1];if(tgo||tgp)out.push('- TRANSAMINASES: TGO '+(tgo||'NA')+' / TGP '+(tgp||'NA')+'.');let pcr=(t.match(/PROTEINA "?C"? REATIVA[\s\S]{0,100}?RESULTADO\s+([0-9.,]+)/i)||[])[1];if(pcr)out.push('- PCR: '+pcr+' MG/L.');let ami=(t.match(/AMILASE SERICA[\s\S]{0,100}?RESULTADO\s+([0-9.,]+)/i)||[])[1];let lip=(t.match(/LIPASE[\s\S]{0,100}?RESULTADO\s+([0-9.,]+)/i)||[])[1];if(ami||lip)out.push('- ENZIMAS PANCREÁTICAS: AMILASE '+(ami||'NA')+' / LIPASE '+(lip||'NA')+'.');if(/EAS|ELEMENTOS ANORMAIS|SEDIMENTO URINARIO/i.test(t)){let ph=(t.match(/pH\s+([0-9.,]+)/i)||[])[1],dens=(t.match(/DENSIDADE\s+([0-9.]+)/i)||[])[1],prot=(t.match(/PROTEINA\s+(\+\+\+|\+\+|\+|Não detectado|Normal)/i)||[])[1],nit=(t.match(/NITRITO\s+([^\s]+(?: Detectado)?)/i)||[])[1],leuc=(t.match(/LEUCOCITO\s+([^\s]+(?: Detectado)?)/i)||[])[1],pio=(t.match(/PIOCITOS\s+([0-9]+)/i)||[])[1],hem=(t.match(/HEMACIAS\s+([^\s]+)/i)||[])[1],flora=(t.match(/FLORA BACTERIANA\s+([^\n]+?)\s+(?:Escassa|Ausente|CRISTAIS|Método)/i)||[])[1];out.push('- EAS: PH '+(ph||'NA')+' / DENSIDADE '+(dens||'NA')+' / PROTEÍNA '+(prot||'NA')+' / NITRITO '+(nit||'NA')+' / LEUCÓCITO '+(leuc||'NA')+' / PIÓCITOS '+(pio||'NA')+' / HEMÁCIAS '+(hem||'NA')+' / FLORA '+clean(flora||'NA')+'.')}
-if(/TOMOGRAFIA/i.test(t)){let title=(t.match(/TOMOGRAFIA[^\n]+?(?= TÉCNICA| TECNICA|$)/i)||[])[0]||'TOMOGRAFIA';let imp=(t.match(/IMPRESSÃO DIAGNÓSTICA\s+([\s\S]*?)(?:Resultado completo|Responsável técnico|$)/i)||[])[1];out.push('- '+up(title)+': '+(imp?up(imp):'LAUDO DESCRITIVO COLADO. REVISAR IMPRESSÃO DIAGNÓSTICA.')+'.')}
-if(/RX|RAIO|TÓRAX|TORAX/i.test(t)&&/INTERPRETAÇÃO|INTERPRETACAO/i.test(t)){let title=(t.match(/RX[^:]+/i)||[])[0]||'RX';let inter=(t.match(/INTERPRETAÇ(?:ÃO|AO):\s*([\s\S]*?)$/i)||[])[1];out.push('- '+up(title)+': '+(inter?up(inter):'REVISAR LAUDO')+'.')}
-if(/ECG|ELETROCARDIOGRAMA/i.test(t)){let imp=(t.match(/(?:CONCLUSÃO|CONCLUSAO|INTERPRETAÇÃO|INTERPRETACAO|LAUDO)[:\s]+([\s\S]*?)$/i)||[])[1]||t;out.push('- ECG: '+up(imp)+'.')}
-return clean(out.join('\n'))||'- EXAMES COMPLEMENTARES: NÃO FOI POSSÍVEL TRANSFORMAR AUTOMATICAMENTE. REVISAR TEXTO CRU.'}
-function refresh(){let txt=active==='nota'?nota():active==='exames'?transformExams(state.raw):active==='adc'?adc():passagem();if(!userEdited)$('out').value=txt;$('alert').classList.toggle('show',!!Object.values(state.red).find(Boolean)&&/ALTA/i.test(state.status));$('hint').textContent=active==='exames'?'Cole exames crus no formulário e use o transformador. Saída já vem em padrão de evolução.':'Texto editável antes de copiar.'}
+function pick(re,t){const m=t.match(re);return m?clean(m[1]):''}
+function pushIf(out,label,parts){const vals=parts.filter(Boolean);if(vals.length)out.push('- '+label+': '+vals.join(' / ')+'.')}
+function summarize(text){return clean(text).replace(/\s*\.\s*/g,'. ').replace(/\n+/g,' ').trim()}
+function transformExams(raw){
+  let source=String(raw||'');
+  if(!source.trim()) return '';
+  let t=clean(source);
+  let f=flat(source);
+  let out=[];
+
+  let hb=pick(/Hemoglobina\s*([0-9.,]+)/i,f);
+  let ht=pick(/Hematócrito\s*([0-9.,]+)/i,f);
+  let leuco=pick(/Leucócitos\s*([0-9.]+)/i,f);
+  let bast=pick(/Bastonetes\s*([0-9.,]+)/i,f);
+  let seg=pick(/Segmentados\s*([0-9.,]+)/i,f);
+  let eos=pick(/Eosinófilos\s*([0-9.,]+)/i,f);
+  let baso=pick(/Basófilos\s*([0-9.,]+)/i,f);
+  let linf=pick(/Linfócitos Típicos\s*([0-9.,]+)/i,f);
+  let mono=pick(/Monócitos\s*([0-9.,]+)/i,f);
+  let plaq=pick(/Contagem de Plaquetas\s*([0-9.]+)/i,f);
+  pushIf(out,'HEMOGRAMA',[hb&&'HB '+hb,ht&&'HT '+ht,leuco&&'LEUCO '+leuco,bast&&'BAST '+bast+'%',seg&&'SEG '+seg+'%',eos&&'EOS '+eos+'%',baso&&'BASO '+baso+'%',linf&&'LINF '+linf+'%',mono&&'MONO '+mono+'%',plaq&&'PLAQ '+plaq]);
+
+  let cr=pick(/CREATININA\s+RESULTADO\s*([0-9.,]+)/i,f);
+  let rfg=pick(/TAXA FILTRAÇÃO GLOMERULAR\s*([^\n]+?mL\/min\/1[.,]73m2|SUPERIOR A \d+)/i,f);
+  let ureia=pick(/UREIA\s*([0-9.,]+)\s*mg\/dL/i,f);
+  let bun=pick(/NITROGENIO UREICO\s*([0-9.,]+)/i,f);
+  pushIf(out,'FUNÇÃO RENAL',[cr&&'CREATININA '+cr,ureia&&'UREIA '+ureia,bun&&'NU '+bun,rfg&&'RFG '+rfg.toUpperCase()]);
+
+  let tgp=pick(/TRANSAMINASE GLUTAMICO PIRUVICA\s+RESULTADO\s*([0-9.,]+)/i,f);
+  let tgo=pick(/TRANSAMINASE GLUTAMICO OXALACETICA\s+RESULTADO\s*([0-9.,]+)/i,f);
+  let pcr=pick(/PROTEINA\s+"?C"?\s+REATIVA\s+RESULTADO\s*([0-9.,]+)/i,f);
+  let amilase=pick(/AMILASE SERICA\s+RESULTADO\s*([0-9.,]+)/i,f);
+  let lipase=pick(/LIPASE\s+RESULTADO\s*([0-9.,]+)/i,f);
+  pushIf(out,'BIOQUÍMICA',[tgo&&'TGO '+tgo,tgp&&'TGP '+tgp,pcr&&'PCR '+pcr+' MG/L',amilase&&'AMILASE '+amilase,lipase&&'LIPASE '+lipase]);
+
+  let ph=pick(/pH\s*([0-9.,]+)/i,f);
+  let dens=pick(/DENSIDADE\s*([0-9.]+)/i,f);
+  let prot=pick(/PROTEINA\s*(\+\+\+|\+\+|\+|NÃO DETECTADO|NORMAL)/i,f);
+  let nit=pick(/NITRITO\s*(NÃO DETECTADO|DETECTADO|NORMAL)/i,f);
+  let leucUr=pick(/LEUCOCITO\s*(NÃO DETECTADO|DETECTADO|NORMAL)/i,f);
+  let hemac=pick(/HEMACIAS\s*(AUSENTE\(S\)|[0-9.,]+)/i,f);
+  let pioc=pick(/PIOCITOS\s*([0-9.,]+)/i,f);
+  let muco=pick(/MUCO\s*(\+\+\+|\+\+|\+|AUSENTE)/i,f);
+  let flora=pick(/FLORA BACTERIANA\s*([A-ZÀ-Úa-zà-ú ]+?)(?= CRISTAIS| CILINDROS| FUNGOS| PROTOZOARIO| Observações gerais| Método)/i,f);
+  pushIf(out,'EAS',[ph&&'PH '+ph,dens&&'DENS '+dens,prot&&'PROT '+prot.toUpperCase(),nit&&'NITRITO '+nit.toUpperCase(),leucUr&&'LEUC '+leucUr.toUpperCase(),hemac&&'HEMÁCIAS '+hemac.toUpperCase(),pioc&&'PIÓCITOS '+pioc,muco&&'MUCO '+muco.toUpperCase(),flora&&'FLORA '+flora.toUpperCase()]);
+
+  if(/TOMOGRAFIA COMPUTADORIZADA/i.test(f)){
+    let title=pick(/(TOMOGRAFIA COMPUTADORIZADA DE [A-ZÀ-Úa-zà-ú ]+? COM CONTRASTE)/i,f) || 'TOMOGRAFIA COMPUTADORIZADA';
+    let imp=pick(/IMPRESSÃO DIAGNÓSTICA\s*([\s\S]*?)(?=HEMOGRAMA|RX DO TÓRAX|$)/i,t);
+    if(imp){
+      let pieces=imp.split('.').map(x=>summarize(x)).filter(Boolean).map(x=>x.toUpperCase());
+      out.push('- '+title.toUpperCase()+': '+pieces.join(' / ')+'.');
+    }else out.push('- '+title.toUpperCase()+': REVISAR IMPRESSÃO DIAGNÓSTICA.');
+  }
+
+  if(/RX DO TÓRAX|RX DE TÓRAX|RAIO-X DO TÓRAX/i.test(f)){
+    let inter=pick(/INTERPRETAÇ(?:ÃO|AO):\s*([\s\S]*?)$/i,t) || pick(/RX DO TÓRAX PA:\s*([\s\S]*?)INTERPRETAÇ(?:ÃO|AO)/i,t);
+    if(inter) out.push('- RX DE TÓRAX: '+summarize(inter).toUpperCase()+'.');
+  }
+
+  if(/ECG|ELETROCARDIOGRAMA/i.test(f)){
+    let ecg=pick(/(?:CONCLUSÃO|CONCLUSAO|INTERPRETAÇÃO|INTERPRETACAO|LAUDO)[:\s]+([\s\S]*?)$/i,t);
+    if(ecg) out.push('- ECG: '+summarize(ecg).toUpperCase()+'.');
+  }
+
+  return clean(out.join('\n')) || '- EXAMES COMPLEMENTARES: NÃO FOI POSSÍVEL TRANSFORMAR AUTOMATICAMENTE. REVISAR TEXTO CRU.';
+}
+function refresh(){let txt=active==='nota'?nota():active==='exames'?transformExams(state.raw):active==='adc'?adc():passagem();if(!userEdited)$('out').value=txt;$('alert').classList.toggle('show',!!Object.values(state.red).find(Boolean)&&/ALTA/i.test(state.status));$('hint').textContent=active==='exames'?'Cole exames crus do sistema. O parser agora tenta resumir TC, hemograma, função renal, bioquímica, EAS e RX em formato compacto.':'Texto editável antes de copiar.'}
 document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{active=t.dataset.tab;document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x===t));userEdited=false;refresh()});$('out').oninput=()=>userEdited=true;$('regen').onclick=()=>{userEdited=false;refresh()};$('copy').onclick=async()=>{try{await navigator.clipboard.writeText($('out').value)}catch(e){$('out').select();document.execCommand('copy')}const b=$('copy');b.textContent='Copiado';b.classList.add('ok');setTimeout(()=>{b.textContent='Copiar';b.classList.remove('ok')},1300)};$('reset').onclick=()=>{if(confirm('Resetar tudo?')){Object.keys(state).forEach(k=>{if(k==='modo')state[k]='EVOLUÇÃO';else if(k==='acomp')state[k]='DESACOMPANHADO(A)';else if(k==='red')state[k]={};else state[k]=''});render();refresh()}};$('expand').onclick=()=>document.querySelectorAll('.card').forEach(c=>c.classList.remove('closed'));$('collapse').onclick=()=>document.querySelectorAll('#form .card').forEach(c=>c.classList.add('closed'));
 render();refresh();
