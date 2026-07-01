@@ -3,328 +3,112 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gerador de Evolução PS - Meridional Serra</title>
+<title>Gerador HMS - Meridional Serra</title>
 <style>
-  :root{
-    --navy:#0f2540; --navy-2:#17385f; --ink:#0c1a2b; --line:#d7dee7;
-    --paper:#f6f8fb; --white:#ffffff; --coral:#e8613c; --coral-soft:#fdeee9;
-    --muted:#5c6b7c; --ok:#1c7a52; --ok-soft:#e5f3ec; --warn:#b23a2e; --warn-soft:#fbe9e7;
-    --focus:#2f6fb0;
-  }
-  *{box-sizing:border-box}
-  html,body{margin:0;padding:0}
-  body{
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    background:var(--paper); color:var(--ink); font-size:15px; line-height:1.45;
-  }
-  .wrap{max-width:1280px; margin:0 auto; padding:0 16px 64px}
-  header.top{
-    background:linear-gradient(180deg,var(--navy),var(--navy-2));
-    color:#fff; padding:14px 0; border-bottom:3px solid var(--coral);
-    position:sticky; top:0; z-index:20;
-  }
-  header.top .wrap{padding-top:0;padding-bottom:0}
-  .brand{display:flex; align-items:center; gap:12px; flex-wrap:wrap}
-  .brand h1{font-size:17px; margin:0; font-weight:700; letter-spacing:.2px}
-  .brand .sub{font-size:12px; color:#c7d5e6; font-weight:500}
-  .privacy{
-    background:var(--coral-soft); border:1px solid #f3c9bd; color:#8a2f1c;
-    border-radius:8px; padding:9px 12px; margin:14px 0; font-size:12.5px; font-weight:600;
-    display:flex; gap:8px; align-items:flex-start;
-  }
-  .privacy b{color:var(--warn)}
-  .grid{display:grid; grid-template-columns:1fr 1fr; gap:18px; align-items:start}
-  @media(max-width:960px){ .grid{grid-template-columns:1fr} }
-  .col-out{position:sticky; top:74px}
-  @media(max-width:960px){ .col-out{position:static} }
-
-  .card{background:var(--white); border:1px solid var(--line); border-radius:10px; margin-bottom:14px; overflow:hidden}
-  .card > .head{
-    display:flex; justify-content:space-between; align-items:center; cursor:pointer;
-    padding:11px 14px; background:#fbfcfe; border-bottom:1px solid var(--line); user-select:none;
-  }
-  .card > .head:hover{background:#f2f6fb}
-  .card > .head h2{font-size:13.5px; margin:0; color:var(--navy); font-weight:700; letter-spacing:.3px; text-transform:uppercase}
-  .card > .head .chev{color:var(--muted); font-size:12px; transition:transform .15s}
-  .card.closed .chev{transform:rotate(-90deg)}
-  .card .body{padding:14px}
-  .card.closed .body{display:none}
-
-  label.fld{display:block; margin:0 0 10px}
-  label.fld > span{display:block; font-size:12px; color:var(--muted); font-weight:600; margin-bottom:3px}
-  input[type=text], input[type=number], textarea, select{
-    width:100%; padding:8px 10px; border:1px solid var(--line); border-radius:7px;
-    font-size:14px; font-family:inherit; background:#fff; color:var(--ink);
-  }
-  input:focus, textarea:focus, select:focus{outline:2px solid var(--focus); outline-offset:1px; border-color:var(--focus)}
-  textarea{resize:vertical; min-height:52px}
-  .row{display:flex; gap:10px; flex-wrap:wrap}
-  .row > *{flex:1; min-width:90px}
-
-  .chips{display:flex; flex-wrap:wrap; gap:7px}
-  .chip{
-    display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border-radius:20px;
-    border:1px solid var(--line); background:#fff; cursor:pointer; font-size:13px; user-select:none;
-  }
-  .chip:hover{border-color:#adbccb}
-  .chip input{position:absolute; opacity:0; width:0; height:0}
-  .chip.on{background:var(--navy); color:#fff; border-color:var(--navy)}
-  .chip.rf.on{background:var(--warn); border-color:var(--warn)}
-  .grouplabel{font-size:11.5px; font-weight:700; color:var(--navy-2); text-transform:uppercase; letter-spacing:.4px; margin:12px 0 6px}
-  .grouplabel:first-child{margin-top:0}
-
-  .status-grid{display:grid; grid-template-columns:1fr 1fr; gap:7px}
-  @media(max-width:520px){ .status-grid{grid-template-columns:1fr} }
-  .status-opt{
-    padding:9px 11px; border:1px solid var(--line); border-radius:8px; cursor:pointer; font-size:13.5px; font-weight:600; text-align:center; background:#fff;
-  }
-  .status-opt.on{background:var(--coral); color:#fff; border-color:var(--coral)}
-
-  .alert{
-    display:none; background:var(--warn-soft); border:1px solid #f0b7b0; color:#7c241a;
-    border-radius:8px; padding:10px 12px; margin:10px 0 0; font-size:13px; font-weight:600;
-  }
-  .alert.show{display:block}
-  .clin-note{
-    background:var(--coral-soft); border-left:3px solid var(--coral); color:#7c2f1c;
-    border-radius:6px; padding:9px 11px; margin:0 0 10px; font-size:12.5px; line-height:1.5;
-  }
-  .clin-note strong{color:var(--warn)}
-
-  .score-block{border:1px solid var(--line); border-radius:9px; padding:12px; margin-bottom:12px; background:#fbfcfe}
-  .score-block h3{margin:0 0 4px; font-size:13.5px; color:var(--navy); font-weight:700}
-  .score-block .desc{font-size:11.5px; color:var(--muted); margin:0 0 10px}
-  .score-line{display:flex; justify-content:space-between; align-items:center; gap:8px; padding:5px 0; border-top:1px dashed #e2e8f0}
-  .score-line:first-of-type{border-top:none}
-  .score-line .q{font-size:13px; flex:1}
-  .score-opts{display:flex; gap:5px; flex-wrap:wrap}
-  .score-opt{padding:4px 9px; border:1px solid var(--line); border-radius:6px; cursor:pointer; font-size:12px; background:#fff; white-space:nowrap}
-  .score-opt.on{background:var(--navy); color:#fff; border-color:var(--navy)}
-  .score-result{
-    margin-top:10px; padding:10px 12px; border-radius:8px; font-weight:700; font-size:14px;
-    display:flex; justify-content:space-between; align-items:center; gap:10px;
-  }
-  .score-result .band{font-size:12px; font-weight:600; padding:3px 9px; border-radius:14px}
-  .rk-low{background:var(--ok-soft); color:var(--ok)} .rk-low .band{background:var(--ok); color:#fff}
-  .rk-mid{background:#fff4e5; color:#a6620a} .rk-mid .band{background:#d9820c; color:#fff}
-  .rk-high{background:var(--warn-soft); color:var(--warn)} .rk-high .band{background:var(--warn); color:#fff}
-  .score-copy{margin-top:8px}
-
-  .cid-search input{margin-bottom:8px}
-  .cid-item{display:flex; justify-content:space-between; align-items:center; gap:8px; padding:7px 10px; border:1px solid var(--line); border-radius:7px; margin-bottom:6px; background:#fff}
-  .cid-item .code{font-weight:700; color:var(--navy); font-family:"SF Mono",Menlo,Consolas,monospace}
-  .cid-item .desc{flex:1; font-size:13px; color:var(--ink)}
-  .cid-item button{border:1px solid var(--navy); background:#fff; color:var(--navy); border-radius:6px; padding:4px 10px; cursor:pointer; font-size:12px; font-weight:600}
-  .cid-item button:hover{background:var(--navy); color:#fff}
-  .cid-item button.copied{background:var(--ok); color:#fff; border-color:var(--ok)}
-
-  .out-tabs{display:flex; gap:4px; flex-wrap:wrap; padding:10px 12px 0; background:var(--navy)}
-  .out-tab{
-    padding:8px 12px; font-size:12.5px; font-weight:600; color:#c7d5e6; cursor:pointer;
-    border:1px solid transparent; border-bottom:none; border-radius:7px 7px 0 0; white-space:nowrap;
-  }
-  .out-tab:hover{color:#fff}
-  .out-tab.on{background:var(--white); color:var(--navy)}
-  .out-body{background:#fff; padding:12px}
-  .out-actions{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:8px}
-  .btn{
-    border:1px solid var(--navy); background:var(--navy); color:#fff; font-weight:600;
-    padding:8px 14px; border-radius:7px; cursor:pointer; font-size:13px; font-family:inherit;
-  }
-  .btn:hover{background:var(--navy-2)}
-  .btn.ghost{background:#fff; color:var(--navy)}
-  .btn.ghost:hover{background:#eef3f9}
-  .btn.coral{background:var(--coral); border-color:var(--coral)}
-  .btn.coral:hover{filter:brightness(.95)}
-  .btn.copied{background:var(--ok); border-color:var(--ok)}
-  textarea.output{
-    width:100%; min-height:420px; font-family:"SF Mono",Menlo,Consolas,monospace; font-size:12.5px;
-    line-height:1.5; white-space:pre; overflow:auto; background:#fbfcfe;
-  }
-  .hint{font-size:12px; color:var(--muted); margin:6px 0 0}
-  .foot{font-size:11.5px; color:var(--muted); text-align:center; margin-top:22px; line-height:1.6}
-  .toprow{display:flex; gap:8px; flex-wrap:wrap; margin:14px 0}
+:root{
+  --bg:#f5f7fb;
+  --card:#ffffff;
+  --text:#14233b;
+  --muted:#65758b;
+  --line:#dde5ef;
+  --navy:#102742;
+  --navy-2:#183b63;
+  --coral:#e76740;
+  --coral-soft:#fff1eb;
+  --ok:#1d7b52;
+  --warn:#a83d2e;
+  --shadow:0 12px 36px rgba(16,39,66,.08);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:linear-gradient(180deg,#f8fafe 0%,#f4f7fb 100%);color:var(--text);font-size:15px;line-height:1.45}
+button,input,textarea,select{font:inherit}
+.wrap{max-width:1280px;margin:0 auto;padding:0 16px 56px}
+.top{position:sticky;top:0;z-index:20;background:linear-gradient(180deg,var(--navy),var(--navy-2));border-bottom:3px solid var(--coral);box-shadow:0 8px 24px rgba(16,39,66,.18)}
+.top .wrap{padding-top:14px;padding-bottom:14px}
+.brand h1{margin:0;font-size:18px;font-weight:700;letter-spacing:.2px;color:#fff}
+.brand p{margin:4px 0 0;color:#d2deed;font-size:12.5px}
+.hero{margin:18px 0 14px;padding:14px 16px;border:1px solid #f3cdbf;border-radius:14px;background:var(--coral-soft);color:#7e321f;box-shadow:var(--shadow)}
+.hero b{color:var(--warn)}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 16px}
+.grid{display:grid;grid-template-columns:minmax(0,1.02fr) minmax(360px,.98fr);gap:18px;align-items:start}
+.col-out{position:sticky;top:86px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:var(--shadow);margin-bottom:14px}
+.head{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;background:#fbfcff;border-bottom:1px solid var(--line);cursor:pointer}
+.head:hover{background:#f7faff}
+.head h2{margin:0;font-size:13px;font-weight:800;color:var(--navy);letter-spacing:.42px;text-transform:uppercase}
+.chev{font-size:12px;color:#6f8095;transition:transform .15s}
+.closed .chev{transform:rotate(-90deg)}
+.body{padding:16px}
+.closed .body{display:none}
+.fld{display:block;margin:0 0 12px}
+.fld>span{display:block;margin-bottom:4px;font-size:12px;font-weight:700;color:var(--muted)}
+input[type=text], textarea, select{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--text)}
+input[type=text]:focus, textarea:focus, select:focus{outline:none;border-color:#90acd0;box-shadow:0 0 0 4px rgba(47,111,176,.12)}
+textarea{resize:vertical;min-height:58px}
+.row{display:flex;gap:10px;flex-wrap:wrap}.row>*{flex:1;min-width:110px}
+.group{font-size:11.5px;font-weight:800;color:var(--navy-2);letter-spacing:.4px;text-transform:uppercase;margin:14px 0 6px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{display:inline-flex;align-items:center;justify-content:center;padding:7px 11px;border-radius:999px;border:1px solid var(--line);background:#fff;cursor:pointer;font-size:12.5px;color:var(--text);transition:.15s}
+.chip:hover{border-color:#b8c7d9;background:#fbfdff}
+.chip.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.chip.rf.on{background:var(--warn);border-color:var(--warn)}
+.mode,.status{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.mode button,.status button{border:1px solid var(--line);background:#fff;color:var(--text);border-radius:12px;padding:10px 12px;font-weight:700;cursor:pointer}
+.mode button.on,.status button.on{background:var(--coral);border-color:var(--coral);color:#fff}
+.btn{border:1px solid var(--navy);background:var(--navy);color:#fff;border-radius:12px;padding:9px 14px;font-size:13px;font-weight:700;cursor:pointer}
+.btn:hover{background:#17385f}.btn.ghost{background:#fff;color:var(--navy)}.btn.coral{background:var(--coral);border-color:var(--coral)}.btn.ok{background:var(--ok);border-color:var(--ok)}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;padding:12px 12px 0;background:var(--navy)}
+.tab{padding:9px 12px;border-radius:12px 12px 0 0;border:none;background:transparent;color:#d2deed;font-size:12.5px;font-weight:700;cursor:pointer}
+.tab.on{background:#fff;color:var(--navy)}
+.outbody{padding:14px;background:#fff}
+.output{width:100%;min-height:470px;border:1px solid var(--line);border-radius:14px;padding:12px;background:#fbfcff;color:var(--text);font-family:"SF Mono",Menlo,Consolas,monospace;font-size:12.5px;line-height:1.55;white-space:pre;overflow:auto}
+.alert{display:none;padding:10px 12px;margin-bottom:10px;border-radius:12px;background:#fff1ee;color:#7c241a;border:1px solid #f0bbb3;font-size:12.5px;font-weight:700}.alert.show{display:block}
+.hint{margin:8px 2px 0;font-size:12px;color:var(--muted)}
+.footer{margin-top:20px;text-align:center;color:var(--muted);font-size:11.5px}
+@media (max-width:980px){.grid{grid-template-columns:1fr}.col-out{position:static}.output{min-height:360px}}
 </style>
 </head>
 <body>
 <header class="top">
-  <div class="wrap">
-    <div class="brand">
-      <h1>Gerador de Evolução — Pronto Socorro</h1>
-      <span class="sub">Hospital Meridional Serra · texto puro para MV/SoulMV</span>
+  <div class="wrap brand">
+    <div>
+      <h1>Gerador HMS — Pronto Socorro</h1>
+      <p>Meridional Serra · evolução, reavaliação, parecer, passagem e transformador de exames</p>
     </div>
   </div>
 </header>
-
 <div class="wrap">
-  <div class="privacy">
-    <span>🔒</span>
-    <span><b>NÃO INSERIR</b> nome, CPF, SAME, carteirinha, data de nascimento completa ou qualquer identificador do paciente. Ferramenta de apoio à redação — não substitui a decisão médica. Nenhum dado é enviado ou salvo em servidor.</span>
+  <div class="hero"><b>Privacidade:</b> não inserir nome, CPF, SAME, carteirinha, data de nascimento completa, chave de acesso ou qualquer identificador. A ferramenta roda localmente no navegador e gera texto puro para MV/SoulMV.</div>
+  <div class="toolbar">
+    <button class="btn ghost" id="reset">Resetar</button>
+    <button class="btn ghost" id="expand">Expandir tudo</button>
+    <button class="btn ghost" id="collapse">Recolher tudo</button>
   </div>
-
-  <div class="toprow">
-    <button class="btn ghost" id="btnReset">Resetar formulário</button>
-    <button class="btn ghost" id="btnClear">Limpar dados</button>
-    <button class="btn ghost" id="btnExpand">Expandir tudo</button>
-    <button class="btn ghost" id="btnCollapse">Recolher tudo</button>
-  </div>
-
   <div class="grid">
-    <div class="col-form" id="colForm"></div>
-
-    <div class="col-out">
-      <div class="card" style="margin-bottom:0">
-        <div class="out-tabs" id="outTabs">
-          <div class="out-tab on" data-tab="evolucao">Evolução</div>
-          <div class="out-tab" data-tab="adc">ADC / Alta</div>
-          <div class="out-tab" data-tab="justificativa">Justificativa</div>
-          <div class="out-tab" data-tab="parecer">Parecer</div>
-          <div class="out-tab" data-tab="passagem">Passagem</div>
-          <div class="out-tab" data-tab="scores">Scores</div>
-          <div class="out-tab" data-tab="cid">CID</div>
+    <section id="form"></section>
+    <aside class="col-out">
+      <div class="card">
+        <div class="tabs">
+          <button class="tab on" data-tab="nota">Nota</button>
+          <button class="tab" data-tab="exames">Exames</button>
+          <button class="tab" data-tab="adc">ADC / Alta</button>
+          <button class="tab" data-tab="passagem">Passagem</button>
         </div>
-        <div class="out-body">
-          <div class="out-actions">
-            <button class="btn coral" id="btnCopy">Copiar</button>
-            <button class="btn ghost" id="btnRegen">Atualizar texto</button>
+        <div class="outbody">
+          <div class="toolbar" style="margin-bottom:10px">
+            <button class="btn coral" id="copy">Copiar</button>
+            <button class="btn ghost" id="regen">Atualizar texto</button>
           </div>
-          <div class="alert" id="rfAlert">ATENÇÃO: HÁ SINAL DE ALARME MARCADO. CONFIRME SE A ALTA É REALMENTE A CONDUTA MÉDICA.</div>
-          <textarea class="output" id="output" spellcheck="false"></textarea>
-          <div id="panel" style="display:none"></div>
-          <p class="hint" id="outHint">O texto é editável aqui antes de copiar. O QP fica entre aspas retas e sem hífen; os itens internos usam hífen simples.</p>
+          <div class="alert" id="alert">Há sinal de alarme marcado com status de alta. Confirmar segurança clínica antes de alta.</div>
+          <textarea class="output" id="out" spellcheck="false"></textarea>
+          <p class="hint" id="hint">Texto editável antes de copiar.</p>
         </div>
       </div>
-    </div>
+    </aside>
   </div>
-
-  <div class="foot">
-    Gerador de Evolução PS · Meridional Serra — uso pessoal da médica assistente · Dra. Joyce Radis de Souza de Oliveira (CRM-ES 21188)<br>
-    Página estática, offline-capable. Não coleta, não transmite e não armazena dados de pacientes.
-  </div>
+  <div class="footer">Uso pessoal da médica assistente · Dra. Joyce Radis de Souza de Oliveira · CRM-ES 21188</div>
 </div>
-<script>
-function sanitizeText(text){
-  return String(text)
-    .replace(/[\u201C\u201D]/g,'"')
-    .replace(/[\u2018\u2019]/g,"'")
-    .replace(/[\u2014\u2013]/g,'-')
-    .replace(/\*/g,'')
-    .replace(/[\u2022\u25CF\u25AA\u2023\u2043]/g,'-')
-    .replace(/[<>]/g,'')
-    .replace(/&/g,'E')
-    .replace(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE00}-\u{FE0F}]/gu,'')
-    .replace(/[^\S\r\n]+/g,' ')
-    .replace(/[ \t]+\n/g,'\n')
-    .replace(/\n{3,}/g,'\n\n')
-    .trim();
-}
-
-var EXAM_BLOCKS = {
-  geral:   { label:'Estado geral', line:d=>'- GERAL: '+d },
-  acv:     { label:'ACV',          line:d=>'- ACV: '+d },
-  ar:      { label:'AR',           line:d=>'- AR: '+d },
-  abdome:  { label:'Abdome',       line:d=>'- ABDOME: '+d },
-  neuro:   { label:'Neurológico',  line:d=>'- NEUROLÓGICO: '+d },
-  orofar:  { label:'Orofaringe / face / VAS', line:d=>'- OROFARINGE E VAS: '+d },
-  msk:     { label:'Musculoesquelético', line:d=>'- MUSCULOESQUELÉTICO: '+d }
-};
-
-var EXAM_OPTIONS = {
-  geral:  ['BEG','REG','MEG','LOTE','SONOLENTO','CONFUSO','HIDRATADO','DESIDRATADO','EUPNEICO','DISPNEICO','BEM PERFUNDIDO','MAL PERFUNDIDO','ANICTÉRICO','ACIANÓTICO','AFEBRIL AO TOQUE'],
-  acv:    ['RCR 2T','BNF','SEM SOPROS','TAQUICÁRDICO','BRADICÁRDICO','RITMO IRREGULAR','SOPRO PRESENTE'],
-  ar:     ['MV PRESENTE BILATERALMENTE','SEM RUÍDOS ADVENTÍCIOS','SIBILOS','CREPITAÇÕES','RONCOS','MV REDUZIDO','TIRAGEM'],
-  abdome: ['PLANO','GLOBOSO','FLÁCIDO','DOLOROSO À PALPAÇÃO','SEM DOR À PALPAÇÃO','SEM SINAIS DE IRRITAÇÃO PERITONEAL','DEFESA','RIGIDEZ','BLUMBERG','GIORDANO NEGATIVO','GIORDANO POSITIVO','DISTENSÃO ABDOMINAL','RHA PRESENTES','RHA REDUZIDOS'],
-  neuro:  ['SEM DÉFICIT FOCAL','PUPILAS ISOCÓRICAS E FOTORREAGENTES','FORÇA PRESERVADA','SENSIBILIDADE PRESERVADA','SEM SINAIS MENÍNGEOS','MARCHA PRESERVADA','GLASGOW 15','DÉFICIT FOCAL','CONFUSÃO','REBAIXAMENTO'],
-  orofar: ['OROFARINGE HIPEREMIADA','SEM PLACAS','PLACAS EM OROFARINGE','RINORREIA','OBSTRUÇÃO NASAL','DOR À PALPAÇÃO DE SEIOS DA FACE','OTOSCOPIA SEM ALTERAÇÕES','OTOSCOPIA NA'],
-  msk:    ['DOR À PALPAÇÃO PARAVERTEBRAL','DOR À MOBILIZAÇÃO','SEM DÉFICIT MOTOR','LASÈGUE POSITIVO','LASÈGUE NEGATIVO','LASÈGUE NA','SEM ALTERAÇÃO ESFINCTERIANA','MARCHA PRESERVADA','EDEMA LOCAL','EQUIMOSE','DEFORMIDADE']
-};
-
-var SYNDROMES = {
-  gripal:{ nome:'Gripal / IVAS / rinossinusite', pos:['FEBRE','TOSSE','ODINOFAGIA','RINORREIA','OBSTRUÇÃO NASAL','DOR FACIAL','CEFALEIA','MIALGIA','PROSTRAÇÃO','ESPIRROS','ROUQUIDÃO'], rf:['DISPNEIA','DOR TORÁCICA','SATURAÇÃO BAIXA','CONFUSÃO','FEBRE PERSISTENTE','IMUNOSSUPRESSÃO','GESTAÇÃO','SINAIS DE PNEUMONIA'], exam:['geral','orofar','ar','acv'], hip:['IVAS','Síndrome gripal','Rinossinusite aguda','Faringoamigdalite a esclarecer','Tosse a esclarecer'] },
-  gea:{ nome:'GEA — gastroenterite aguda', pos:['DIARREIA','NÁUSEAS','VÔMITOS','DOR ABDOMINAL EM CÓLICA','FEBRE','INTOLERÂNCIA VO','CONTATO COM SINTOMÁTICOS','INGESTA ALIMENTAR SUSPEITA','HIPOREXIA'], rf:['SANGUE NAS FEZES','DESIDRATAÇÃO','FEBRE ALTA','DOR ABDOMINAL INTENSA','IMUNOSSUPRESSÃO','IDOSO FRÁGIL','ANTIBIÓTICO RECENTE','VÔMITOS INCOERCÍVEIS','SINAIS DE SEPSE'], exam:['geral','abdome','acv','ar'], hip:['Gastroenterite aguda','Síndrome diarreica aguda','Síndrome emética','Dor abdominal a esclarecer'] },
-  geca:{ nome:'GECA — gastroenterocolite aguda', pos:['DIARREIA','NÁUSEAS','VÔMITOS','DOR ABDOMINAL EM CÓLICA','FEBRE','MUCO NAS FEZES','SANGUE NAS FEZES','TENESMO','URGÊNCIA EVACUATÓRIA','INTOLERÂNCIA VO','CONTATO COM SINTOMÁTICOS','INGESTA ALIMENTAR SUSPEITA'], rf:['SANGUE NAS FEZES','DESIDRATAÇÃO','FEBRE ALTA','DOR ABDOMINAL INTENSA','IMUNOSSUPRESSÃO','IDOSO FRÁGIL','ANTIBIÓTICO RECENTE','VÔMITOS INCOERCÍVEIS','SINAIS DE SEPSE','DISENTERIA'], exam:['geral','abdome','acv','ar'], hip:['Gastroenterocolite aguda','Diarreia aguda invasiva a esclarecer','Disenteria a esclarecer','Dor abdominal a esclarecer'] },
-  cefaleia:{ nome:'Cefaleia', pos:['CEFALEIA','NÁUSEAS','VÔMITOS','FOTOFOBIA','FONOFOBIA','TONTURA','ESCOTOMAS','DOR CERVICAL','SINTOMAS GRIPAIS ASSOCIADOS'], rf:['PIOR CEFALEIA DA VIDA','INÍCIO SÚBITO','DÉFICIT FOCAL','REBAIXAMENTO OU CONFUSÃO','FEBRE OU RIGIDEZ DE NUCA','TRAUMA','ANTICOAGULAÇÃO','GESTAÇÃO OU PUERPÉRIO','NEOPLASIA OU IMUNOSSUPRESSÃO','CEFALEIA NOVA EM IDOSO'], exam:['geral','neuro','acv','ar'], hip:['Cefaleia primária provável','Enxaqueca provável','Cefaleia tensional provável','Cefaleia a esclarecer'] },
-  lombalgia:{ nome:'Lombalgia', pos:['DOR LOMBAR','IRRADIAÇÃO PARA MMII','PARESTESIA','PIORA AO MOVIMENTO','TRAUMA','ESFORÇO FÍSICO','DISÚRIA ASSOCIADA','FEBRE ASSOCIADA'], rf:['DÉFICIT MOTOR','ALTERAÇÃO ESFINCTERIANA','ANESTESIA EM SELA','FEBRE','TRAUMA IMPORTANTE','HISTÓRIA DE CÂNCER','PERDA PONDERAL','IMUNOSSUPRESSÃO','DOR NOTURNA PROGRESSIVA'], exam:['geral','msk','neuro','abdome'], hip:['Lombalgia mecânica','Lombociatalgia','Dor lombar a esclarecer','Cólica renal a esclarecer'] },
-  toracica:{ nome:'Dor torácica', pos:['DOR TORÁCICA','IRRADIAÇÃO','DISPNEIA','SUDORESE','NÁUSEAS','VÔMITOS','PALPITAÇÕES','SÍNCOPE','DOR PLEURÍTICA','TOSSE','FEBRE','DOR À PALPAÇÃO'], rf:['DOR OPRESSIVA TÍPICA','IRRADIAÇÃO PARA BRAÇO/MANDÍBULA/DORSO','DISPNEIA','SUDORESE','SÍNCOPE','INSTABILIDADE HEMODINÂMICA','ECG ALTERADO','TROPONINA ALTERADA','DAC PRÉVIA','SUSPEITA DE TEP','SUSPEITA DE DISSECÇÃO'], exam:['geral','acv','ar'], hip:['Dor torácica a esclarecer','Síndrome coronariana aguda a descartar','Dor torácica musculoesquelética provável','Dor torácica pleurítica a esclarecer','TEP a descartar'] },
-  epigastrica:{ nome:'Dor epigástrica', pos:['DOR EPIGÁSTRICA','QUEIMAÇÃO RETROESTERNAL','PLENITUDE PÓS-PRANDIAL','NÁUSEAS','VÔMITOS','PIROSE','REGURGITAÇÃO','RELAÇÃO COM ALIMENTAÇÃO','DOR QUE MELHORA COM ANTIÁCIDO'], rf:['IRRADIAÇÃO PARA BRAÇO/MANDÍBULA/DORSO','SUDORESE','DISPNEIA','DOR AOS ESFORÇOS','SÍNCOPE OU PRÉ-SÍNCOPE','PALPITAÇÕES','NÁUSEAS/VÔMITOS COM SUDORESE','DAC PRÉVIA OU FATORES DE RISCO','DIABETES','IDOSO','INSTABILIDADE HEMODINÂMICA','ECG ALTERADO','TROPONINA ALTERADA'], exam:['geral','acv','ar','abdome'], hip:['Dor epigástrica a esclarecer','Dispepsia a esclarecer','Equivalente anginoso a descartar','Síndrome coronariana aguda a descartar','Doença ulcerosa péptica a esclarecer','Pancreatite a descartar'], nota:'Epigastralgia pode ser equivalente anginoso (IAM de parede inferior). Marque as red flags para não subestimar. Considerar ECG e troponina antes de assumir causa gástrica.' },
-  abdominal:{ nome:'Dor abdominal', pos:['DOR ABDOMINAL','NÁUSEAS','VÔMITOS','DIARREIA','CONSTIPAÇÃO','FEBRE','DISÚRIA','SANGRAMENTO','DISTENSÃO','INAPETÊNCIA','PÓS-OPERATÓRIO RECENTE'], rf:['DEFESA','RIGIDEZ','BLUMBERG','VÔMITOS INCOERCÍVEIS','FEBRE PERSISTENTE','INSTABILIDADE','SANGRAMENTO','PÓS-OPERATÓRIO RECENTE','GESTAÇÃO','IDOSO OU FRÁGIL','DOR DESPROPORCIONAL'], exam:['geral','abdome','acv','ar'], hip:['Dor abdominal a esclarecer','Gastroenterite aguda','Abdome agudo a descartar','Apendicite a descartar','Cólica renal a esclarecer','Complicação pós-operatória a descartar'] },
-  itu:{ nome:'ITU / disúria', pos:['DISÚRIA','POLACIÚRIA','URGÊNCIA MICCIONAL','HEMATÚRIA','DOR SUPRAPÚBICA','DOR LOMBAR','FEBRE','NÁUSEAS','VÔMITOS'], rf:['FEBRE','DOR LOMBAR','GIORDANO POSITIVO','VÔMITOS','GESTAÇÃO','HOMEM','IMUNOSSUPRESSÃO','SEPSE','IDOSO FRÁGIL'], exam:['geral','abdome','acv','ar'], hip:['ITU baixa provável','Pielonefrite a esclarecer','Disúria a esclarecer','Cólica renal a esclarecer'] },
-  nv:{ nome:'Náuseas e vômitos', pos:['NÁUSEAS','VÔMITOS','DOR ABDOMINAL','DIARREIA','FEBRE','TONTURA','CEFALEIA','INTOLERÂNCIA VO','USO DE MEDICAÇÕES','GESTAÇÃO POSSÍVEL'], rf:['INTOLERÂNCIA VO PERSISTENTE','DESIDRATAÇÃO','DOR ABDOMINAL IMPORTANTE','REBAIXAMENTO','CEFALEIA INTENSA ASSOCIADA','GESTAÇÃO','PÓS-OPERATÓRIO RECENTE','SINAIS DE SEPSE'], exam:['geral','abdome','neuro','acv','ar'], hip:['Náuseas e vômitos a esclarecer','Gastroenterite aguda','Síndrome emética','Dor abdominal a esclarecer'] },
-  tontura:{ nome:'Tontura', pos:['TONTURA','VERTIGEM','NÁUSEAS','VÔMITOS','ZUMBIDO','HIPOACUSIA','CEFALEIA','PALPITAÇÕES','SÍNCOPE','INSTABILIDADE POSTURAL'], rf:['DÉFICIT FOCAL','DISARTRIA','DIPLOPIA','ATAXIA','CEFALEIA SÚBITA','SÍNCOPE','DOR TORÁCICA','ARRITMIA','INSTABILIDADE','IDOSO COM FATOR DE RISCO VASCULAR'], exam:['geral','neuro','acv','ar'], hip:['Tontura a esclarecer','Vertigem periférica provável','Pré-síncope a esclarecer','Síndrome vestibular a esclarecer'] },
-  dispneia:{ nome:'Dispneia / broncoespasmo', pos:['DISPNEIA','TOSSE','SIBILÂNCIA','DOR TORÁCICA','FEBRE','EXPECTORAÇÃO','ORTOPNEIA','EDEMA DE MMII','PALPITAÇÕES','ANSIEDADE'], rf:['SATURAÇÃO BAIXA','CIANOSE','USO DE MUSCULATURA ACESSÓRIA','DOR TORÁCICA','SÍNCOPE','INSTABILIDADE','AUSCULTA MUITO ALTERADA','HISTÓRIA DE TEP','IC','DPOC GRAVE'], exam:['geral','ar','acv'], hip:['Dispneia a esclarecer','Broncoespasmo','Crise asmática','Exacerbação de DPOC','Pneumonia a descartar','IC descompensada a descartar','TEP a descartar'] },
-  has:{ nome:'Crise hipertensiva / PA elevada', pos:['PA ELEVADA','CEFALEIA','TONTURA','DOR TORÁCICA','DISPNEIA','ALTERAÇÃO VISUAL','NÁUSEAS','ANSIEDADE','PALPITAÇÕES'], rf:['DOR TORÁCICA','DISPNEIA','DÉFICIT NEUROLÓGICO','CEFALEIA INTENSA','CONFUSÃO','ALTERAÇÃO VISUAL','EDEMA AGUDO DE PULMÃO','INJÚRIA RENAL','GESTAÇÃO','SUSPEITA DE DISSECÇÃO'], exam:['geral','acv','ar','neuro'], hip:['PA elevada sem sinais de emergência hipertensiva','Crise hipertensiva a esclarecer','Emergência hipertensiva a descartar'] },
-  trauma:{ nome:'Trauma simples', pos:['DOR LOCAL','EDEMA','EQUIMOSE','LIMITAÇÃO FUNCIONAL','TRAUMA CONTUSO','QUEDA','TORÇÃO','FERIMENTO','DOR À MOBILIZAÇÃO'], rf:['PERDA DE CONSCIÊNCIA','ANTICOAGULAÇÃO','DÉFICIT NEUROLÓGICO','DOR CERVICAL IMPORTANTE','DEFORMIDADE','FRATURA EXPOSTA','DOR DESPROPORCIONAL','INSTABILIDADE','TRAUMA DE ALTA ENERGIA','IDOSO FRÁGIL'], exam:['geral','msk','neuro'], hip:['Trauma contuso simples','Contusão','Entorse','Fratura a descartar','Ferimento simples'] }
-};
-
-var SCORES = {
-  heart:{ nome:'HEART', desc:'Estratificação de risco na dor torácica. Apoio, não substitui julgamento.', items:[{q:'História (anamnese)', opts:[['Pouco suspeita',0],['Moderadamente suspeita',1],['Muito suspeita',2]]},{q:'ECG', opts:[['Normal',0],['Alt. inespecífica de repolarização',1],['Infra de ST significativo',2]]},{q:'Idade', opts:[['< 45',0],['45-64',1],['≥ 65',2]]},{q:'Fatores de risco', opts:[['Nenhum',0],['1-2 fatores',1],['≥3 ou DAC conhecida',2]]},{q:'Troponina', opts:[['Normal',0],['1-3x limite',1],['> 3x limite',2]]}], bands:function(v){ if(v<=3)return['BAIXO (0-3)','low']; if(v<=6)return['INTERMEDIÁRIO (4-6)','mid']; return['ALTO (7-10)','high']; }, line:function(v,b){ return 'ESCORE HEART: '+v+' PONTOS - RISCO '+b+'.'; } },
-  wells_tep:{ nome:'Wells (TEP)', desc:'Probabilidade pré-teste de tromboembolismo pulmonar.', items:[{q:'Sinais/sintomas de TVP', opts:[['Não',0],['Sim (+3)',3]]},{q:'TEP é o diagnóstico mais provável', opts:[['Não',0],['Sim (+3)',3]]},{q:'FC > 100 bpm', opts:[['Não',0],['Sim (+1,5)',1.5]]},{q:'Imobilização/cirurgia < 4 sem', opts:[['Não',0],['Sim (+1,5)',1.5]]},{q:'TVP/TEP prévio', opts:[['Não',0],['Sim (+1,5)',1.5]]},{q:'Hemoptise', opts:[['Não',0],['Sim (+1)',1]]},{q:'Neoplasia (tratamento < 6 m ou paliativo)', opts:[['Não',0],['Sim (+1)',1]]}], bands:function(v){ if(v<=1)return['BAIXA (≤1)','low']; if(v<=6)return['INTERMEDIÁRIA (2-6)','mid']; return['ALTA (≥7)','high']; }, line:function(v,b){ return 'ESCORE DE WELLS (TEP): '+String(v).replace('.',',')+' PONTOS - PROBABILIDADE '+b+'.'; } },
-  curb65:{ nome:'CURB-65', desc:'Gravidade da pneumonia adquirida na comunidade.', items:[{q:'Confusão mental (nova)', opts:[['Não',0],['Sim (+1)',1]]},{q:'Ureia > 50 mg/dL', opts:[['Não',0],['Sim (+1)',1]]},{q:'FR ≥ 30 irpm', opts:[['Não',0],['Sim (+1)',1]]},{q:'PAS < 90 ou PAD ≤ 60', opts:[['Não',0],['Sim (+1)',1]]},{q:'Idade ≥ 65', opts:[['Não',0],['Sim (+1)',1]]}], bands:function(v){ if(v<=1)return['BAIXO (0-1)','low']; if(v===2)return['INTERMEDIÁRIO (2)','mid']; return['ALTO (3-5)','high']; }, line:function(v,b){ return 'CURB-65: '+v+' PONTOS - GRAVIDADE '+b+'.'; } },
-  news2:{ nome:'NEWS 2', desc:'Deterioração clínica. Preenche a partir dos sinais vitais.', items:[{q:'FR (irpm)', opts:[['≤8',3],['9-11',1],['12-20',0],['21-24',2],['≥25',3]]},{q:'SpO2 (%)', opts:[['≥96',0],['94-95',1],['92-93',2],['≤91',3]]},{q:'Ar ambiente / O2 suplementar', opts:[['Ar ambiente',0],['O2 suplementar',2]]},{q:'PAS (mmHg)', opts:[['≥111',0],['101-110',1],['91-100',2],['≤90',3]]},{q:'FC (bpm)', opts:[['51-90',0],['41-50',1],['91-110',1],['111-130',2],['≤40 ou ≥131',3]]},{q:'Nível de consciência', opts:[['Alerta',0],['Alterado (V/P/U)',3]]},{q:'Temperatura (C)', opts:[['36,1-38,0',0],['35,1-36,0',1],['38,1-39,0',1],['≥39,1',2],['≤35,0',3]]}], bands:function(v){ if(v<=4)return['BAIXO (0-4)','low']; if(v<=6)return['MÉDIO (5-6)','mid']; return['ALTO (≥7)','high']; }, line:function(v,b){ return 'NEWS 2: '+v+' PONTOS - RISCO '+b+' DE DETERIORAÇÃO.'; } }
-};
-
-var CID = [['J00','Nasofaringite aguda (resfriado comum)'],['J01.9','Sinusite aguda não especificada'],['J02.9','Faringite aguda não especificada'],['J03.9','Amigdalite aguda não especificada'],['J06.9','Infecção aguda das vias aéreas superiores (IVAS)'],['J11','Influenza (gripe), vírus não identificado'],['J20.9','Bronquite aguda não especificada'],['J44.1','DPOC com exacerbação aguda'],['J45.9','Asma não especificada'],['J45.901','Asma não especificada com exacerbação aguda'],['J18.9','Pneumonia não especificada'],['A09','Diarreia e gastroenterite de origem infecciosa presumível'],['A08.4','Infecção intestinal viral não especificada'],['K52.9','Gastroenterite e colite não infecciosa não especificada'],['R11','Náusea e vômitos'],['K30','Dispepsia (funcional)'],['K21.9','Doença do refluxo gastroesofágico sem esofagite'],['K29.7','Gastrite não especificada'],['R10.1','Dor abdominal localizada no abdome superior (epigástrica)'],['R10.4','Dor abdominal outra e não especificada'],['R10.3','Dor localizada em outras partes do abdome inferior'],['R07.4','Dor torácica não especificada'],['R07.3','Outras dores torácicas'],['I20.9','Angina pectoris não especificada'],['R51','Cefaleia'],['G43.9','Enxaqueca não especificada'],['M54.5','Dor lombar baixa (lombalgia)'],['M54.4','Lumbago com ciática'],['M79.6','Dor em membro'],['N39.0','Infecção do trato urinário de localização não especificada'],['N30.0','Cistite aguda'],['N10','Nefrite tubulointersticial aguda (pielonefrite aguda)'],['N23','Cólica nefrética não especificada'],['R42','Tontura e instabilidade'],['H81.1','Vertigem paroxística benigna'],['I10','Hipertensão essencial (primária)'],['R03.0','Medida elevada da PA sem diagnóstico de hipertensão'],['R50.9','Febre não especificada'],['T14.0','Traumatismo superficial de região não especificada'],['S00','Traumatismo superficial da cabeça'],['R55','Síncope e colapso'],['B34.9','Infecção viral não especificada']];
-
-var HPP = {
-  comorb:['HAS','DM','DLP','DAC','IAM PRÉVIO','AVC PRÉVIO','FA','IC','DPOC','ASMA','DRC','NEOPLASIA','IMUNOSSUPRESSÃO','GESTAÇÃO','OBESIDADE','TEP/TVP PRÉVIO','DOENÇA PSIQUIÁTRICA'],
-  alerg:['DIPIRONA','AINE','PENICILINA','CEFALOSPORINA','CONTRASTE','LÁTEX'],
-  medic:['LOSARTANA','ANLODIPINO','HIDROCLOROTIAZIDA','METFORMINA','INSULINA','AAS','CLOPIDOGREL','RIVAROXABANA','APIXABANA','VARFARINA','ESTATINA','LEVOTIROXINA','ANTIDEPRESSIVO','BENZODIAZEPÍNICO','ANTICONCEPCIONAL','CORTICOIDE CRÔNICO']
-};
-
-var CONDUTAS = ['MEDICAÇÃO SINTOMÁTICA','ANALGESIA','ANTIEMÉTICO','ANTITÉRMICO','ANTIESPASMÓDICO','HIDRATAÇÃO VO','HIDRATAÇÃO EV','EXAMES LABORATORIAIS','ECG','TROPONINA','RX','TC','USG','URINA ROTINA','TESTE VIRAL','PARECER ESPECIALISTA','OBSERVAÇÃO CLÍNICA','REAVALIAÇÃO APÓS MEDICAÇÃO','ALTA COM ORIENTAÇÕES','ENCAMINHADO SALA VERMELHA','INTERNAÇÃO SOLICITADA'];
-var STATUS_LIST = ['Alta','Reavaliar após medicação','Aguarda exames','Aguarda parecer','Sala vermelha','Solicitação de internação','Observação clínica'];
-var ADC_TEXT = { 'Alta':'PACIENTE REAVALIADO(A), EM BOM ESTADO GERAL, HEMODINAMICAMENTE ESTÁVEL, SEM SINAIS DE GRAVIDADE NO MOMENTO. APRESENTA MELHORA APÓS CONDUTA INICIAL. ORIENTADOS SINAIS DE ALARME, RETORNO IMEDIATO SE PIORA E SEGUIMENTO AMBULATORIAL. ALTA MÉDICA.','Reavaliar após medicação':'PACIENTE AVALIADO(A), HEMODINAMICAMENTE ESTÁVEL NO MOMENTO. PRESCRITA MEDICAÇÃO SINTOMÁTICA E MANTIDO(A) EM OBSERVAÇÃO PARA REAVALIAÇÃO CLÍNICA APÓS CONDUTA INICIAL.','Aguarda exames':'PACIENTE AVALIADO(A), SEM INSTABILIDADE HEMODINÂMICA NO MOMENTO. SOLICITADOS EXAMES COMPLEMENTARES PARA DEFINIÇÃO DIAGNÓSTICA. MANTIDO(A) EM OBSERVAÇÃO CLÍNICA ATÉ RESULTADOS E REAVALIAÇÃO.','Aguarda parecer':'PACIENTE AVALIADO(A), MANTIDO(A) EM OBSERVAÇÃO CLÍNICA. SOLICITADO PARECER DE [ESPECIALIDADE] PARA DEFINIÇÃO DE CONDUTA. AGUARDA AVALIAÇÃO ESPECIALIZADA E REAVALIAÇÃO.','Sala vermelha':'PACIENTE AVALIADO(A), IDENTIFICADA NECESSIDADE DE MONITORIZAÇÃO/AVALIAÇÃO EM SALA VERMELHA. CASO COMUNICADO AO EMERGENCISTA. MANTIDO SEGUIMENTO CONFORME FLUXO INSTITUCIONAL.','Solicitação de internação':'PACIENTE AVALIADO(A), COM NECESSIDADE DE INTERNAÇÃO HOSPITALAR DEVIDO A QUADRO CLÍNICO E NECESSIDADE DE SEGUIMENTO EM AMBIENTE HOSPITALAR. SOLICITAÇÃO REALIZADA CONFORME FLUXO INSTITUCIONAL. MANTIDO(A) EM OBSERVAÇÃO ATÉ DEFINIÇÃO.','Observação clínica':'PACIENTE AVALIADO(A), HEMODINAMICAMENTE ESTÁVEL NO MOMENTO. MANTIDO(A) EM OBSERVAÇÃO CLÍNICA PARA SEGUIMENTO, REAVALIAÇÃO E DEFINIÇÃO DE CONDUTA.' };
-
-var state = { syndrome:'', tempo:'', pos:{}, rf:{}, outrosSint:'', obsHda:'', comorb:{}, comorbOutros:'', alerg:{}, alergOutros:'', medic:{}, medicOutros:'', dacFam:'NA', dacFamLivre:'', ihRecente:'NA', ihRecenteLivre:'', fc:'', fr:'', sto2:'', tax:'', pa:'', hgt:'', dor:'', exGeral:{}, exGeralLivre:'', exSel:{}, exLivre:{}, hipotese:'', conduta:{}, condutaOutro:'', status:'', justExame:'', justAchados:'', justRisco:'', parEsp:'', parMotivo:'', parResumo:'', parPergunta:'', scoreSel:{ heart:{}, wells_tep:{}, curb65:{}, news2:{} }, cidQuery:'' };
-var activeTab='evolucao';
-function selKeys(obj){ return Object.keys(obj).filter(function(k){return obj[k]}); }
-function joinList(arr){ return arr.join(', '); }
-function orNA(v){ v=(v||'').trim(); return v?v:'NA'; }
-function buildHda(){ var s=SYNDROMES[state.syndrome]; var queixa = s ? s.nome.toUpperCase() : '[QUEIXA]'; var tempo = state.tempo.trim() ? state.tempo.trim().toUpperCase() : '[TEMPO]'; var pos = selKeys(state.pos); if(state.outrosSint.trim()) pos.push(state.outrosSint.trim().toUpperCase()); var rf = selKeys(state.rf); var l1 = 'PACIENTE COM '+queixa+' HÁ '+tempo; l1 += pos.length ? ', ASSOCIADO A '+joinList(pos)+'.' : '.'; var out = l1; if(rf.length) out += ' NEGA '+joinList(rf)+'.'; if(state.obsHda.trim()) out += ' '+state.obsHda.trim().toUpperCase().replace(/\.*$/,'')+'.'; return out; }
-function buildHpp(){ var comorb = selKeys(state.comorb); if(state.comorbOutros.trim()) comorb.push(state.comorbOutros.trim().toUpperCase()); var alerg = selKeys(state.alerg); if(state.alergOutros.trim()) alerg.push(state.alergOutros.trim().toUpperCase()); var medic = selKeys(state.medic); if(state.medicOutros.trim()) medic.push(state.medicOutros.trim().toUpperCase()); var dac = state.dacFam==='Sim' ? (state.dacFamLivre.trim()?state.dacFamLivre.trim().toUpperCase():'SIM') : 'NA'; var ih  = state.ihRecente==='Sim' ? (state.ihRecenteLivre.trim()?state.ihRecenteLivre.trim().toUpperCase():'SIM') : 'NA'; return ['- COMORBIDADES: '+(comorb.length?joinList(comorb):'NA'),'- ALERGIAS: '+(alerg.length?joinList(alerg):'NA'),'- MEDICAÇÕES DE USO CONTÍNUO: '+(medic.length?joinList(medic):'NA'),'- HISTÓRIA DE DAC PRECOCE NA FAMÍLIA: '+dac,'- INTERNAÇÃO RECENTE: '+ih].join('\n'); }
-function buildVitals(){ var v=['- FC: '+(state.fc.trim()?state.fc.trim()+' BPM':'NA'),'- FR: '+(state.fr.trim()?state.fr.trim()+' IRPM':'NA'),'- STO2: '+(state.sto2.trim()?state.sto2.trim()+'%':'NA'),'- TAX: '+(state.tax.trim()?state.tax.trim()+' C':'NA'),'- PA: '+(state.pa.trim()?state.pa.trim()+' MMHG':'NA')]; if(state.hgt.trim()) v.push('- HGT: '+state.hgt.trim()); if(state.dor.trim()) v.push('- DOR: '+state.dor.trim()+'/10'); return v.join('\n'); }
-function buildExam(){ var s=SYNDROMES[state.syndrome]; var lines=[]; var geral = selKeys(state.exGeral); if(state.exGeralLivre.trim()) geral.push(state.exGeralLivre.trim().toUpperCase()); lines.push('- GERAL: '+(geral.length?joinList(geral):'NA')); var blocks = s ? s.exam : ['acv','ar','abdome','neuro']; blocks.forEach(function(b){ if(b==='geral') return; var sel = selKeys(state.exSel[b]||{}); if(state.exLivre[b] && state.exLivre[b].trim()) sel.push(state.exLivre[b].trim().toUpperCase()); if(sel.length) lines.push(EXAM_BLOCKS[b].line(joinList(sel))); }); return lines.join('\n'); }
-function buildConduta(){ var c=selKeys(state.conduta); if(state.condutaOutro.trim()) c.push(state.condutaOutro.trim().toUpperCase()); if(!c.length) return '- NA'; return c.map(function(x){return '- '+x}).join('\n'); }
-function anyRedFlag(){ return selKeys(state.rf).length>0; }
-function generateEvolution(){ var qp = state.syndrome ? (SYNDROMES[state.syndrome].nome.toUpperCase()) : '[QUEIXA PRINCIPAL]'; var t=[]; t.push('## EVOLUÇÃO PRONTO SOCORRO - HOSPITAL MERIDIONAL SERRA ##'); t.push(''); t.push('# QP:'); t.push('"'+qp+'"'); t.push(''); t.push('# HDA:'); t.push(buildHda()); t.push(''); t.push('# HPP:'); t.push(buildHpp()); t.push(''); t.push('# SINAIS VITAIS:'); t.push(buildVitals()); t.push(''); t.push('# EXAME FÍSICO:'); t.push(buildExam()); t.push(''); t.push('# HIPÓTESE DIAGNÓSTICA:'); t.push('- '+orNA(state.hipotese).toUpperCase()); t.push(''); t.push('# CONDUTA:'); t.push(buildConduta()); return sanitizeText(t.join('\n')); }
-function buildJustificationInline(){ if(!state.justExame.trim() && !state.justAchados.trim() && !state.justRisco.trim()) return ''; var ex=state.justExame.trim()?state.justExame.trim().toUpperCase():'[EXAME/INTERNAÇÃO/PARECER]'; var quadro = state.syndrome?SYNDROMES[state.syndrome].nome.toUpperCase():'[QUADRO CLÍNICO]'; var ach=state.justAchados.trim()?state.justAchados.trim().toUpperCase():'[ACHADOS RELEVANTES]'; var risco=state.justRisco.trim()?state.justRisco.trim().toUpperCase():'[HIPÓTESE/RISCO]'; return 'SOLICITO '+ex+' DEVIDO A '+quadro+' ASSOCIADO A '+ach+', COM NECESSIDADE DE DESCARTAR '+risco+'. RESULTADO/AVALIAÇÃO DEFINIRÁ CONDUTA, NECESSIDADE DE OBSERVAÇÃO, INTERNAÇÃO, PARECER ESPECIALIZADO OU ALTA SEGURA.'; }
-function generateJustification(){ var j=buildJustificationInline(); if(!j) return 'Preencha os campos de justificativa (exame/parecer, achados e risco a descartar) para gerar o texto.'; return sanitizeText(j); }
-function generateAdcText(){ if(!state.status) return 'Selecione o status do atendimento para gerar o texto de ADC/alta.'; var base=ADC_TEXT[state.status]||''; if(state.status==='Aguarda parecer' && state.parEsp.trim()) base=base.replace('[ESPECIALIDADE]', state.parEsp.trim().toUpperCase()); return sanitizeText(base); }
-function generateConsultRequest(){ var esp=state.parEsp.trim()?state.parEsp.trim().toUpperCase():'[ESPECIALIDADE]'; var resumo=state.parResumo.trim()?state.parResumo.trim().toUpperCase():(state.syndrome?('QUADRO DE '+SYNDROMES[state.syndrome].nome.toUpperCase()):'[RESUMO CLÍNICO]'); var perg=state.parPergunta.trim()?state.parPergunta.trim().toUpperCase():'[PERGUNTA OBJETIVA]'; var t='SOLICITO PARECER DA '+esp+'.\n\nPACIENTE COM '+resumo+'. REALIZADA AVALIAÇÃO CLÍNICA INICIAL E CONDUTA CONFORME NECESSIDADE. SOLICITO AVALIAÇÃO PARA '+perg+' E DEFINIÇÃO DE CONDUTA ESPECIALIZADA.'; return sanitizeText(t); }
-function generateHandoff(){ var s=state.syndrome?SYNDROMES[state.syndrome].nome.toUpperCase():'[SITUAÇÃO ATUAL]'; var vit='FC '+orNA(state.fc)+' / FR '+orNA(state.fr)+' / STO2 '+orNA(state.sto2)+' / PA '+orNA(state.pa)+' / TAX '+orNA(state.tax); var rf=selKeys(state.rf); var t=[]; t.push('SITUAÇÃO:'); t.push('- PACIENTE EM '+ (state.status?state.status.toUpperCase():'ATENDIMENTO') +' POR '+s+'.'); t.push(''); t.push('BACKGROUND:'); t.push('- HDA: '+buildHda()); t.push('- HPP: COMORBIDADES '+ (selKeys(state.comorb).length?joinList(selKeys(state.comorb)):'NA') +'.'); t.push(''); t.push('AVALIAÇÃO:'); t.push('- SINAIS VITAIS: '+vit+'.'); t.push('- HD: '+orNA(state.hipotese).toUpperCase()+'.'); if(rf.length) t.push('- SINAIS DE ALARME MARCADOS: '+joinList(rf)+'.'); t.push(''); t.push('RECOMENDAÇÃO:'); var c=selKeys(state.conduta); if(state.condutaOutro.trim()) c.push(state.condutaOutro.trim().toUpperCase()); t.push('- '+(c.length?joinList(c):'DEFINIR CONDUTA / SEGUIMENTO.')); return sanitizeText(t.join('\n')); }
-function currentText(){ switch(activeTab){ case 'evolucao': return generateEvolution(); case 'adc': return generateAdcText(); case 'justificativa': return generateJustification(); case 'parecer': return generateConsultRequest(); case 'passagem': return generateHandoff(); } return ''; }
-var $=function(id){return document.getElementById(id)}; var colForm=$('colForm'); var outputEl=$('output'); var userEdited=false;
-function el(tag,attrs,html){ var e=document.createElement(tag); if(attrs) for(var k in attrs){ if(k==='class')e.className=attrs[k]; else e.setAttribute(k,attrs[k]); } if(html!=null) e.innerHTML=html; return e; }
-function chip(label,checked,onToggle,isRf){ var l=el('label',{class:'chip'+(isRf?' rf':'')+(checked?' on':'')}); var i=el('input',{type:'checkbox'}); i.checked=checked; l.appendChild(i); l.appendChild(document.createTextNode(label)); i.addEventListener('change',function(){ l.classList.toggle('on',i.checked); onToggle(i.checked); refresh(); }); return l; }
-function card(title,open,buildBody){ var c=el('div',{class:'card'+(open?'':' closed')}); var h=el('div',{class:'head'}); h.appendChild(el('h2',null,title)); h.appendChild(el('span',{class:'chev'},'▼')); h.addEventListener('click',function(){ c.classList.toggle('closed'); }); var b=el('div',{class:'body'}); buildBody(b); c.appendChild(h); c.appendChild(b); return c; }
-function textInput(labelText,key,ph){ var l=el('label',{class:'fld'}); l.appendChild(el('span',null,labelText)); var i=el('input',{type:'text'}); if(ph)i.placeholder=ph; i.value=state[key]||''; i.addEventListener('input',function(){ state[key]=i.value; refresh(); }); l.appendChild(i); return l; }
-function numInput(labelText,key,ph){ var l=el('label',{class:'fld'}); l.appendChild(el('span',null,labelText)); var i=el('input',{type:'text',inputmode:'decimal'}); if(ph)i.placeholder=ph; i.value=state[key]||''; i.addEventListener('input',function(){ state[key]=i.value; refresh(); }); l.appendChild(i); return l; }
-function areaInput(labelText,key,ph){ var l=el('label',{class:'fld'}); l.appendChild(el('span',null,labelText)); var t=el('textarea'); if(ph)t.placeholder=ph; t.value=state[key]||''; t.addEventListener('input',function(){ state[key]=t.value; refresh(); }); l.appendChild(t); return l; }
-function buildAll(){ colForm.innerHTML=''; colForm.appendChild(card('1 · Síndrome principal',true,function(b){ var l=el('label',{class:'fld'}); l.appendChild(el('span',null,'Escolha a síndrome (define red flags, exame dirigido e hipóteses sugeridas)')); var sel=el('select'); sel.appendChild(el('option',{value:''},'— selecione —')); Object.keys(SYNDROMES).forEach(function(k){ var o=el('option',{value:k},SYNDROMES[k].nome); if(state.syndrome===k)o.selected=true; sel.appendChild(o); }); sel.addEventListener('change',function(){ state.syndrome=sel.value; state.pos={}; state.rf={}; state.exSel={}; state.exLivre={}; buildAll(); refresh(); }); l.appendChild(sel); b.appendChild(l); })); if(state.syndrome){ var s=SYNDROMES[state.syndrome]; colForm.appendChild(card('2 · HDA — quadro atual',true,function(b){ b.appendChild(textInput('Tempo de sintomas','tempo','ex.: 2 DIAS, 6 HORAS')); b.appendChild(el('div',{class:'grouplabel'},'Sintomas positivos')); var g1=el('div',{class:'chips'}); s.pos.forEach(function(sym){ g1.appendChild(chip(sym, !!state.pos[sym], function(v){ state.pos[sym]=v; })); }); b.appendChild(g1); b.appendChild(areaInput('Outros sintomas (livre)','outrosSint','')); b.appendChild(areaInput('Observações livres da HDA','obsHda','')); })); colForm.appendChild(card('3 · Sinais de alarme (red flags)',true,function(b){ if(s.nota){ var nb=el('div',{class:'clin-note'}); nb.appendChild(el('strong',null,'Atenção clínica: ')); nb.appendChild(document.createTextNode(s.nota)); b.appendChild(nb); } b.appendChild(el('p',{class:'hint'},'Marcar aqui inclui o item em "NEGA ..." na HDA. Marcar red flag e escolher Alta dispara aviso de segurança.')); var g=el('div',{class:'chips'}); s.rf.forEach(function(f){ g.appendChild(chip(f, !!state.rf[f], function(v){ state.rf[f]=v; }, true)); }); b.appendChild(g); })); }
-colForm.appendChild(card('4 · HPP — antecedentes',false,function(b){ b.appendChild(el('div',{class:'grouplabel'},'Comorbidades')); var g1=el('div',{class:'chips'}); HPP.comorb.forEach(function(x){ g1.appendChild(chip(x,!!state.comorb[x],function(v){state.comorb[x]=v;})); }); b.appendChild(g1); b.appendChild(textInput('Outras comorbidades','comorbOutros','')); b.appendChild(el('div',{class:'grouplabel'},'Alergias')); var g2=el('div',{class:'chips'}); HPP.alerg.forEach(function(x){ g2.appendChild(chip(x,!!state.alerg[x],function(v){state.alerg[x]=v;})); }); b.appendChild(g2); b.appendChild(textInput('Outras alergias','alergOutros','')); b.appendChild(el('div',{class:'grouplabel'},'Medicações de uso contínuo')); var g3=el('div',{class:'chips'}); HPP.medic.forEach(function(x){ g3.appendChild(chip(x,!!state.medic[x],function(v){state.medic[x]=v;})); }); b.appendChild(g3); b.appendChild(textInput('Outras medicações','medicOutros','')); b.appendChild(el('div',{class:'grouplabel'},'DAC precoce na família')); b.appendChild(twoWay('dacFam','dacFamLivre')); b.appendChild(el('div',{class:'grouplabel'},'Internação recente')); b.appendChild(twoWay('ihRecente','ihRecenteLivre')); }));
-colForm.appendChild(card('5 · Sinais vitais',false,function(b){ b.appendChild(el('p',{class:'hint'},'Campo vazio vira NA automaticamente.')); var r1=el('div',{class:'row'}); r1.appendChild(numInput('FC (bpm)','fc','')); r1.appendChild(numInput('FR (irpm)','fr','')); r1.appendChild(numInput('STO2 (%)','sto2','')); b.appendChild(r1); var r2=el('div',{class:'row'}); r2.appendChild(numInput('TAX (C)','tax','')); r2.appendChild(textInput('PA (mmHg)','pa','ex.: 120/80')); b.appendChild(r2); var r3=el('div',{class:'row'}); r3.appendChild(numInput('HGT (opcional)','hgt','')); r3.appendChild(numInput('Dor 0-10 (opcional)','dor','')); b.appendChild(r3); }));
-colForm.appendChild(card('6 · Exame físico',false,function(b){ b.appendChild(el('div',{class:'grouplabel'},'Geral')); var gg=el('div',{class:'chips'}); EXAM_OPTIONS.geral.forEach(function(x){ gg.appendChild(chip(x,!!state.exGeral[x],function(v){state.exGeral[x]=v;})); }); b.appendChild(gg); b.appendChild(textInput('Geral — livre','exGeralLivre','')); var blocks = state.syndrome ? SYNDROMES[state.syndrome].exam : ['acv','ar','abdome','neuro']; blocks.forEach(function(bl){ if(bl==='geral') return; b.appendChild(el('div',{class:'grouplabel'},EXAM_BLOCKS[bl].label)); var g=el('div',{class:'chips'}); state.exSel[bl]=state.exSel[bl]||{}; EXAM_OPTIONS[bl].forEach(function(x){ g.appendChild(chip(x,!!state.exSel[bl][x],function(v){state.exSel[bl][x]=v;})); }); b.appendChild(g); var l=el('label',{class:'fld'}); l.appendChild(el('span',null,EXAM_BLOCKS[bl].label+' — livre')); var i=el('input',{type:'text'}); i.value=state.exLivre[bl]||''; i.addEventListener('input',function(){ state.exLivre[bl]=i.value; refresh(); }); l.appendChild(i); b.appendChild(l); }); }));
-colForm.appendChild(card('7 · Hipótese diagnóstica',false,function(b){ if(state.syndrome){ b.appendChild(el('div',{class:'grouplabel'},'Sugestões (clique para usar)')); var g=el('div',{class:'chips'}); SYNDROMES[state.syndrome].hip.forEach(function(h){ var c=el('span',{class:'chip'},h); c.addEventListener('click',function(){ state.hipotese=h; buildAll(); refresh(); }); g.appendChild(c); }); b.appendChild(g); } b.appendChild(textInput('Hipótese (escolha ou escreva)','hipotese','')); }));
-colForm.appendChild(card('8 · Conduta',false,function(b){ var g=el('div',{class:'chips'}); CONDUTAS.forEach(function(x){ g.appendChild(chip(x,!!state.conduta[x],function(v){state.conduta[x]=v;})); }); b.appendChild(g); b.appendChild(textInput('Outra conduta (livre)','condutaOutro','')); }));
-colForm.appendChild(card('9 · Status do atendimento',false,function(b){ var g=el('div',{class:'status-grid'}); STATUS_LIST.forEach(function(st){ var o=el('div',{class:'status-opt'+(state.status===st?' on':'')},st); o.addEventListener('click',function(){ state.status=(state.status===st?'':st); buildAll(); refresh(); }); g.appendChild(o); }); b.appendChild(g); }));
-colForm.appendChild(card('10 · Justificativa (opcional)',false,function(b){ b.appendChild(textInput('Exame / internação / parecer solicitado','justExame','ex.: TC DE ABDOME')); b.appendChild(textInput('Achados relevantes','justAchados','ex.: DOR À PALPAÇÃO, DISTENSÃO')); b.appendChild(textInput('Risco / hipótese a descartar','justRisco','ex.: ABDOME AGUDO')); }));
-colForm.appendChild(card('11 · Pedido de parecer',false,function(b){ b.appendChild(textInput('Especialidade','parEsp','ex.: CIRURGIA GERAL')); b.appendChild(textInput('Motivo do parecer','parMotivo','')); b.appendChild(areaInput('Resumo clínico','parResumo','')); b.appendChild(textInput('Pergunta objetiva','parPergunta','ex.: NECESSIDADE DE ABORDAGEM CIRÚRGICA')); })); }
-function twoWay(key,livreKey){ var wrap=el('div'); var g=el('div',{class:'chips'}); ['NA','Sim'].forEach(function(opt){ var c=el('span',{class:'chip'+(state[key]===opt?' on':'')},opt); c.addEventListener('click',function(){ state[key]=opt; buildAll(); refresh(); }); g.appendChild(c); }); wrap.appendChild(g); if(state[key]==='Sim'){ var l=el('label',{class:'fld',style:'margin-top:8px'}); l.appendChild(el('span',null,'Detalhe (livre)')); var i=el('input',{type:'text'}); i.value=state[livreKey]||''; i.addEventListener('input',function(){ state[livreKey]=i.value; refresh(); }); l.appendChild(i); wrap.appendChild(l); } return wrap; }
-function scoreValue(key){ var sel=state.scoreSel[key]||{}; var sum=0; Object.keys(sel).forEach(function(i){ if(sel[i]!=null) sum+=sel[i]; }); return sum; }
-function scoreComplete(key){ var sel=state.scoreSel[key]||{}; return SCORES[key].items.every(function(_,i){ return sel[i]!=null; }); }
-function renderScores(panel){ panel.innerHTML=''; Object.keys(SCORES).forEach(function(key){ var sc=SCORES[key]; var box=el('div',{class:'score-block'}); box.appendChild(el('h3',null,sc.nome)); box.appendChild(el('p',{class:'desc'},sc.desc)); sc.items.forEach(function(item,idx){ var line=el('div',{class:'score-line'}); line.appendChild(el('div',{class:'q'},item.q)); var opts=el('div',{class:'score-opts'}); item.opts.forEach(function(o){ var sel=state.scoreSel[key]||(state.scoreSel[key]={}); var on = sel[idx]===o[1]; var btn=el('span',{class:'score-opt'+(on?' on':'')},o[0]); btn.addEventListener('click',function(){ state.scoreSel[key][idx]=o[1]; renderScores(panel); }); opts.appendChild(btn); }); line.appendChild(opts); box.appendChild(line); }); if(scoreComplete(key)){ var v=scoreValue(key); var bd=sc.bands(v); var res=el('div',{class:'score-result rk-'+bd[1]}); res.appendChild(el('span',null,sc.nome+': '+String(v).replace('.',',')+' pts')); res.appendChild(el('span',{class:'band'},bd[0])); box.appendChild(res); var line=sc.line(String(v).replace('.',','), bd[0]); var cp=el('button',{class:'btn ghost score-copy'},'Copiar linha p/ evolução'); cp.addEventListener('click',function(){ var txt=sanitizeText(line); if(navigator.clipboard) navigator.clipboard.writeText(txt).catch(function(){}); cp.textContent='Copiado'; cp.classList.add('copied'); setTimeout(function(){ cp.textContent='Copiar linha p/ evolução'; cp.classList.remove('copied'); },1400); }); box.appendChild(cp); } else { box.appendChild(el('p',{class:'hint'},'Marque todos os itens para calcular.')); } panel.appendChild(box); }); }
-function renderCid(panel){ panel.innerHTML=''; var wrap=el('div',{class:'cid-search'}); var inp=el('input',{type:'text',placeholder:'Buscar CID por termo ou código (ex.: gastro, epigástrica, J06)'}); inp.value=state.cidQuery; var list=el('div'); function draw(){ list.innerHTML=''; var q=state.cidQuery.trim().toLowerCase(); var norm=function(s){ return s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase(); }; var res=CID.filter(function(c){ if(!q) return true; return norm(c[0]).indexOf(norm(q))>=0 || norm(c[1]).indexOf(norm(q))>=0; }); if(!res.length){ list.appendChild(el('p',{class:'hint'},'Nenhum CID encontrado para esse termo.')); return; } res.forEach(function(c){ var it=el('div',{class:'cid-item'}); it.appendChild(el('span',{class:'code'},c[0])); it.appendChild(el('span',{class:'desc'},c[1])); var btn=el('button',null,'Copiar'); btn.addEventListener('click',function(){ if(navigator.clipboard) navigator.clipboard.writeText(c[0]).catch(function(){}); btn.textContent='Copiado'; btn.classList.add('copied'); setTimeout(function(){ btn.textContent='Copiar'; btn.classList.remove('copied'); },1200); }); it.appendChild(btn); list.appendChild(it); }); } inp.addEventListener('input',function(){ state.cidQuery=inp.value; draw(); }); wrap.appendChild(inp); wrap.appendChild(list); panel.appendChild(wrap); draw(); }
-function refresh(){ var panel=$('panel'); var hint=$('outHint'); var copyBtn=$('btnCopy'); var regenBtn=$('btnRegen'); var interactive = (activeTab==='scores' || activeTab==='cid'); outputEl.style.display = interactive ? 'none' : 'block'; panel.style.display = interactive ? 'block' : 'none'; copyBtn.style.display = interactive ? 'none' : 'inline-block'; regenBtn.style.display = interactive ? 'none' : 'inline-block'; if(activeTab==='scores'){ hint.textContent='Cada score calcula sozinho e mostra a faixa. A leitura clínica e a conduta são suas. Use "Copiar linha" para levar o resultado à evolução.'; renderScores(panel); } else if(activeTab==='cid'){ hint.textContent='Busca de CID-10 para colar no MEVO. Copia só o código.'; renderCid(panel); } else { if(!userEdited){ outputEl.value=currentText(); } hint.textContent='O texto é editável aqui antes de copiar. O QP fica entre aspas retas e sem hífen; os itens internos usam hífen simples.'; } var showAlert = (activeTab==='evolucao' || activeTab==='adc') && anyRedFlag() && state.status==='Alta'; $('rfAlert').classList.toggle('show', showAlert); }
-Array.prototype.forEach.call(document.querySelectorAll('.out-tab'),function(tab){ tab.addEventListener('click',function(){ Array.prototype.forEach.call(document.querySelectorAll('.out-tab'),function(t){t.classList.remove('on')}); tab.classList.add('on'); activeTab=tab.getAttribute('data-tab'); userEdited=false; refresh(); }); });
-outputEl.addEventListener('input',function(){ userEdited=true; });
-$('btnCopy').addEventListener('click',function(){ outputEl.select(); try{ document.execCommand('copy'); }catch(e){} if(navigator.clipboard){ navigator.clipboard.writeText(outputEl.value).catch(function(){}); } var b=$('btnCopy'); var old=b.textContent; b.textContent='Copiado'; b.classList.add('copied'); setTimeout(function(){ b.textContent=old; b.classList.remove('copied'); },1400); });
-$('btnRegen').addEventListener('click',function(){ userEdited=false; refresh(); });
-function resetState(){ for(var k in state){ if(typeof state[k]==='string') state[k]= (k==='dacFam'||k==='ihRecente')?'NA':''; else state[k]={}; } state.exSel={}; state.exLivre={}; }
-$('btnReset').addEventListener('click',function(){ if(!confirm('Resetar todo o formulário? Isso apaga tudo o que foi preenchido.')) return; resetState(); activeTab='evolucao'; userEdited=false; Array.prototype.forEach.call(document.querySelectorAll('.out-tab'),function(t){t.classList.remove('on')}); document.querySelector('.out-tab[data-tab="evolucao"]').classList.add('on'); buildAll(); refresh(); });
-$('btnClear').addEventListener('click',function(){ if(!confirm('Limpar os dados preenchidos?')) return; resetState(); userEdited=false; buildAll(); refresh(); });
-$('btnExpand').addEventListener('click',function(){ Array.prototype.forEach.call(document.querySelectorAll('.card'),function(c){c.classList.remove('closed')}); });
-$('btnCollapse').addEventListener('click',function(){ Array.prototype.forEach.call(document.querySelectorAll('#colForm .card'),function(c){c.classList.add('closed')}); });
-buildAll(); refresh();
-</script>
+<script src="app.js"></script>
 </body>
 </html>
