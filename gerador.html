@@ -3,107 +3,183 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Gerador HMS - Clinica Medica</title>
+<title>Gerador HMS - Clínica Médica</title>
 <style>
-:root{--n:#0f2540;--n2:#17385f;--c:#e8613c;--bg:#f6f8fb;--l:#d8e1ec;--m:#64748b}
+:root{--primary:#0f2540;--primary-light:#1a3a5c;--accent:#e8613c;--success:#10b981;--warning:#f59e0b;--danger:#ef4444;--bg:#f0f4f8;--surface:#fff;--border:#dbe4f0;--text:#0c1a2b;--text-muted:#64748b;--shadow-sm:0 2px 8px rgba(15,37,64,0.08);--shadow-md:0 8px 20px rgba(15,37,64,0.12);--shadow-lg:0 12px 32px rgba(15,37,64,0.15)}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;color:#0c1a2b}
-.top{background:linear-gradient(180deg,var(--n),var(--n2));color:#fff;border-bottom:3px solid var(--c);position:sticky;top:0;z-index:5}
-.wrap{max-width:1120px;margin:auto;padding:12px}
-.top h1{margin:0;font-size:18px}
-.top p{margin:3px 0 0;color:#d2deed;font-size:12.5px}
-.grid{display:grid;grid-template-columns:1fr 420px;gap:12px}
-.card{background:#fff;border:1px solid var(--l);border-radius:16px;margin-bottom:12px;overflow:hidden;box-shadow:0 8px 22px #0f254012}
-.h{padding:12px 14px;background:#fbfcff;border-bottom:1px solid var(--l);font-weight:900;color:var(--n);font-size:13px;text-transform:uppercase;display:flex;justify-content:space-between;align-items:center}
-.b{padding:13px}
-.chips{display:flex;gap:8px;flex-wrap:wrap}
-.chip,.btn{border:1px solid var(--l);background:#fff;border-radius:999px;padding:8px 11px;font-weight:850;font-size:12.5px;cursor:pointer;color:#0c1a2b; transition:all 0.2s ease;}
-.chip.on{background:var(--n);border-color:var(--n);color:white}
-.chip.hot.on{background:var(--c);border-color:var(--c)}
-.btn{border-radius:12px;background:var(--n);border-color:var(--n);color:white}
-.btn.ghost{background:#fff;color:var(--n)}
-.btn.c{background:var(--c);border-color:var(--c)}
-.btn.mic { background: #fff; color: var(--c); border-color: var(--c); padding: 4px 8px; font-size: 11px; margin-top: -3px; font-weight: bold;}
-.btn.mic.recording { background: var(--c); color: #fff; animation: pulse 1.5s infinite; }
-@keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; } }
-textarea,input{width:100%;border:1px solid var(--l);border-radius:13px;padding:10px 12px;font:inherit;background:#fff; margin-bottom: 8px;}
-textarea{min-height:80px;resize:vertical}
-.lab{display:block;margin:12px 0 6px;color:var(--n2);font-size:11.5px;font-weight:900;text-transform:uppercase; display:flex; justify-content:space-between; align-items:center;}
-.outbox{position:sticky;top:76px}
-.out{min-height:560px;background:#fbfcff;font-family:Menlo,Consolas,monospace;font-size:12.4px;line-height:1.55;white-space:pre}
-.hint{font-size:12px;color:var(--m);line-height:1.4}
-.row{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}
-.score{border:1px solid var(--l);border-radius:13px;padding:10px;background:#fbfcff;margin-bottom:10px}
-.score b{color:var(--n)}
-.opts{display:flex;gap:6px;flex-wrap:wrap;margin-top:7px}
-@media(max-width:900px){.grid{grid-template-columns:1fr}.outbox{position:static}.out{min-height:410px}.row{grid-template-columns:repeat(2,1fr)}.wrap{padding:10px}.top h1{font-size:17px}.btn{flex:1}}
+html{scroll-behavior:smooth}
+body{margin:0;background:linear-gradient(135deg,var(--bg) 0%,#e8f1fb 100%);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;color:var(--text);min-height:100vh}
+.top{background:linear-gradient(135deg,var(--primary) 0%,var(--primary-light) 100%);color:#fff;border-bottom:2px solid var(--accent);position:sticky;top:0;z-index:100;box-shadow:var(--shadow-lg)}
+.wrap{max-width:1280px;margin:auto;padding:16px}
+.top h1{margin:0;font-size:20px;font-weight:900;letter-spacing:-0.5px}
+.top p{margin:6px 0 0;color:rgba(255,255,255,0.85);font-size:13px;font-weight:500}
+.grid{display:grid;grid-template-columns:1fr 480px;gap:16px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:20px;margin-bottom:14px;overflow:hidden;box-shadow:var(--shadow-md);transition:all 0.3s ease}
+.card:hover{box-shadow:var(--shadow-lg);transform:translateY(-2px)}
+.h{padding:14px 16px;background:linear-gradient(135deg,#f8fafc 0%,#f0f4f8 100%);border-bottom:1px solid var(--border);font-weight:900;color:var(--primary);font-size:13px;text-transform:uppercase;display:flex;justify-content:space-between;align-items:center;letter-spacing:0.5px}
+.b{padding:16px}
+.chips{display:flex;gap:10px;flex-wrap:wrap}
+.chip,.btn{border:1.5px solid var(--border);background:var(--surface);border-radius:10px;padding:10px 13px;font-weight:700;font-size:13px;cursor:pointer;color:var(--text);transition:all 0.25s cubic-bezier(0.4,0,0.2,1);box-shadow:var(--shadow-sm)}
+.chip:hover{border-color:var(--primary);transform:translateY(-1px)}
+.chip.on{background:var(--primary);border-color:var(--primary);color:#fff;box-shadow:0 4px 12px rgba(15,37,64,0.3)}
+.chip.hot{background:linear-gradient(135deg,#fef3f2 0%,#fff5f0 100%);border-color:var(--accent);color:var(--accent)}
+.chip.hot.on{background:linear-gradient(135deg,var(--accent) 0%,#d75a2e 100%);border-color:var(--accent);color:#fff;box-shadow:0 4px 12px rgba(232,97,60,0.3)}
+.btn{border-radius:12px;background:var(--primary);border-color:var(--primary);color:#fff;padding:11px 15px;font-size:13px}
+.btn:hover{background:var(--primary-light);box-shadow:0 6px 16px rgba(15,37,64,0.25)}
+.btn.ghost{background:transparent;color:var(--primary);border-color:var(--primary)}
+.btn.ghost:hover{background:rgba(15,37,64,0.05)}
+.btn.c{background:linear-gradient(135deg,var(--accent) 0%,#d75a2e 100%);border-color:var(--accent)}
+.btn.c:hover{box-shadow:0 6px 16px rgba(232,97,60,0.3)}
+.btn.mic{background:#fff;color:var(--accent);border-color:var(--accent);padding:8px 10px;font-size:12px;margin-top:-2px;font-weight:bold}
+.btn.mic.recording{background:var(--accent);color:#fff;animation:pulse 1.5s infinite;box-shadow:0 4px 12px rgba(232,97,60,0.4)}
+@keyframes pulse{0%{opacity:1;transform:scale(1)}50%{opacity:0.7;transform:scale(1.05)}100%{opacity:1;transform:scale(1)}}
+textarea,input{width:100%;border:1.5px solid var(--border);border-radius:12px;padding:12px 14px;font:inherit;background:var(--surface);color:var(--text);transition:all 0.3s ease;margin-bottom:10px}
+textarea:focus,input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(232,97,60,0.1)}
+textarea{min-height:90px;resize:vertical}
+.lab{display:block;margin:14px 0 8px;color:var(--primary);font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:0.5px;display:flex;justify-content:space-between;align-items:center}
+.outbox{position:sticky;top:96px;height:fit-content}
+.out{min-height:620px;background:linear-gradient(135deg,#f9fafb 0%,#fbfcff 100%);font-family:'Menlo','Courier New',monospace;font-size:13px;line-height:1.6;white-space:pre-wrap;word-wrap:break-word;border:1px solid var(--border);border-radius:12px;padding:14px;font-weight:500;resize:vertical;color:var(--text)}
+.hint{font-size:12px;color:var(--text-muted);line-height:1.5;margin-top:6px}
+.row{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.row2{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.row3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.score{border:1.5px solid var(--border);border-radius:14px;padding:12px;background:linear-gradient(135deg,#fafbfc 0%,#f5f8fc 100%);margin-bottom:12px;transition:all 0.3s ease}
+.score:hover{border-color:var(--primary);box-shadow:var(--shadow-md)}
+.score b{color:var(--primary);font-weight:900}
+.opts{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.section-title{font-size:14px;font-weight:900;color:var(--primary);text-transform:uppercase;letter-spacing:0.5px;margin-top:14px;margin-bottom:10px;padding-bottom:8px;border-bottom:2px solid var(--accent)}
+.badge{display:inline-block;background:var(--accent);color:#fff;padding:4px 8px;border-radius:6px;font-size:11px;font-weight:700;margin-left:auto}
+.status-bar{padding:10px 16px;background:linear-gradient(135deg,#f0fdf4 0%,#ecfdf5 100%);border-left:4px solid var(--success);border-radius:8px;margin-bottom:12px;font-size:12px;font-weight:600;color:#166534}
+@media(max-width:1024px){.grid{grid-template-columns:1fr}.outbox{position:static;top:auto}.out{min-height:400px}.row{grid-template-columns:repeat(3,1fr)}.row2{grid-template-columns:1fr}.wrap{padding:14px}.top h1{font-size:18px}}
+@media(max-width:768px){.wrap{padding:12px}.card{margin-bottom:12px}.b{padding:14px}.row{grid-template-columns:repeat(2,1fr)}.chips{gap:8px}.chip,.btn{font-size:12px;padding:9px 11px}}
+@media(max-width:480px){.row{grid-template-columns:1fr}.row3{grid-template-columns:1fr}.b{padding:12px}.chip,.btn{width:100%;text-align:center}.out{min-height:300px}}
 </style>
 </head>
 <body>
 <header class="top">
   <div class="wrap">
-    <h1>GERADOR HMS CLINICA MEDICA</h1>
-    <p>Otimizado para padrao ONA 3. Raciocinio em QP e HD. Sem caracteres especiais.</p>
+    <h1>🏥 ACELERADOR HMS - CLÍNICA MÉDICA</h1>
+    <p>Padrão ONA 3 | Raciocínio em QP e HD | Sem caracteres especiais | Auto-save</p>
   </div>
 </header>
 <main class="wrap">
+  <div class="status-bar">✓ Dados sendo salvos automaticamente. Se a página cair, nada será perdido!</div>
   <div class="grid">
     <section>
       <div class="card">
-        <div class="h">1 QUEIXA PRINCIPAL (QP)</div>
+        <div class="h">🔴 QUEIXA PRINCIPAL (QP)</div>
         <div class="b">
           <div id="models" class="chips"></div>
-          <span class="lab">TEMPO DA QUEIXA / HDA</span>
+          <span class="lab">⏱️ TEMPO DA QUEIXA</span>
           <div id="times" class="chips"></div>
-          <input id="tempoLivre" placeholder="ou digite tempo especifico ex 6 HORAS / 2 DIAS">
-          <span class="lab"><span>COMPLEMENTO HDA</span> <button id="micExtra" class="btn mic" title="Falar texto">DITAR VOZ</button></span>
-          <textarea id="extra" placeholder="Descreva sinais associados, inicio do quadro, fatores de melhora e piora"></textarea>
+          <input id="tempoLivre" placeholder="ou tempo específico: 6 HORAS, 2 DIAS, etc">
+          <span class="lab"><span>📝 COMPLEMENTO HDA</span> <button id="micExtra" class="btn mic" title="Falar texto">🎤 DITAR</button></span>
+          <textarea id="extra" placeholder="Sinais associados, início do quadro, fatores de melhora e piora..."></textarea>
         </div>
       </div>
+
       <div class="card">
-        <div class="h">2 RESULTADOS DE EXAMES</div>
+        <div class="h">👨‍⚕️ HISTÓRIA PATOLÓGICA PREGRESSA</div>
         <div class="b">
-          <textarea id="raw" style="min-height:120px" placeholder="Cole laudos, TC, RX, ECG ou exames laboratoriais aqui"></textarea>
-          <p class="hint">O parser extraira os dados sem gerar caracteres especiais ou travessoes.</p>
+          <span class="lab">COMORBIDADES</span>
+          <div id="comorbChips" class="chips" style="margin-bottom:10px"></div>
+          <textarea id="comorb" placeholder="Ou digite customizado: HAS, DM, IAM prévio, etc" style="min-height:70px"></textarea>
+          
+          <span class="lab">ALERGIAS</span>
+          <div id="alergChips" class="chips" style="margin-bottom:10px"></div>
+          <textarea id="alerg" placeholder="Ou digite: Penicilina, AINE, Contraste, etc" style="min-height:50px"></textarea>
+          
+          <span class="lab">MEDICAMENTOS DE USO CONTÍNUO</span>
+          <div id="medChips" class="chips" style="margin-bottom:10px"></div>
+          <textarea id="medcont" placeholder="Ou digite: Losartana 50mg, Metformina 850mg, etc" style="min-height:70px"></textarea>
         </div>
       </div>
+
       <div class="card">
-        <div class="h">3 SCORES CLINICOS</div>
-        <div class="b"><div id="scores"></div></div>
-      </div>
-      <div class="card">
-        <div class="h">4 SINAIS VITAIS, CONDUTA E HPP</div>
+        <div class="h">📊 EXAME FÍSICO</div>
         <div class="b">
-          <span class="lab">CONDUTAS RAPIDAS</span>
-          <div id="cond" class="chips"></div>
-          <span class="lab"><span>CONDUTA LIVRE</span> <button id="micCond" class="btn mic" title="Falar texto">DITAR VOZ</button></span>
-          <textarea id="condLivre" placeholder="Especifique medicacoes, dosagens e orientacoes adicionais"></textarea>
-          <span class="lab">SINAIS VITAIS</span>
-          <div class="row">
-            <input id="fc" placeholder="FC">
-            <input id="fr" placeholder="FR">
-            <input id="sat" placeholder="STO2">
-            <input id="tax" placeholder="TAX">
-            <input id="pa" placeholder="PA">
+          <div class="row3">
+            <div>
+              <label class="lab">GERAL</label>
+              <input id="geral" placeholder="BEG, hidratado, etc">
+            </div>
+            <div>
+              <label class="lab">ACV</label>
+              <input id="acv" placeholder="RCR 2T, BNF, etc">
+            </div>
+            <div>
+              <label class="lab">AR</label>
+              <input id="ar" placeholder="MV bilateral, etc">
+            </div>
           </div>
-          <span class="lab">HPP / ALERGIAS / MEDICAMENTOS CONTINUOS</span>
-          <textarea id="hpp" placeholder="Deixe em branco para constar NA"></textarea>
+          <div class="row3">
+            <div>
+              <label class="lab">ABD</label>
+              <input id="abd" placeholder="Flácido, indolor, etc">
+            </div>
+            <div>
+              <label class="lab">NEURO</label>
+              <input id="neuro" placeholder="Glasgow 15, etc">
+            </div>
+            <div>
+              <label class="lab">MMII</label>
+              <input id="mmii" placeholder="Edema, varizes, etc">
+            </div>
+          </div>
+          <textarea id="outros" placeholder="Outros achados (opcional)" style="min-height:50px;margin-top:10px"></textarea>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="h">📋 EXAMES COMPLEMENTARES E SCORES</div>
+        <div class="b">
+          <span class="lab">LAUDOS E RESULTADOS</span>
+          <textarea id="raw" placeholder="Cole laudos, TC, RX, ECG, labs aqui. Parser automático!"></textarea>
+          <p class="hint">💡 Dica: Copie diretamente do laudo. O sistema formata automaticamente sem caracteres especiais.</p>
+          <div id="scores" style="margin-top:14px"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="h">🩺 SINAIS VITAIS</div>
+        <div class="b">
+          <div class="row">
+            <div><label class="lab">FC</label><input id="fc" placeholder="bpm"></div>
+            <div><label class="lab">FR</label><input id="fr" placeholder="irpm"></div>
+            <div><label class="lab">STO2</label><input id="sat" placeholder="%"></div>
+            <div><label class="lab">TAX</label><input id="tax" placeholder="°C"></div>
+            <div><label class="lab">PA</label><input id="pa" placeholder="mmHg"></div>
+          </div>
+          <div class="row2">
+            <div><label class="lab">HGT</label><input id="hgt" placeholder="(opcional)"></div>
+            <div><label class="lab">DOR</label><input id="dor" placeholder="(0-10)"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="h">⚙️ CONDUTA MÉDICA</div>
+        <div class="b">
+          <span class="lab">CONDUTAS RÁPIDAS</span>
+          <div id="cond" class="chips"></div>
+          <span class="lab"><span>📝 PRESCRIÇÕES/MEDICAÇÕES</span> <button id="micCond" class="btn mic" title="Falar texto">🎤 DITAR</button></span>
+          <textarea id="condLivre" placeholder="Medicações, dosagens e orientações. Ex: Dipirona 1g EV agora, etc"></textarea>
         </div>
       </div>
     </section>
     <aside class="outbox">
       <div class="card">
-        <div class="h">EVOLUCAO GERADA</div>
+        <div class="h">📄 EVOLUÇÃO GERADA</div>
         <div class="b">
-          <div class="chips" style="margin-bottom:10px">
-            <button class="chip on" data-tab="evo">Evolucao</button>
-            <button class="chip" data-tab="pass">Passagem Plantao</button>
-            <button class="chip" data-tab="exam">Resumo Exames</button>
+          <div class="chips" style="margin-bottom:12px">
+            <button class="chip on" data-tab="evo">Evolução</button>
+            <button class="chip" data-tab="pass">Passagem</button>
+            <button class="chip" data-tab="exam">Exames</button>
           </div>
           <textarea id="out" class="out"></textarea>
-          <div class="chips" style="margin-top:10px">
-            <button id="copy" class="btn c">COPIAR TEXTO</button>
-            <button id="reset" class="btn ghost">NOVA CONSULTA</button>
+          <div class="chips" style="margin-top:12px;gap:8px">
+            <button id="copy" class="btn c" style="flex:1">📋 COPIAR</button>
+            <button id="reset" class="btn ghost" style="flex:1">🔄 NOVA</button>
           </div>
         </div>
       </div>
@@ -113,238 +189,92 @@ textarea{min-height:80px;resize:vertical}
 <script>
 const $=id=>document.getElementById(id);
 const up=s=>String(s||'').replace(/[<>~_\\*#-]/g,' ').replace(/&/g,'E').replace(/\s+/g,' ').trim().toUpperCase();
+const clean=t=>String(t||'').replace(/[\u201C\u201D]/g,'"').replace(/[\u2018\u2019]/g,"'").replace(/[<>~_\\*#-]/g,' ').replace(/&/g,'E').replace(/https?:\/\/\S+/gi,'').replace(/[^\S\n]+/g,' ').replace(/[ \t]+\n/g,'\n').replace(/\n{3,}/g,'\n\n').trim();
+const na=v=>clean(v)||'NA';
 
 const M={
-  tosse:{
-    n:'TOSSE / SINTOMAS RESPIRATORIOS',
-    h:'PACIENTE COMPARECE AO PRONTO SOCORRO DESACOMPANHADO COM QUADRO DE TOSSE E DISPNEIA HA {T}. NEGA DOR TORACICA TIPICA, SINCOPE, HEMOPTISE E PIORA IMPORTANTE DO PADRAO RESPIRATORIO NO MOMENTO.',
-    hd:['PNM ADQUIRIDA NA COMUNIDADE','SD GRIPAL','RINOSSINUSITE','ASMA EXACERBADA','DPOC EXACERBADO'],
-    ex:['GERAL: BEG, LOTE, EUPNEICO OU SEM SINAIS DE ESFORCO RESPIRATORIO IMPORTANTE NO MOMENTO','AR: MV PRESENTE BILATERALMENTE, AVALIAR PRESENCA DE CREPITACOES, RONCOS OU SIBILOS','ACV: RCR 2T, BNF, SEM SOPROS']
-  },
-  dortorvent:{
-    n:'DOR TORACICA VENTILATORIO DEPENDENTE',
-    h:'PACIENTE COMPARECE AO PRONTO SOCORRO DESACOMPANHADO COM QUEIXA DE DOR TORACICA VENTILATORIO DEPENDENTE HA {T}. NEGA SINCOPE, DISPNEIA IMPORTANTE, HEMOPTISE E INSTABILIDADE CLINICA NO MOMENTO.',
-    hd:['TROMBOEMBOLISMO PULMONAR A DESCARTAR','PNM','PLEURITE'],
-    ex:['GERAL: BEG, LOTE, EUPNEICO, BEM PERFUNDIDO','ACV: RCR 2T, BNF, SEM SOPROS','AR: MV PRESENTE BILATERALMENTE, SEM RUIDOS ADVENTICIOS']
-  },
-  dortor:{
-    n:'DOR TORACICA TIPICA E ATIPICA',
-    h:'PACIENTE COMPARECE AO PRONTO SOCORRO DESACOMPANHADO COM QUEIXA DE DOR TORACICA HA {T}. CARACTERIZAR TIPO, IRRADIACAO E FATORES DE PIORA. NEGA SINCOPE, DISPNEIA E INSTABILIDADE CLINICA NO MOMENTO.',
-    hd:['SINDROME CORONARIANA AGUDA A DESCARTAR','DOR TORACICA A ESCLARECER','DRGE'],
-    ex:['GERAL: BEG, LOTE, EUPNEICO, BEM PERFUNDIDO','ACV: RCR 2T, BNF, SEM SOPROS','AR: MV PRESENTE BILATERALMENTE, SEM RUIDOS ADVENTICIOS']
-  },
-  ouvido:{
-    n:'DOR DE OUVIDO E OTALGIA',
-    h:'PACIENTE COMPARECE AO PRONTO SOCORRO DESACOMPANHADO COM QUEIXA DE OTALGIA HA {T}. AVALIAR OTORREIA, FEBRE, VERTIGEM OU PLENITUDE AURICULAR. NEGA SINAIS DE ALARME NEUROLOGICO.',
-    hd:['OMA','OEA','CERUME IMPACTADO'],
-    ex:['GERAL: BEG, LOTE','OTOSCOPIA: AVALIAR CONDUTO AUDITIVO EXTERNO E MEMBRANA TIMPANICA, PESQUISAR HIPEREMIA OU ABAULAMENTO']
-  },
-  garganta:{
-    n:'DOR DE GARGANTA E ODINOFAGIA',
-    h:'PACIENTE COMPARECE AO PRONTO SOCORRO DESACOMPANHADO COM QUEIXA DE ODINOFAGIA HA {T}. AVALIAR FEBRE, EXSUDATO E LINFONODOMEGALIA. NEGA DISPNEIA, SIALORREIA E TRISMO.',
-    hd:['AMIGDALITE BACTERIANA','FARINGITE VIRAL','MONONUCLEOSE INFECCIOSA','SD GRIPAL'],
-    ex:['GERAL: BEG, LOTE, EUPNEICO','OROFARINGE: AVALIAR HIPEREMIA, PLACAS PURULENTAS, AMIGDALAS E UVULA','CERVICAL: AVALIAR LINFONODOS PALPAVEIS E DOLOROSOS']
-  },
-  abd:{
-    n:'DOR ABDOMINAL',
-    h:'PACIENTE COMPARECE AO PRONTO SOCORRO DESACOMPANHADO COM QUEIXA DE DOR ABDOMINAL HA {T}. AVALIAR NAUSEAS, VOMITOS, HABITO INTESTINAL E SINTOMAS URINARIOS ASSOCIADOS. NEGA SANGRAMENTO, SINCOPE E SINAIS DE INSTABILIDADE.',
-    hd:['ABDOME AGUDO A DESCARTAR','GASTROENTERITE AGUDA','COLICA BILIAR','APENDICITE AGUDA'],
-    ex:['GERAL: BEG OU REG, LOTE, HIDRATADO, BEM PERFUNDIDO','ABD: FLACIDO, DOLOROSO A PALPACAO, RHA PRESENTES, SEM SINAIS DE IRRITACAO PERITONEAL EVIDENTES']
-  },
-  urin:{
-    n:'DISURIA E SINTOMAS URINARIOS',
-    h:'PACIENTE COMPARECE AO PRONTO SOCORRO DESACOMPANHADO COM QUEIXA DE DISURIA HA {T}. AVALIAR POLACIURIA, FEBRE, DOR LOMBAR E HEMATURIA. NEGA SINAIS SISTEMICOS IMPORTANTES NO MOMENTO.',
-    hd:['ITU BAIXA','PIELONEFRITE A DESCARTAR','COLICA NEFRETICA'],
-    ex:['GERAL: BEG, LOTE, EUPNEICO','ABD: FLACIDO, DOR SUPRAPUBICA A PALPACAO, GIORDANO NEGATIVO BILATERALMENTE']
-  },
-  cefaleia:{
-    n:'CEFALEIA',
-    h:'PACIENTE COMPARECE AO PRONTO SOCORRO DESACOMPANHADO COM QUEIXA DE CEFALEIA HA {T}. AVALIAR PADRAO, FOTOFOBIA, NAUSEAS E FATORES DE ALARME. NEGA DEFICIT FOCAL, INICIO SUBITO, PIOR CEFALEIA DA VIDA, FEBRE E RIGIDEZ DE NUCA.',
-    hd:['CEFALEIA PRIMARIA','ENXAQUECA','CEFALEIA TENSIONAL','HSA A DESCARTAR'],
-    ex:['GERAL: BEG, LOTE','NEUROLOGICO: GLASGOW 15, PUPILAS ISOCORICAS E FOTORREAGENTES, SEM DEFICIT FOCAL, SEM SINAIS MENINGEOS']
-  },
-  lomb:{
-    n:'LOMBALGIA',
-    h:'PACIENTE COMPARECE AO PRONTO SOCORRO DESACOMPANHADO COM QUEIXA DE DOR LOMBAR HA {T}. AVALIAR IRRADIACAO, PARESTESIA E TRAUMA. NEGA ALTERACAO ESFINCTERIANA, ANESTESIA EM SELA E DEFICIT MOTOR NO MOMENTO.',
-    hd:['LOMBOCIATALGIA','LOMBALGIA MECANICA','ESPASMO MUSCULAR'],
-    ex:['GERAL: BEG, LOTE','MUSCULOESQUELETICO: DOR PARAVERTEBRAL A PALPACAO, SEM DEFICIT MOTOR, LASEGUE NEGATIVO, SEM ALTERACAO ESFINCTERIANA']
-  }
+  tosse:{n:'TOSSE / SINTOMAS RESPIRATÓRIOS',h:'PACIENTE COMPARECE AO PRONTO SOCORRO DESACOMPANHADO COM QUADRO DE TOSSE E DISPNEIA HA {T}. NEGA DOR TORACICA TIPICA, SINCOPE, HEMOPTISE E PIORA IMPORTANTE DO PADRAO RESPIRATORIO NO MOMENTO.',hd:['PNM ADQUIRIDA NA COMUNIDADE','SINDROME GRIPAL','RINOSSINUSITE','ASMA EXACERBADA','DPOC EXACERBADO','TUBERCULOSE A DESCARTAR']},
+  dortorvent:{n:'DOR TORACICA VENTILATORIO DEPENDENTE',h:'PACIENTE COMPARECE AO PRONTO SOCORRO DESACOMPANHADO COM QUEIXA DE DOR TORACICA VENTILATORIO DEPENDENTE HA {T}. NEGA SINCOPE, DISPNEIA IMPORTANTE, HEMOPTISE E INSTABILIDADE CLINICA NO MOMENTO.',hd:['TROMBOEMBOLISMO PULMONAR A DESCARTAR','PNEUMONIA','PLEURITE','PERICARDITE']},
+  dortor:{n:'DOR TORACICA TIPICA E ATIPICA',h:'PACIENTE COMPARECE AO PRONTO SOCORRO DESACOMPANHADO COM QUEIXA DE DOR TORACICA HA {T}. CARACTERIZAR TIPO, IRRADIACAO E FATORES DE PIORA. NEGA SINCOPE, DISPNEIA E INSTABILIDADE CLINICA NO MOMENTO.',hd:['SINDROME CORONARIANA AGUDA A DESCARTAR','DOR TORACICA A ESCLARECER','DRGE','ESPASMO ESOFAGICO']},
+  ouvido:{n:'DOR DE OUVIDO E OTALGIA',h:'PACIENTE COMPARECE AO PRONTO SOCORRO DESACOMPANHADO COM QUEIXA DE OTALGIA HA {T}. AVALIAR OTORREIA, FEBRE, VERTIGEM OU PLENITUDE AURICULAR. NEGA SINAIS DE ALARME NEUROLOGICO.',hd:['OTITE MEDIA AGUDA','OTITE EXTERNA AGUDA','CERUME IMPACTADO','NEURALGIA DO TRIGEMEO']},
+  garganta:{n:'DOR DE GARGANTA E ODINOFAGIA',h:'PACIENTE COMPARECE AO PRONTO SOCORRO DESACOMPANHADO COM QUEIXA DE ODINOFAGIA HA {T}. AVALIAR FEBRE, EXSUDATO E LINFONODOMEGALIA. NEGA DISPNEIA, SIALORREIA E TRISMO.',hd:['AMIGDALITE BACTERIANA','FARINGITE VIRAL','MONONUCLEOSE INFECCIOSA','SINDROME GRIPAL']},
+  abd:{n:'DOR ABDOMINAL',h:'PACIENTE COMPARECE AO PRONTO SOCORRO DESACOMPANHADO COM QUEIXA DE DOR ABDOMINAL HA {T}. AVALIAR NAUSEAS, VOMITOS, HABITO INTESTINAL E SINTOMAS URINARIOS ASSOCIADOS. NEGA SANGRAMENTO, SINCOPE E SINAIS DE INSTABILIDADE.',hd:['ABDOME AGUDO A DESCARTAR','GASTROENTERITE AGUDA','COLICA BILIAR','APENDICITE AGUDA','DIVERTICULITE']},
+  urin:{n:'DISURIA E SINTOMAS URINARIOS',h:'PACIENTE COMPARECE AO PRONTO SOCORRO DESACOMPANHADO COM QUEIXA DE DISURIA HA {T}. AVALIAR POLACIURIA, FEBRE, DOR LOMBAR E HEMATURIA. NEGA SINAIS SISTEMICOS IMPORTANTES NO MOMENTO.',hd:['ITU BAIXA','PIELONEFRITE A DESCARTAR','COLICA NEFRETICA','PROSTATITE AGUDA']},
+  cefaleia:{n:'CEFALEIA',h:'PACIENTE COMPARECE AO PRONTO SOCORRO DESACOMPANHADO COM QUEIXA DE CEFALEIA HA {T}. AVALIAR PADRAO, FOTOFOBIA, NAUSEAS E FATORES DE ALARME. NEGA DEFICIT FOCAL, INICIO SUBITO, PIOR CEFALEIA DA VIDA, FEBRE E RIGIDEZ DE NUCA.',hd:['CEFALEIA PRIMARIA','ENXAQUECA','CEFALEIA TENSIONAL','HEMORRAGIA SUBARACNOIDE A DESCARTAR','MENINGITE A DESCARTAR']},
+  lomb:{n:'LOMBALGIA',h:'PACIENTE COMPARECE AO PRONTO SOCORRO DESACOMPANHADO COM QUEIXA DE DOR LOMBAR HA {T}. AVALIAR IRRADIACAO, PARESTESIA E TRAUMA. NEGA ALTERACAO ESFINCTERIANA, ANESTESIA EM SELA E DEFICIT MOTOR NO MOMENTO.',hd:['LOMBOCIATALGIA','LOMBALGIA MECANICA','ESPASMO MUSCULAR','ESTENOSE DE CANAL MEDULAR']},
+  febre:{n:'FEBRE / INFECCAO',h:'PACIENTE COMPARECE AO PRONTO SOCORRO COM QUEIXA DE FEBRE HA {T}. RELATA CALAFRIOS, ASTENIA E MIALGIA ASSOCIADOS. AVALIAR FOCO INFECCIOSO.',hd:['INFECCAO RESPIRATORIA','INFECCAO URINARIA','GASTROENTERITE VIRAL OU BACTERIANA','DENGUE','COVID-19','INFLUENZA']},
+  quedas:{n:'QUEDA / TRAUMA',h:'PACIENTE COMPARECE AO PRONTO SOCORRO DESACOMPANHADO COM RELATO DE QUEDA HA {T}. AVALIAR MECANISMO, PERDA DE CONSCIENCIA E TRAUMATISMOS ASSOCIADOS. NEGA PERDA DE MEMORIA OU DEFICIT FOCAL NO MOMENTO.',hd:['TRAUMATISMO CRANIOENCEFALICO','FRATURA A DESCARTAR','TRAUMATISMO TORACO-ABDOMINAL','LESAO MEDULAR POTENCIAL']},
+  dispneia:{n:'DISPNEIA / FALTA DE AR',h:'PACIENTE COMPARECE AO PRONTO SOCORRO DESACOMPANHADO COM QUEIXA DE DISPNEIA HA {T}. AVALIAR ORTOPNEIA, DISPNEIA PAROXISTICA NOTURNA E FATORES DE AGRAVAMENTO. NEGA SIBILANCIA, ESTRIDOR E DESSATURACAO IMPORTANTE NO MOMENTO.',hd:['INSUFICIENCIA CARDIACA DESCOMPENSADA','DOENCA PULMONAR OBSTRUTIVA CRONICA','SINDROME ANSIOSA','TEP A DESCARTAR','ASMA AGUDA']},
+  nausea:{n:'NAUSEA E VOMITO',h:'PACIENTE COMPARECE AO PRONTO SOCORRO COM QUEIXA DE NAUSEAS E VOMITOS HA {T}. AVALIAR CARACTERISTICAS DO VOMITO, ASSOCIACAO COM DOR ABDOMINAL E DEPLEÇAO HIDROELETROLITICA. NEGA SANGRAMENTO DIGESTIVO.',hd:['GASTROENTERITE','COLECISTITE','OBSTRUCAO INTESTINAL','VERTIGEM PERIFERICA OU CENTRAL','ENXAQUECA']},
+  alcool:{n:'INTOXICACAO ALCOOLICA / SUBSTANCIAS',h:'PACIENTE COMPARECE AO PRONTO SOCORRO DESACOMPANHADO EM ESTADO DE EMBRIAGUEZ. AVALIAR REBAIXAMENTO SENSORIO, COMPORTAMENTO E TRAUMA ASSOCIADO. NEGA DEFICIT FOCAL EVIDENTE NO MOMENTO.',hd:['INTOXICACAO ALCOOLICA AGUDA','SURTO PSICOMATICO','HIPOGLICEMIA','TRAUMATISMO CRANIOENCEFALICO']}
 };
 
 const T=['HOJE','6 HORAS','1 DIA','2 DIAS','3 DIAS','5 DIAS','1 SEMANA'];
-const C=['MEDICACAO SINTOMATICA','SOLICITO LABORATORIO DE RASTREIO INFECCIOSO','SOLICITO EXAMES DE IMAGEM','SOLICITO RX','SOLICITO ECG','SOLICITO TROPONINA','SOLICITO EAS','MANTENHO OBSERVACAO CLINICA','REAVALIAR APOS MEDICACOES','ALTA APOS CONSULTA E ORIENTACOES'];
-const SD={heart:['HEART',[['Historia',['0 pouco','1 moderada','2 muito']],['ECG',['0 normal','1 inespecifico','2 ST']],['Idade',['0 <45','1 45 64','2 >=65']],['Risco',['0 nenhum','1 1 2','2 >=3 DAC']],['Troponina',['0 normal','1 1 3x','2 >3x']]]],curb:['CURB 65',[['Confusao',['0 nao','1 sim']],['Ureia',['0 nao','1 sim']],['FR>=30',['0 nao','1 sim']],['PA baixa',['0 nao','1 sim']],['>=65',['0 nao','1 sim']]]],wells:['WELLS TEP',[['TVP',['0 nao','3 sim']],['TEP provavel',['0 nao','3 sim']],['FC>100',['0 nao','1.5 sim']],['Imob Cirurgia',['0 nao','1.5 sim']],['Previo',['0 nao','1.5 sim']],['Hemoptise',['0 nao','1 sim']],['Neoplasia',['0 nao','1 sim']]]]};
+const C=['MEDICACAO SINTOMATICA','SOLICITO LABORATORIO DE RASTREIO INFECCIOSO','SOLICITO EXAMES DE IMAGEM','SOLICITO RX TORAX','SOLICITO ECG','SOLICITO TROPONINA','SOLICITO EAS','SOLICITO ULTRASSOM ABDOMINAL','MANTENHO OBSERVACAO CLINICA','REAVALIAR APOS MEDICACOES','ALTA APOS CONSULTA E ORIENTACOES','INTERNACAO SOLICITADA'];
 
-// Tratamento de Bugs de Cache
-let S = {m:'tosse', t:'2 DIAS', c: new Set(['MEDICACAO SINTOMATICA']), tab:'evo', sc:{}, edit:false};
-try {
-  let saved = localStorage.getItem('hms_state');
-  if (saved) {
-    let parsed = JSON.parse(saved);
-    if(M[parsed.m]) S.m = parsed.m;
-    S.t = parsed.t || '2 DIAS';
-    S.tab = parsed.tab || 'evo';
-    S.sc = parsed.sc || {};
-    S.c = new Set(Array.isArray(parsed.c) ? parsed.c : []);
-  }
-} catch (e) {
-  console.warn("Storage limpo por prevencao de falhas");
-}
+const COMORB=['HAS','DM','DLP','DAC','IAM PREVIO','AVC PREVIO','FA','IC','DPOC','ASMA','DRC','NEOPLASIA','IMUNOSSUPRESSAO','GESTACAO','OBESIDADE','TEP PREVIO','FUMANTE'];
+const ALERG=['DIPIRONA','AINE','PENICILINA','CEFALOSPORINA','CONTRASTE','LATEX','AMOXICILINA'];
+const MEDS=['LOSARTANA 50 MG','ANLODIPINO 5 MG','HIDROCLOROTIAZIDA 25 MG','METFORMINA 850 MG','INSULINA','AAS 100 MG','CLOPIDOGREL 75 MG','RIVAROXABANA','APIXABANA','VARFARINA','LEVOTIROXINA','LISINOPRIL'];
 
-function saveState() {
-  try { 
-    let toSave = { ...S, c: Array.from(S.c) }; 
-    localStorage.setItem('hms_state', JSON.stringify(toSave)); 
-  } catch(e) {}
-}
+const SD={heart:['HEART',[['Historia',['0 pouco','1 moderada','2 muito']],['ECG',['0 normal','1 inespecifico','2 ST']],['Idade',['0 <45','1 45-64','2 >=65']],['Risco',['0 nenhum','1 1-2','2 >=3 DAC']],['Troponina',['0 normal','1 1-3x','2 >3x']]]],curb:['CURB 65',[['Confusao',['0 nao','1 sim']],['Ureia',['0 nao','1 sim']],['FR>=30',['0 nao','1 sim']],['PA baixa',['0 nao','1 sim']],['>=65',['0 nao','1 sim']]]],wells:['WELLS TEP',[['TVP',['0 nao','3 sim']],['TEP provavel',['0 nao','3 sim']],['FC>100',['0 nao','1.5 sim']],['Imob Cirurgia',['0 nao','1.5 sim']],['Previo',['0 nao','1.5 sim']],['Hemoptise',['0 nao','1 sim']],['Neoplasia',['0 nao','1 sim']]]]};
 
-function chip(p,txt,on,fn,cls=''){let b=document.createElement('button');b.className='chip '+cls+(on?' on':'');b.textContent=txt;b.onclick=()=>{fn();ren();gen()};p.append(b)}
+let S={m:'tosse',t:'2 DIAS',c:new Set(['MEDICACAO SINTOMATICA']),tab:'evo',sc:{},edit:false};
+try{let saved=localStorage.getItem('hms_state');if(saved){let parsed=JSON.parse(saved);if(M[parsed.m])S.m=parsed.m;S.t=parsed.t||'2 DIAS';S.tab=parsed.tab||'evo';S.sc=parsed.sc||{};S.c=new Set(Array.isArray(parsed.c)?parsed.c:[])}}catch(e){}
 
-function ren(){
-  models.innerHTML=''; Object.keys(M).forEach(k=>chip(models,M[k].n,S.m===k,()=>S.m=k,'hot'));
-  times.innerHTML=''; T.forEach(t=>chip(times,t,S.t===t,()=>{S.t=t;tempoLivre.value=''}));
-  cond.innerHTML=''; C.forEach(c=>chip(cond,c,S.c.has(c),()=>S.c.has(c)?S.c.delete(c):S.c.add(c),'hot'));
-  document.querySelectorAll('[data-tab]').forEach(b=>{
-    b.classList.toggle('on',S.tab===b.dataset.tab);
-    b.onclick=()=>{S.tab=b.dataset.tab;S.edit=false;gen();ren()};
-  });
+function saveState(){try{let toSave={...S,c:Array.from(S.c)};localStorage.setItem('hms_state',JSON.stringify(toSave))}catch(e){}}
+
+function chipFactory(parent,items,activeValue,toggleFn,cls=''){parent.innerHTML='';items.forEach(item=>{let btn=document.createElement('button');btn.className='chip '+cls+(activeValue===item||activeValue.has?.(item)?'on':'');btn.textContent=item;btn.onclick=()=>{toggleFn(item);ren();gen()};parent.append(btn)})}
+
+function renderChips(){
+  chipFactory($('models'),Object.keys(M),S.m,(m)=>S.m=m,'hot');
+  chipFactory($('times'),T,S.t,(t)=>{S.t=t;$('tempoLivre').value=''},'');
+  chipFactory($('cond'),C,S.c,(c)=>S.c.has(c)?S.c.delete(c):S.c.add(c),'hot');
+  chipFactory($('comorbChips'),COMORB,new Set($('comorb').value.split(/[,;\n]/).map(x=>clean(x)).filter(Boolean)),(item)=>{let parts=clean($('comorb').value).split(/[,;\n]/).map(x=>clean(x)).filter(Boolean);parts.includes(clean(item))?parts=parts.filter(x=>x!==clean(item)):parts.push(clean(item));$('comorb').value=parts.join(', ');gen()},'');
+  chipFactory($('alergChips'),ALERG,new Set($('alerg').value.split(/[,;\n]/).map(x=>clean(x)).filter(Boolean)),(item)=>{let parts=clean($('alerg').value).split(/[,;\n]/).map(x=>clean(x)).filter(Boolean);parts.includes(clean(item))?parts=parts.filter(x=>x!==clean(item)):parts.push(clean(item));$('alerg').value=parts.join(', ');gen()},'');
+  chipFactory($('medChips'),MEDS,new Set($('medcont').value.split(/[,;\n]/).map(x=>clean(x)).filter(Boolean)),(item)=>{let parts=clean($('medcont').value).split(/[,;\n]/).map(x=>clean(x)).filter(Boolean);parts.includes(clean(item))?parts=parts.filter(x=>x!==clean(item)):parts.push(clean(item));$('medcont').value=parts.join(', ');gen()},'');
+  document.querySelectorAll('[data-tab]').forEach(b=>{b.classList.toggle('on',S.tab===b.dataset.tab);b.onclick=()=>{S.tab=b.dataset.tab;S.edit=false;gen();renderChips()}});
   scoreRender();
 }
 
 function scoreRender(){
-  scores.innerHTML='';
+  $('scores').innerHTML='';
   Object.keys(SD).forEach(k=>{
-    let box=document.createElement('div'); box.className='score'; box.innerHTML='<b>'+SD[k][0]+'</b>';
-    SD[k][1].forEach((it,i)=>{
-      let d=document.createElement('div'); d.className='hint'; d.textContent=it[0];
-      let o=document.createElement('div'); o.className='opts';
-      it[1].forEach(x=>{
-        let v=parseFloat(x),bt=document.createElement('button');
-        bt.className='chip '+((S.sc[k]||{})[i]===v?'on':''); bt.textContent=x;
-        bt.onclick=()=>{S.sc[k]=S.sc[k]||{};S.sc[k][i]=v;ren();gen()};
-        o.append(bt);
-      }); box.append(d,o);
-    });
-    let l=scoreLine(k); if(l){let p=document.createElement('p'); p.className='hint'; p.textContent=l; box.append(p)}
-    scores.append(box);
+    let box=document.createElement('div');box.className='score';box.innerHTML='<b>'+SD[k][0]+'</b>';
+    SD[k][1].forEach((it,i)=>{let d=document.createElement('div');d.className='hint';d.textContent=it[0];let o=document.createElement('div');o.className='opts';it[1].forEach(x=>{let v=parseFloat(x),bt=document.createElement('button');bt.className='chip '+((S.sc[k]||{})[i]===v?'on':'');bt.textContent=x;bt.onclick=()=>{S.sc[k]=S.sc[k]||{};S.sc[k][i]=v;renderChips();gen()};o.append(bt)});box.append(d,o)});
+    let l=scoreLine(k);if(l){let p=document.createElement('p');p.className='hint';p.textContent=l;box.append(p)}
+    $('scores').append(box);
   });
 }
 
-function tempo(){return up(tempoLivre.value)||S.t}
-function hda(){let h=M[S.m].h.replace('{T}',tempo());return h+(up(extra.value)?' '+up(extra.value).replace(/\.$/,'')+'.':'')}
-function vit(){
-  let arr = [];
-  if(up(fc.value)) arr.push('FC ' + up(fc.value) + ' BPM');
-  if(up(fr.value)) arr.push('FR ' + up(fr.value) + ' IRPM');
-  if(up(sat.value)) arr.push('SATO2 ' + up(sat.value) + ' %');
-  if(up(tax.value)) arr.push('TAX ' + up(tax.value) + ' C');
-  if(up(pa.value)) arr.push('PA ' + up(pa.value) + ' MMHG');
-  return arr.length > 0 ? arr.join('\n') : 'NAO AFERIDOS ATE O MOMENTO';
-}
-function exam(){return M[S.m].ex.join('\n')}
+function tempo(){return clean($('tempoLivre').value)||S.t}
+function hda(){let h=M[S.m].h.replace('{T}',tempo());return h+(clean($('extra').value)?' '+clean($('extra').value).replace(/\.$/,'')+'.' :'')}
+function vitals(){let arr=[];if(up($('fc').value))arr.push('FC '+up($('fc').value)+' BPM');if(up($('fr').value))arr.push('FR '+up($('fr').value)+' IRPM');if(up($('sat').value))arr.push('SATO2 '+up($('sat').value)+' %');if(up($('tax').value))arr.push('TAX '+up($('tax').value)+' C');if(up($('pa').value))arr.push('PA '+up($('pa').value)+' MMHG');if(up($('hgt').value))arr.push('HGT '+up($('hgt').value));if(up($('dor').value))arr.push('DOR '+up($('dor').value)+'/10');return arr.length>0?arr.join('\n'):'NAO AFERIDOS ATE O MOMENTO'}
+function exam(){let exams=[];if(clean($('geral').value))exams.push('GERAL: '+clean($('geral').value));if(clean($('acv').value))exams.push('ACV: '+clean($('acv').value));if(clean($('ar').value))exams.push('AR: '+clean($('ar').value));if(clean($('abd').value))exams.push('ABD: '+clean($('abd').value));if(clean($('neuro').value))exams.push('NEUROLOGICO: '+clean($('neuro').value));if(clean($('mmii').value))exams.push('MMII: '+clean($('mmii').value));if(clean($('outros').value))exams.push('OUTROS: '+clean($('outros').value));return exams.length>0?exams.join('\n'):'AVALIAR ACHADOS PERTINENTES'}
 function hd(){return M[S.m].hd.join('\n')}
-function conduta(){let a=Array.from(S.c);if(up(condLivre.value))a.push(up(condLivre.value));return a.length>0?a.join('\n'):'CONDUTAS REGISTRADAS EM PRECRICAO MEDICA'}
+function conduta(){let a=Array.from(S.c);if(clean($('condLivre').value))a.push(clean($('condLivre').value));return a.length>0?a.join('\n'):'CONDUTAS REGISTRADAS EM PRESCRICAO MEDICA'}
 function pick(r,t){let m=t.match(r);return m?up(m[1]):''}
-
-function exTxt(){
-  let f=up(raw.value); if(!f)return ''; let o=[];
-  let hb=pick(/HEMOGLOBINA\s*([0-9.,]+)/,f), ht=pick(/HEMAT[OÓ]CRITO\s*([0-9.,]+)/,f), leuco=pick(/LEUC[OÓ]CITOS\s*([0-9.,]+)/,f), plaq=pick(/PLAQUETAS?\s*([0-9.,]+)/,f);
-  if(hb||leuco||plaq) o.push('HEMOGRAMA: ' + [hb&&'HB '+hb,ht&&'HT '+ht,leuco&&'LEUCO '+leuco,plaq&&'PLAQ '+plaq].filter(Boolean).join(' | '));
-  
-  let cr=pick(/CREATININA\s*([0-9.,]+)/,f), ur=pick(/UREIA\s*([0-9.,]+)/,f), pcr=pick(/(?:PROTE[IÍ]NA\s*C\s*REATIVA|PCR)\s*([0-9.,]+)/,f);
-  if(cr||ur||pcr) o.push('BIOQUIMICA: ' + [cr&&'CREATININA '+cr,ur&&'UREIA '+ur,pcr&&'PCR '+pcr].filter(Boolean).join(' | '));
-  
-  if(/TOMOGRAFIA COMPUTADORIZADA/i.test(f)){
-    let imp=pick(/IMPRESS[ÃA]O DIAGN[ÓO]STICA\s*([\s\S]*?)(?=HEMOGRAMA|RX|EAS|$)/,f);
-    if(imp) o.push('TOMOGRAFIA: ' + imp.replace(/\n+/g, ' ').slice(0,180));
-  }
-  if(/RX|RAIO/i.test(f)){
-    let rx=pick(/(?:INTERPRETAÇ[ÃA]O|LAUDO)[:\s]+([\s\S]*?)$/i, f);
-    if(rx) o.push('RADIOGRAFIA: ' + rx.replace(/\n+/g, ' ').slice(0,120));
-  }
-  if(/ECG|ELETROCARDIOGRAMA/i.test(f)){ o.push('ELETROCARDIOGRAMA: ACHADOS DISCUTIDOS NA EVOLUCAO CLINICA'); }
-  
-  if(o.length === 0) o.push('EXAMES COMPLEMENTARES: ' + f.slice(0,350));
-  return o.join('\n\n');
-}
-
-function scoreLine(k){
-  let v=S.sc[k]||{},n=SD[k][1].length; if(Object.keys(v).length<n)return '';
-  let sum=Object.values(v).reduce((a,b)=>a+b,0);
-  let risk=k==='heart'?(sum<=3?'BAIXO':sum<=6?'INTERMEDIARIO':'ALTO'):k==='curb'?(sum<=1?'BAIXO':sum===2?'INTERMEDIARIO':'ALTO'):(sum<=1?'BAIXA':sum<=6?'INTERMEDIARIA':'ALTA');
-  return SD[k][0]+' '+String(sum).replace('.',',')+' PONTOS (RISCO '+risk+')';
-}
+function exTxt(){let f=clean($('raw').value);if(!f)return '';let o=[];let hb=pick(/HEMOGLOBINA\s*([0-9.,]+)/,f),ht=pick(/HEMAT[OÓ]CRITO\s*([0-9.,]+)/,f),leuco=pick(/LEUC[OÓ]CITOS\s*([0-9.,]+)/,f),plaq=pick(/PLAQUETAS?\s*([0-9.,]+)/,f);if(hb||leuco||plaq)o.push('HEMOGRAMA: '+[hb&&'HB '+hb,ht&&'HT '+ht,leuco&&'LEUCO '+leuco,plaq&&'PLAQ '+plaq].filter(Boolean).join(' | '));let cr=pick(/CREATININA\s*([0-9.,]+)/,f),ur=pick(/UREIA\s*([0-9.,]+)/,f),pcr=pick(/(?:PROTE[IÍ]NA\s*C\s*REATIVA|PCR)\s*([0-9.,]+)/,f);if(cr||ur||pcr)o.push('BIOQUIMICA: '+[cr&&'CREATININA '+cr,ur&&'UREIA '+ur,pcr&&'PCR '+pcr].filter(Boolean).join(' | '));if(/TOMOGRAFIA COMPUTADORIZADA/i.test(f)){let imp=pick(/IMPRESS[ÃA]O DIAGN[ÓO]STICA\s*([\s\S]*?)(?=HEMOGRAMA|RX|EAS|$)/,f);if(imp)o.push('TOMOGRAFIA: '+imp.replace(/\n+/g,' ').slice(0,180))}if(/RX|RAIO/i.test(f)){let rx=pick(/(?:INTERPRETAÇ[ÃA]O|LAUDO)[:\s]+([\s\S]*?)$/i,f);if(rx)o.push('RADIOGRAFIA: '+rx.replace(/\n+/g,' ').slice(0,120))}if(/ECG|ELETROCARDIOGRAMA/i.test(f)){o.push('ELETROCARDIOGRAMA: ACHADOS DISCUTIDOS NA EVOLUCAO CLINICA')}if(o.length===0)o.push('EXAMES COMPLEMENTARES: '+f.slice(0,350));return o.join('\n\n')}
+function scoreLine(k){let v=S.sc[k]||{},n=SD[k][1].length;if(Object.keys(v).length<n)return '';let sum=Object.values(v).reduce((a,b)=>a+b,0);let risk=k==='heart'?(sum<=3?'BAIXO':sum<=6?'INTERMEDIARIO':'ALTO'):k==='curb'?(sum<=1?'BAIXO':sum===2?'INTERMEDIARIO':'ALTO'):(sum<=1?'BAIXA':sum<=6?'INTERMEDIARIA':'ALTA');return SD[k][0]+' '+String(sum).replace('.',',')+' PONTOS (RISCO '+risk+')'}
 function scoresTxt(){return Object.keys(SD).map(scoreLine).filter(Boolean).join('\n')}
 
-function evo(){
-  let t=['EVOLUCAO PRONTO SOCORRO HOSPITAL MERIDIONAL SERRA','','QUEIXA PRINCIPAL',up(M[S.m].n),'','HISTORIA DA DOENCA ATUAL',hda(),'','HISTORIA PATOLOGICA PREGRESSA','COMORBIDADES: '+(up(hpp.value)||'NA'),'ALERGIAS: NA','MEDICACOES DE USO CONTINUO: NA','','SINAIS VITAIS',vit(),'','EXAME FISICO',exam(),'','HIPOTESES DIAGNOSTICAS',hd()];
-  let e=exTxt(),s=scoresTxt(); 
-  if(e)t.push('','EXAMES COMPLEMENTARES',e); 
-  if(s)t.push('','SCORES CLINICOS',s);
-  t.push('','CONDUTA',conduta()); 
-  return t.join('\n')
-}
-function pass(){return ['SITUACAO:','PACIENTE EM ATENDIMENTO POR '+up(M[S.m].n),'','BACKGROUND:',hda(),'','AVALIACAO:','SINAIS VITAIS: '+vit().replace(/\n/g,' | '),'HD PRINCIPAL: '+M[S.m].hd[0],'','RECOMENDACAO:',conduta()].join('\n')}
+function evo(){let t=['EVOLUCAO PRONTO SOCORRO HOSPITAL MERIDIONAL SERRA','','QUEIXA PRINCIPAL',clean(M[S.m].n),'','HISTORIA DA DOENCA ATUAL',hda(),'','HISTORIA PATOLOGICA PREGRESSA','COMORBIDADES: '+na(clean($('comorb').value)),'ALERGIAS: '+na(clean($('alerg').value)),'MEDICACOES DE USO CONTINUO: '+na(clean($('medcont').value)),'','SINAIS VITAIS',vitals(),'','EXAME FISICO',exam(),'','HIPOTESES DIAGNOSTICAS',hd()];let e=exTxt(),s=scoresTxt();if(e)t.push('','EXAMES COMPLEMENTARES',e);if(s)t.push('','SCORES CLINICOS',s);t.push('','CONDUTA',conduta());return t.join('\n')}
+function pass(){return['SITUACAO:','PACIENTE EM ATENDIMENTO POR '+clean(M[S.m].n),'','BACKGROUND:',hda(),'COMORBIDADES: '+na(clean($('comorb').value))+'.','','AVALIACAO:','SINAIS VITAIS: '+vitals().replace(/\n/g,' | '),'HD PRINCIPAL: '+M[S.m].hd[0],'','RECOMENDACAO:',conduta()].join('\n')}
 
-function gen(){
-  let x=S.tab==='pass'?pass():S.tab==='exam'?(exTxt()||'COLE EXAMES CRUS NO CAMPO CORRESPONDENTE'):evo();
-  if(!S.edit) out.value=x;
-  saveState();
-}
+function gen(){let x=S.tab==='pass'?pass():S.tab==='exam'?(exTxt()||'COLE EXAMES CRUS NO CAMPO CORRESPONDENTE'):evo();if(!S.edit)$('out').value=x;saveState()}
 
-['tempoLivre','extra','raw','condLivre','fc','fr','sat','tax','pa','hpp'].forEach(id=>{
-  try { $(id).value = localStorage.getItem('hms_'+id) || ''; } catch(e) {}
-  $(id).oninput = () => { 
-    try { localStorage.setItem('hms_'+id, $(id).value); } catch(e) {}
-    gen(); 
-  };
-});
-out.oninput=()=>S.edit=true;
+['tempoLivre','extra','raw','condLivre','fc','fr','sat','tax','pa','hgt','dor','geral','acv','ar','abd','neuro','mmii','outros','comorb','alerg','medcont'].forEach(id=>{try{$(id).value=localStorage.getItem('hms_'+id)||''}catch(e){}$(id).oninput=()=>{try{localStorage.setItem('hms_'+id,$(id).value)}catch(e){}renderChips();gen()}});
+$('out').oninput=()=>S.edit=true;
 
-copy.onclick=async()=>{
-  try{await navigator.clipboard.writeText(out.value)}catch(e){out.select();document.execCommand('copy')}
-  copy.textContent='COPIADO!'; setTimeout(()=>copy.textContent='COPIAR TEXTO',1200)
-};
+$('copy').onclick=async()=>{try{await navigator.clipboard.writeText($('out').value)}catch(e){$('out').select();document.execCommand('copy')}$('copy').textContent='✓ COPIADO!';setTimeout(()=>$('copy').textContent='📋 COPIAR',1500)};
 
-reset.onclick=()=>{
-  if(confirm('Limpar dados do paciente atual e iniciar nova consulta?')) {
-    try { localStorage.clear(); } catch(e) {}
-    location.reload();
-  }
-};
+$('reset').onclick=()=>{if(confirm('Limpar dados do paciente atual e iniciar nova consulta?')){try{localStorage.clear()}catch(e){}location.reload()}};
 
-function setupMic(btnId, inputId) {
-  const btn = $(btnId);
-  const input = $(inputId);
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  
-  if (!SpeechRecognition) { btn.style.display = 'none'; return; }
-  
-  const r = new SpeechRecognition();
-  r.lang = 'pt-BR'; r.continuous = false; r.interimResults = false;
-  
-  btn.onclick = (e) => {
-    e.preventDefault();
-    if(btn.classList.contains('recording')) { r.stop(); return; }
-    btn.classList.add('recording'); btn.textContent = 'GRAVANDO...';
-    try { r.start(); } catch(err) { btn.classList.remove('recording'); btn.textContent = 'ERRO AO DITAR'; }
-  };
-  
-  r.onresult = (e) => {
-    let transcript = e.results[0][0].transcript;
-    input.value += (input.value ? ' ' : '') + transcript;
-    try { localStorage.setItem('hms_'+inputId, input.value); } catch(err) {}
-    gen();
-  };
-  
-  r.onend = () => { btn.classList.remove('recording'); btn.textContent = 'DITAR VOZ'; };
-  r.onerror = () => { btn.classList.remove('recording'); btn.textContent = 'TENTAR NOVAMENTE'; }
-}
+function setupMic(btnId,inputId){const btn=$(btnId),input=$(inputId),SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SpeechRecognition){btn.style.display='none';return}const r=new SpeechRecognition();r.lang='pt-BR';r.continuous=false;r.interimResults=false;btn.onclick=e=>{e.preventDefault();if(btn.classList.contains('recording')){r.stop();return}btn.classList.add('recording');btn.textContent='GRAVANDO...';try{r.start()}catch(err){btn.classList.remove('recording');btn.textContent='ERRO'}};r.onresult=e=>{let transcript=e.results[0][0].transcript;input.value+=(input.value?' ':'')+transcript;try{localStorage.setItem('hms_'+inputId,input.value)}catch(err){}renderChips();gen()};r.onend=()=>{btn.classList.remove('recording');btn.textContent='🎤 DITAR'};r.onerror=()=>{btn.classList.remove('recording');btn.textContent='TENTAR'}}
 
-setupMic('micExtra', 'extra');
-setupMic('micCond', 'condLivre');
+setupMic('micExtra','extra');
+setupMic('micCond','condLivre');
 
-ren(); gen();
+renderChips();gen();
 </script>
 </body>
 </html>
