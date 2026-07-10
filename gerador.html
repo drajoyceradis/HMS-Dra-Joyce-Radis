@@ -5,94 +5,990 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>HMS - Estação Clínica PS</title>
 <style>
-:root{--ink:#07131f;--panel:#0d1f31;--panel2:#122b42;--bg:#e8eef4;--card:#fdfefe;--line:#cbd7e3;--text:#122235;--muted:#617086;--green:#087a4a;--amber:#a76704;--red:#aa251c;--blue:#1c557f;--soft:#f3f6f9}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;color:var(--text)}
-button,input,textarea,select{font:inherit}button{cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--text);border-radius:8px;padding:9px 11px;font-size:12px;font-weight:800}button:hover{border-color:var(--blue)}button.primary{background:var(--blue);border-color:var(--blue);color:#fff}button.green{background:var(--green);border-color:var(--green);color:#fff}button.warn{background:#fff7e8;border-color:#e2b15d;color:#6f4400}button.ghost{background:transparent;color:#dbe7f3;border-color:#36536e}button.nav.on,button.qp.on{background:#e8f1f8;border-color:var(--blue);color:#083655}
-header{position:sticky;top:0;z-index:30;background:var(--ink);color:#fff;border-bottom:1px solid #27445d}.top{max-width:1680px;margin:auto;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:12px}.brand h1{font-size:17px;margin:0;font-weight:900;letter-spacing:.02em}.brand p{font-size:11px;margin:3px 0 0;color:#aebfd0}.toolbar{display:flex;gap:7px;flex-wrap:wrap}
-.shell{max-width:1680px;margin:auto;padding:12px;display:grid;grid-template-columns:280px minmax(0,1fr) 560px;gap:12px}.side,.center,.preview{min-width:0}.panel{background:var(--card);border:1px solid var(--line);border-radius:12px;box-shadow:0 6px 18px rgba(18,34,53,.06);overflow:hidden;margin-bottom:10px}.panel.dark{background:var(--panel);color:#eaf2fb;border-color:#244157}.title{padding:10px 12px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:8px;background:#f8fafc}.dark .title{background:var(--panel2);border-color:#244157}.title b{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:#153650}.dark .title b{color:#fff}.body{padding:12px}.hint{font-size:11px;color:var(--muted);line-height:1.45}.dark .hint{color:#b9c9d8}
-.navlist,.qplist,.modelgrid,.checks{display:grid;gap:7px}.nav,.qp,.model{width:100%;text-align:left}.qp b,.model b{display:block;font-size:12px}.qp span,.model span{display:block;margin-top:3px;font-size:10.5px;color:var(--muted);font-weight:600}.dark .qp span{color:#b9c9d8}.status{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.kpi{background:#0a1928;border:1px solid #25445f;border-radius:10px;padding:9px}.kpi b{display:block;font-size:18px}.kpi span{font-size:10px;color:#b9c9d8}.layout2{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.layout3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.layout4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}label{display:block;font-size:10.5px;font-weight:900;text-transform:uppercase;letter-spacing:.05em;color:#24445f;margin:8px 0 4px}input,textarea,select{width:100%;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--text);padding:9px 10px;font-size:13px;outline:none}textarea{min-height:76px;resize:vertical;line-height:1.42}.big{min-height:132px}.miniArea{min-height:58px}input:focus,textarea:focus,select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(28,85,127,.11)}
-.sectionNote{background:#f5f8fb;border:1px solid var(--line);border-radius:10px;padding:10px;font-size:12px;color:#43566b;line-height:1.5}.check{display:flex;align-items:flex-start;gap:8px;padding:8px;border:1px solid var(--line);border-radius:8px;background:#fff;font-size:12px;font-weight:750}.check input{width:auto;margin-top:2px}.flag input:checked+span{color:var(--red)}.audit input:checked+span{color:var(--blue)}.warnbox{display:grid;gap:6px}.warnitem{border-left:4px solid var(--amber);background:#fff8ec;padding:8px 10px;border-radius:8px;font-size:12px;color:#6b4305}.okitem{border-left-color:var(--green);background:#edf8f2;color:#075333}.preview{position:sticky;top:64px;height:calc(100vh - 76px)}.preview .panel{height:100%;display:flex;flex-direction:column}.preview .body{display:flex;flex-direction:column;min-height:0;flex:1}.output{flex:1;min-height:420px;font-family:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;font-size:12.7px;line-height:1.55;background:#fbfdff;white-space:pre-wrap}.bar{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-top:8px}.layerTabs{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:10px}.layerTabs button{font-size:11px;padding:8px}.layerTabs .on{background:#122b42;color:#fff;border-color:#122b42}.hidden{display:none!important}
-@media(max-width:1200px){.shell{grid-template-columns:240px minmax(0,1fr)}.preview{grid-column:1/-1;position:static;height:auto}.preview .panel{height:auto}.output{min-height:420px}}@media(max-width:760px){.shell{grid-template-columns:1fr}.layout2,.layout3,.layout4,.status{grid-template-columns:1fr}.toolbar{width:100%}.toolbar button{flex:1}.preview{height:auto}}
+:root{
+  --ink:#07131f;
+  --panel:#0d1f31;
+  --panel2:#122b42;
+  --bg:#e8eef4;
+  --card:#fdfefe;
+  --line:#cbd7e3;
+  --text:#122235;
+  --muted:#617086;
+  --green:#087a4a;
+  --amber:#a76704;
+  --red:#aa251c;
+  --blue:#1c557f;
+  --soft:#f3f6f9
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--bg);
+  font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+  color:var(--text)
+}
+button,input,textarea,select{font:inherit}
+button{
+  cursor:pointer;
+  border:1px solid var(--line);
+  background:#fff;
+  color:var(--text);
+  border-radius:8px;
+  padding:9px 11px;
+  font-size:12px;
+  font-weight:800
+}
+button:hover{border-color:var(--blue)}
+button.primary{background:var(--blue);border-color:var(--blue);color:#fff}
+button.green{background:var(--green);border-color:var(--green);color:#fff}
+button.warn{background:#fff7e8;border-color:#e2b15d;color:#6f4400}
+button.ghost{background:transparent;color:#dbe7f3;border-color:#36536e}
+button.nav.on,button.qp.on{background:#e8f1f8;border-color:var(--blue);color:#083655}
+
+header{
+  position:sticky;
+  top:0;
+  z-index:30;
+  background:var(--ink);
+  color:#fff;
+  border-bottom:1px solid #27445d
+}
+.top{
+  max-width:1680px;
+  margin:auto;
+  padding:10px 14px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px
+}
+.brand h1{
+  font-size:17px;
+  margin:0;
+  font-weight:900;
+  letter-spacing:.02em
+}
+.brand p{
+  font-size:11px;
+  margin:3px 0 0;
+  color:#aebfd0
+}
+.toolbar{display:flex;gap:7px;flex-wrap:wrap}
+
+.shell{
+  max-width:1680px;
+  margin:auto;
+  padding:12px;
+  display:grid;
+  grid-template-columns:280px minmax(0,1fr) 560px;
+  gap:12px
+}
+.side,.center,.preview{min-width:0}
+.panel{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:12px;
+  box-shadow:0 6px 18px rgba(18,34,53,.06);
+  overflow:hidden;
+  margin-bottom:10px
+}
+.panel.dark{
+  background:var(--panel);
+  color:#eaf2fb;
+  border-color:#244157
+}
+.title{
+  padding:10px 12px;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  background:#f8fafc
+}
+.dark .title{
+  background:var(--panel2);
+  border-color:#244157
+}
+.title b{
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  color:#153650
+}
+.dark .title b{color:#fff}
+.body{padding:12px}
+.hint{
+  font-size:11px;
+  color:var(--muted);
+  line-height:1.45
+}
+.dark .hint{color:#b9c9d8}
+.navlist,.qplist,.modelgrid,.checks{display:grid;gap:7px}
+.nav,.qp,.model{width:100%;text-align:left}
+.qp b,.model b{display:block;font-size:12px}
+.qp span,.model span{
+  display:block;
+  margin-top:3px;
+  font-size:10.5px;
+  color:var(--muted);
+  font-weight:600
+}
+.dark .qp span{color:#b9c9d8}
+.status{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:7px
+}
+.kpi{
+  background:#0a1928;
+  border:1px solid #25445f;
+  border-radius:10px;
+  padding:9px
+}
+.kpi b{display:block;font-size:18px}
+.kpi span{font-size:10px;color:#b9c9d8}
+.layout2{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.layout3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.layout4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+label{
+  display:block;
+  font-size:10.5px;
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:.05em;
+  color:#24445f;
+  margin:8px 0 4px
+}
+input,textarea,select{
+  width:100%;
+  border:1px solid var(--line);
+  border-radius:8px;
+  background:#fff;
+  color:var(--text);
+  padding:9px 10px;
+  font-size:13px;
+  outline:none
+}
+textarea{
+  min-height:76px;
+  resize:vertical;
+  line-height:1.42
+}
+.big{min-height:132px}
+.miniArea{min-height:58px}
+input:focus,textarea:focus,select:focus{
+  border-color:var(--blue);
+  box-shadow:0 0 0 3px rgba(28,85,127,.11)
+}
+.check{
+  display:flex;
+  align-items:flex-start;
+  gap:8px;
+  padding:8px;
+  border:1px solid var(--line);
+  border-radius:8px;
+  background:#fff;
+  font-size:12px;
+  font-weight:750
+}
+.check input{width:auto;margin-top:2px}
+.flag input:checked+span{color:var(--red)}
+.audit input:checked+span{color:var(--blue)}
+.warnbox{display:grid;gap:6px}
+.warnitem{
+  border-left:4px solid var(--amber);
+  background:#fff8ec;
+  padding:8px 10px;
+  border-radius:8px;
+  font-size:12px;
+  color:#6b4305
+}
+.okitem{
+  border-left-color:var(--green);
+  background:#edf8f2;
+  color:#075333
+}
+.preview{
+  position:sticky;
+  top:64px;
+  height:calc(100vh - 76px)
+}
+.preview .panel{
+  height:100%;
+  display:flex;
+  flex-direction:column
+}
+.preview .body{
+  display:flex;
+  flex-direction:column;
+  min-height:0;
+  flex:1
+}
+.output{
+  flex:1;
+  min-height:420px;
+  font-family:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
+  font-size:12.7px;
+  line-height:1.55;
+  background:#fbfdff;
+  white-space:pre-wrap
+}
+.bar{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:7px;
+  margin-top:8px
+}
+.layerTabs{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:7px;
+  margin-bottom:10px
+}
+.layerTabs button{
+  font-size:11px;
+  padding:8px
+}
+.layerTabs .on{
+  background:#122b42;
+  color:#fff;
+  border-color:#122b42
+}
+.hidden{display:none!important}
+
+@media(max-width:1200px){
+  .shell{grid-template-columns:240px minmax(0,1fr)}
+  .preview{grid-column:1/-1;position:static;height:auto}
+  .preview .panel{height:auto}
+  .output{min-height:420px}
+}
+@media(max-width:760px){
+  .shell{grid-template-columns:1fr}
+  .layout2,.layout3,.layout4,.status{grid-template-columns:1fr}
+  .toolbar{width:100%}
+  .toolbar button{flex:1}
+  .preview{height:auto}
+}
 </style>
 </head>
 <body>
-<header><div class="top"><div class="brand"><h1>HMS | ESTAÇÃO CLÍNICA DE PRONTO-SOCORRO</h1><p>Documentação orientada a cenário, decisão, produtividade e auditoria | Hospital Meridional Serra</p></div><div class="toolbar"><button class="ghost" id="newCase">Nova evolução</button><button class="ghost" id="duplicateCase">Duplicar caso</button><button class="ghost" id="btnAuditTop">Gerar justificativa</button><button class="green" id="copyTop">Copiar prontuário</button></div></div></header>
+<header>
+  <div class="top">
+    <div class="brand">
+      <h1>HMS | ESTAÇÃO CLÍNICA DE PRONTO-SOCORRO</h1>
+      <p>Documentação orientada a cenário, decisão, produtividade e auditoria | Hospital Meridional Serra</p>
+    </div>
+    <div class="toolbar">
+      <button class="ghost" id="newCase">Nova evolução</button>
+      <button class="ghost" id="duplicateCase">Duplicar caso</button>
+      <button class="ghost" id="btnAuditTop">Gerar justificativa</button>
+      <button class="green" id="copyTop">Copiar prontuário</button>
+    </div>
+  </div>
+</header>
+
 <main class="shell">
-<aside class="side">
-<div class="panel dark"><div class="title"><b>Status operacional</b></div><div class="body"><div class="status"><div class="kpi"><b id="kpiCompleto">0%</b><span>COMPLETUDE</span></div><div class="kpi"><b id="kpiRisco">0</b><span>RED FLAGS</span></div><div class="kpi"><b id="kpiPend">0</b><span>PENDÊNCIAS</span></div></div><p class="hint">A tela começa pela queixa. O texto final nasce na direita em tempo real.</p></div></div>
-<div class="panel"><div class="title"><b>Queixa principal</b></div><div class="body"><div class="qplist" id="qpList"></div></div></div>
-<div class="panel"><div class="title"><b>Ações rápidas</b></div><div class="body"><div class="navlist"><button class="nav" data-mode="entrada">Entrada PS</button><button class="nav" data-mode="reavaliacao">Reavaliação</button><button class="nav" data-mode="alta">Alta</button><button class="nav" data-mode="internacao">Internação clínica</button><button class="nav" data-mode="parecer">Parecer especialista</button><button class="nav" data-mode="exame">Exame alto custo</button><button class="nav" data-mode="passagem">Passagem plantão</button></div></div></div>
-<div class="panel"><div class="title"><b>Modelos inteligentes</b></div><div class="body"><div class="modelgrid" id="modelList"></div></div></div>
-</aside>
-<section class="center">
-<div class="layerTabs"><button class="on" data-layer="clinica">1 Coleta clínica</button><button data-layer="raciocinio">2 Raciocínio</button><button data-layer="auditoria">3 Auditoria</button><button data-layer="consistencia">4 Checagem</button></div>
-<div id="clinica" class="layer">
-<div class="panel"><div class="title"><b id="scenarioTitle">Fluxo clínico por cenário</b><span class="hint" id="scenarioHint">Selecione uma QP na esquerda</span></div><div class="body"><div class="layout3"><div><label>Paciente</label><input id="paciente" placeholder="Opcional"></div><div><label>Destino provável</label><select id="destino"><option>EM OBSERVAÇÃO</option><option>ALTA APÓS REAVALIAÇÃO</option><option>INTERNAÇÃO EM ENFERMARIA</option><option>UTI</option><option>TRANSFERÊNCIA</option><option>PARECER ESPECIALISTA</option></select></div><div><label>Tempo de sintomas</label><input id="tempo" placeholder="Ex: 6 horas, 3 dias"></div></div><label>HDA objetiva</label><textarea id="hda" class="big" placeholder="História dirigida. Registre evolução, fatores de risco, sintomas associados, negativas relevantes e resposta às medidas iniciais."></textarea><div id="scenarioFields" class="layout2"></div></div></div>
-<div class="panel"><div class="title"><b>Sinais vitais e exame físico</b></div><div class="body"><div class="layout4"><div><label>PA</label><input id="pa" placeholder="120/80"></div><div><label>FC</label><input id="fc" placeholder="80"></div><div><label>FR</label><input id="fr" placeholder="18"></div><div><label>SATO2</label><input id="sat" placeholder="98%"></div></div><div class="layout4"><div><label>TAX</label><input id="tax" placeholder="36,5"></div><div><label>HGT</label><input id="hgt" placeholder="Opcional"></div><div><label>Dor</label><input id="dor" placeholder="0 a 10"></div><div><label>Escala/score</label><input id="score" placeholder="HEART, qSOFA, NIHSS..."></div></div><div class="layout2"><div><label>Exame físico direcionado</label><textarea id="exame" class="big">REG, LOTE, ACIANÓTICO, ANICTÉRICO, AFEBRIL, SEM SINAIS DE INSTABILIDADE CLÍNICA IMEDIATA.</textarea></div><div><label>Exames complementares registrados</label><textarea id="exames" class="big" placeholder="ECG, laboratório, imagem, pareceres e resultados relevantes."></textarea></div></div></div></div>
-</div>
-<div id="raciocinio" class="layer hidden">
-<div class="panel"><div class="title"><b>Hipótese e decisão médica</b></div><div class="body"><div class="layout2"><div><label>Hipóteses diagnósticas</label><textarea id="hd" class="big"></textarea></div><div><label>Conduta médica</label><textarea id="conduta" class="big"></textarea></div></div><label>Red flags por cenário</label><div class="checks" id="redFlags"></div><label>Reavaliação / EM TEMPO</label><textarea id="emtempo" class="miniArea"></textarea></div></div>
-</div>
-<div id="auditoria" class="layer hidden">
-<div class="panel"><div class="title"><b>Motor de justificativa defensável</b><span class="hint">Pertinência, coerência e impacto em conduta</span></div><div class="body"><div class="layout2"><div><label>Tipo de necessidade</label><select id="necessidade"><option>OBSERVAÇÃO CLÍNICA</option><option>INTERNAÇÃO CLÍNICA</option><option>PARECER ESPECIALISTA</option><option>EXAME DE ALTO CUSTO</option></select></div><div><label>Exame de alto custo</label><select id="altoCusto"><option value="">NÃO SE APLICA</option><option>TC</option><option>ANGIOTC</option><option>RM</option><option>USG</option><option>ECOCARDIOGRAMA</option><option>ENDOSCOPIA</option></select></div></div><label>Critérios objetivos</label><div class="checks" id="auditChecks"></div><div class="layout3"><div><label>Hipótese que justifica exame</label><input id="exameHipotese" placeholder="Diagnóstico a confirmar/excluir"></div><div><label>Impacto esperado</label><input id="exameImpacto" placeholder="Muda conduta, internação, cirurgia..."></div><div><label>Método simples insuficiente</label><input id="exameInsuf" placeholder="Clínica/lab/RX insuficientes por..."></div></div><label>Justificativa gerada/editável</label><textarea id="just" class="big"></textarea><button class="primary" id="btnBuildAudit">Gerar justificativa estruturada</button></div></div>
-</div>
-<div id="consistencia" class="layer hidden">
-<div class="panel"><div class="title"><b>Auditor silencioso antes de copiar</b><span class="hint">Não trava. Só aponta risco documental.</span></div><div class="body"><div id="warnings" class="warnbox"></div><label>Prompt seguro para OpenEvidence</label><textarea id="oePrompt" class="big" readonly></textarea><button id="copyOE">Copiar prompt OpenEvidence</button></div></div>
-</div>
-</section>
-<aside class="preview"><div class="panel"><div class="title"><b>Texto final para prontuário</b><span class="hint">Caixa alta, sem bullet, pronto para colar</span></div><div class="body"><textarea id="out" class="output"></textarea><div class="bar"><button class="green" id="copy">Copiar</button><button id="regen">Regerar</button><button class="warn" id="finalCheck">Checagem final</button></div><p class="hint">Se editar a prévia manualmente, ela não será sobrescrita até clicar em Regerar.</p></div></div></aside>
+  <aside class="side">
+    <div class="panel dark">
+      <div class="title"><b>Status operacional</b></div>
+      <div class="body">
+        <div class="status">
+          <div class="kpi"><b id="kpiCompleto">0%</b><span>COMPLETUDE</span></div>
+          <div class="kpi"><b id="kpiRisco">0</b><span>RED FLAGS</span></div>
+          <div class="kpi"><b id="kpiPend">0</b><span>PENDÊNCIAS</span></div>
+        </div>
+        <p class="hint">A tela começa pela queixa. O texto final nasce na direita em tempo real.</p>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="title"><b>Queixa principal</b></div>
+      <div class="body"><div class="qplist" id="qpList"></div></div>
+    </div>
+
+    <div class="panel">
+      <div class="title"><b>Ações rápidas</b></div>
+      <div class="body">
+        <div class="navlist">
+          <button class="nav" data-mode="entrada">Entrada PS</button>
+          <button class="nav" data-mode="reavaliacao">Reavaliação</button>
+          <button class="nav" data-mode="alta">Alta</button>
+          <button class="nav" data-mode="internacao">Internação clínica</button>
+          <button class="nav" data-mode="parecer">Parecer especialista</button>
+          <button class="nav" data-mode="exame">Exame alto custo</button>
+          <button class="nav" data-mode="passagem">Passagem plantão</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="title"><b>Modelos inteligentes</b></div>
+      <div class="body"><div class="modelgrid" id="modelList"></div></div>
+    </div>
+  </aside>
+
+  <section class="center">
+    <div class="layerTabs">
+      <button class="on" data-layer="clinica">1 Coleta clínica</button>
+      <button data-layer="raciocinio">2 Raciocínio</button>
+      <button data-layer="auditoria">3 Auditoria</button>
+      <button data-layer="consistencia">4 Checagem</button>
+    </div>
+
+    <div id="clinica" class="layer">
+      <div class="panel">
+        <div class="title">
+          <b id="scenarioTitle">Fluxo clínico por cenário</b>
+          <span class="hint" id="scenarioHint">Selecione uma QP na esquerda</span>
+        </div>
+        <div class="body">
+          <div class="layout3">
+            <div>
+              <label>Paciente</label>
+              <input id="paciente" placeholder="Opcional">
+            </div>
+            <div>
+              <label>Destino provável</label>
+              <select id="destino">
+                <option>EM OBSERVAÇÃO</option>
+                <option>ALTA APÓS REAVALIAÇÃO</option>
+                <option>INTERNAÇÃO EM ENFERMARIA</option>
+                <option>UTI</option>
+                <option>TRANSFERÊNCIA</option>
+                <option>PARECER ESPECIALISTA</option>
+              </select>
+            </div>
+            <div>
+              <label>Tempo de sintomas</label>
+              <input id="tempo" placeholder="Ex: 6 horas, 3 dias">
+            </div>
+          </div>
+
+          <label>HDA objetiva</label>
+          <textarea id="hda" class="big" placeholder="História dirigida. Registre evolução, fatores de risco, sintomas associados, negativas relevantes e resposta às medidas iniciais."></textarea>
+
+          <div id="scenarioFields" class="layout2"></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="title"><b>Sinais vitais e exame físico</b></div>
+        <div class="body">
+          <div class="layout4">
+            <div><label>PA</label><input id="pa" placeholder="120/80"></div>
+            <div><label>FC</label><input id="fc" placeholder="80"></div>
+            <div><label>FR</label><input id="fr" placeholder="18"></div>
+            <div><label>SATO2</label><input id="sat" placeholder="98%"></div>
+          </div>
+
+          <div class="layout4">
+            <div><label>TAX</label><input id="tax" placeholder="36,5"></div>
+            <div><label>HGT</label><input id="hgt" placeholder="Opcional"></div>
+            <div><label>Dor</label><input id="dor" placeholder="0 a 10"></div>
+            <div><label>Escala/score</label><input id="score" placeholder="HEART, qSOFA, NIHSS..."></div>
+          </div>
+
+          <div class="layout2">
+            <div>
+              <label>Exame físico direcionado</label>
+              <textarea id="exame" class="big">REG, LOTE, ACIANÓTICO, ANICTÉRICO, AFEBRIL, SEM SINAIS DE INSTABILIDADE CLÍNICA IMEDIATA.</textarea>
+            </div>
+            <div>
+              <label>Exames complementares registrados</label>
+              <textarea id="exames" class="big" placeholder="ECG, laboratório, imagem, pareceres e resultados relevantes."></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="raciocinio" class="layer hidden">
+      <div class="panel">
+        <div class="title"><b>Hipótese e decisão médica</b></div>
+        <div class="body">
+          <div class="layout2">
+            <div>
+              <label>Hipóteses diagnósticas</label>
+              <textarea id="hd" class="big"></textarea>
+            </div>
+            <div>
+              <label>Conduta médica</label>
+              <textarea id="conduta" class="big"></textarea>
+            </div>
+          </div>
+
+          <label>Red flags por cenário</label>
+          <div class="checks" id="redFlags"></div>
+
+          <label>Reavaliação / EM TEMPO</label>
+          <textarea id="emtempo" class="miniArea"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div id="auditoria" class="layer hidden">
+      <div class="panel">
+        <div class="title">
+          <b>Motor de justificativa defensável</b>
+          <span class="hint">Pertinência, coerência e impacto em conduta</span>
+        </div>
+        <div class="body">
+          <div class="layout2">
+            <div>
+              <label>Tipo de necessidade</label>
+              <select id="necessidade">
+                <option>OBSERVAÇÃO CLÍNICA</option>
+                <option>INTERNAÇÃO CLÍNICA</option>
+                <option>PARECER ESPECIALISTA</option>
+                <option>EXAME DE ALTO CUSTO</option>
+              </select>
+            </div>
+            <div>
+              <label>Exame de alto custo</label>
+              <select id="altoCusto">
+                <option value="">NÃO SE APLICA</option>
+                <option>TC</option>
+                <option>ANGIOTC</option>
+                <option>RM</option>
+                <option>USG</option>
+                <option>ECOCARDIOGRAMA</option>
+                <option>ENDOSCOPIA</option>
+              </select>
+            </div>
+          </div>
+
+          <label>Critérios objetivos</label>
+          <div class="checks" id="auditChecks"></div>
+
+          <div class="layout3">
+            <div>
+              <label>Hipótese que justifica exame</label>
+              <input id="exameHipotese" placeholder="Diagnóstico a confirmar/excluir">
+            </div>
+            <div>
+              <label>Impacto esperado</label>
+              <input id="exameImpacto" placeholder="Muda conduta, internação, cirurgia...">
+            </div>
+            <div>
+              <label>Método simples insuficiente</label>
+              <input id="exameInsuf" placeholder="Clínica/lab/RX insuficientes por...">
+            </div>
+          </div>
+
+          <label>Justificativa gerada/editável</label>
+          <textarea id="just" class="big"></textarea>
+          <button class="primary" id="btnBuildAudit">Gerar justificativa estruturada</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="consistencia" class="layer hidden">
+      <div class="panel">
+        <div class="title">
+          <b>Auditor silencioso antes de copiar</b>
+          <span class="hint">Não trava. Só aponta risco documental.</span>
+        </div>
+        <div class="body">
+          <div id="warnings" class="warnbox"></div>
+
+          <label>Prompt seguro para OpenEvidence</label>
+          <textarea id="oePrompt" class="big" readonly></textarea>
+          <button id="copyOE">Copiar prompt OpenEvidence</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <aside class="preview">
+    <div class="panel">
+      <div class="title">
+        <b>Texto final para prontuário</b>
+        <span class="hint">Caixa alta, sem bullet, pronto para colar</span>
+      </div>
+      <div class="body">
+        <textarea id="out" class="output"></textarea>
+        <div class="bar">
+          <button class="green" id="copy">Copiar</button>
+          <button id="regen">Regerar</button>
+          <button class="warn" id="finalCheck">Checagem final</button>
+        </div>
+        <p class="hint">Se editar a prévia manualmente, ela não será sobrescrita até clicar em Regerar.</p>
+      </div>
+    </div>
+  </aside>
 </main>
+
 <script>
-const $=id=>document.getElementById(id);let MODE='entrada',SC='DOR TORÁCICA',edited=false;
+const $=id=>document.getElementById(id);
+let MODE='entrada',SC='DOR TORÁCICA',edited=false;
+
 const scenarios={
-'DOR TORÁCICA':{hint:'ECG, troponina, equivalentes anginosos e estratificação',fields:['Característica da dor','Irradiação','Dispneia/sudorese/náuseas','Fatores de risco DAC'],red:['ECG ALTERADO','DOR EM REPOUSO OU PROGRESSIVA','INSTABILIDADE HEMODINÂMICA','SÍNCOPE','DISPNEIA ASSOCIADA','TROPONINA ALTERADA','DAC/IAM PRÉVIO','DOR REFRATÁRIA'],hd:'DOR TORÁCICA A ESCLARECER\nSÍNDROME CORONARIANA AGUDA A DESCARTAR',cond:'ECG IMEDIATO E TROPONINA SERIADA CONFORME PROTOCOLO. MONITORIZAÇÃO CLÍNICA, ANALGESIA E REAVALIAÇÃO. DEFINIR DESTINO APÓS ESTRATIFICAÇÃO.'},
-'DISPNEIA':{hint:'SatO2, esforço respiratório, IC, DPOC, pneumonia e TEP',fields:['Início e progressão','Tosse/febre/dor torácica','Ortopneia/edema','Antecedente pulmonar/cardiaco'],red:['SATO2 BAIXA','USO DE MUSCULATURA ACESSÓRIA','CIANOSE','HIPOTENSÃO','DOR TORÁCICA ASSOCIADA','HEMOPTISE','RISCO DE TEP','ALTERAÇÃO DO SENSÓRIO'],hd:'DISPNEIA A ESCLARECER\nINSUFICIÊNCIA RESPIRATÓRIA A DESCARTAR',cond:'OXIGENOTERAPIA SE NECESSÁRIO. SOLICITO EXAMES CONFORME HIPÓTESE E GRAVIDADE. MANTER REAVALIAÇÃO RESPIRATÓRIA E HEMODINÂMICA.'},
-'DOR ABDOMINAL':{hint:'Localização, peritonite, vômitos, abdome agudo e falha terapêutica',fields:['Localização/irradiação','Vômitos/diarreia/febre','Relação alimentar/urinária','Cirurgias prévias/gestação'],red:['SINAIS PERITONEAIS','DOR REFRATÁRIA','VÔMITOS INCOERCÍVEIS','FEBRE OU SEPSE','SANGRAMENTO DIGESTIVO','DISTENSÃO IMPORTANTE','IDOSO FRÁGIL','FALHA TERAPÊUTICA AMBULATORIAL'],hd:'DOR ABDOMINAL A ESCLARECER\nABDOME AGUDO A DESCARTAR',cond:'ANALGESIA, ANTIEMÉTICO E HIDRATAÇÃO CONFORME NECESSIDADE. LABORATÓRIO E IMAGEM CONFORME EXAME FÍSICO. REAVALIAÇÃO SERIADA.'},
-'CEFALEIA':{hint:'Início súbito, sinais neurológicos, febre, trauma e anticoagulação',fields:['Padrão e intensidade','Início súbito?','Sintomas neurológicos','Febre/rigidez/trauma'],red:['INÍCIO SÚBITO','DÉFICIT FOCAL','RIGIDEZ DE NUCA','FEBRE','REBAIXAMENTO SENSORIAL','TRAUMA','ANTICOAGULAÇÃO','IMUNOSSUPRESSÃO'],hd:'CEFALEIA A ESCLARECER\nCAUSA SECUNDÁRIA A DESCARTAR',cond:'ANALGESIA E REAVALIAÇÃO. CONSIDERAR TC DE CRÂNIO E INVESTIGAÇÃO COMPLEMENTAR SE RED FLAGS OU ALTERAÇÃO NEUROLÓGICA.'},
-'FEBRE / SEPSE':{hint:'Foco presumido, qSOFA, lactato, culturas e antimicrobiano',fields:['Foco provável','Tempo de febre','Sintomas associados','Antibiótico prévio/imunossupressão'],red:['HIPOTENSÃO','TAQUIPNEIA','REBAIXAMENTO SENSORIAL','LACTATO ELEVADO','IMUNOSSUPRESSÃO','FOCO INDEFINIDO','OLIGÚRIA','PIORA CLÍNICA RÁPIDA'],hd:'SÍNDROME INFECCIOSA A ESCLARECER\nSEPSE A DESCARTAR',cond:'RASTREIO INFECCIOSO, COLETAS CONFORME INDICAÇÃO E ANTIBIOTICOTERAPIA CONFORME FOCO/PROTOCOLO. REAVALIAÇÃO HEMODINÂMICA SERIADA.'},
-'NÁUSEAS E VÔMITOS':{hint:'Desidratação, distúrbio hidroeletrolítico e tolerância oral',fields:['Número de episódios','Aceitação oral','Dor abdominal/cefaleia','Diurese e sinais de desidratação'],red:['VÔMITOS INCOERCÍVEIS','DESIDRATAÇÃO CLÍNICA','ALTERAÇÃO NEUROLÓGICA','DOR ABDOMINAL IMPORTANTE','DISTÚRBIO HIDROELETROLÍTICO','GESTAÇÃO','IDOSO FRÁGIL','FALHA DE ACEITAÇÃO ORAL'],hd:'VÔMITOS A ESCLARECER\nDESIDRATAÇÃO OU DISTÚRBIO HIDROELETROLÍTICO A DESCARTAR',cond:'ANTIEMÉTICO, HIDRATAÇÃO E CORREÇÃO DE DISTÚRBIOS SE PRESENTES. TESTE DE ACEITAÇÃO ORAL E REAVALIAÇÃO.'},
-'DIARREIA':{hint:'Desidratação, sangue, febre, antibiótico recente e risco',fields:['Frequência/tempo','Sangue ou muco','Febre/dor abdominal','Viagem/antibiótico recente'],red:['SANGUE NAS FEZES','DESIDRATAÇÃO','FEBRE PERSISTENTE','DOR ABDOMINAL INTENSA','IMUNOSSUPRESSÃO','IDOSO FRÁGIL','HIPOTENSÃO','INSUFICIÊNCIA RENAL'],hd:'DIARREIA AGUDA A ESCLARECER\nDESIDRATAÇÃO A DESCARTAR',cond:'HIDRATAÇÃO, SINTOMÁTICOS E EXAMES CONFORME GRAVIDADE. ORIENTAR SINAIS DE ALARME E REAVALIAR.'},
-'LOMBALGIA':{hint:'Déficit neurológico, febre, trauma, neoplasia e retenção urinária',fields:['Irradiação','Força/sensibilidade','Esfíncteres','Trauma/febre/neoplasia'],red:['DÉFICIT MOTOR','ANESTESIA EM SELA','RETENÇÃO OU INCONTINÊNCIA','FEBRE','TRAUMA','NEOPLASIA','IMUNOSSUPRESSÃO','DOR NOTURNA/REFRATÁRIA'],hd:'LOMBALGIA A ESCLARECER\nSINAIS DE ALARME A AVALIAR',cond:'ANALGESIA ESCALONADA, EXAME NEUROLÓGICO DIRECIONADO E IMAGEM SE RED FLAGS. REAVALIAÇÃO FUNCIONAL.'},
-'SÍNCOPE':{hint:'Pródromos, ECG, cardiopatia, trauma e risco arrítmico',fields:['Pródromos','Contexto/postura','Trauma associado','Cardiopatia/palpitações'],red:['ECG ALTERADO','SEM PRÓDROMOS','DURANTE ESFORÇO','CARDIOPATIA','DOR TORÁCICA','DISPNEIA','HIPOTENSÃO','TRAUMA IMPORTANTE'],hd:'SÍNCOPE A ESCLARECER\nETIOLOGIA CARDIOGÊNICA A DESCARTAR',cond:'ECG, SINAIS VITAIS ORTOSTÁTICOS QUANDO INDICADO, EXAMES CONFORME RISCO E MONITORIZAÇÃO SE CRITÉRIOS DE GRAVIDADE.'},
-'CRISE HIPERTENSIVA':{hint:'Lesão de órgão alvo, dor torácica, neuro, renal e retina',fields:['PA inicial e repetida','Sintomas neurológicos','Dor torácica/dispneia','Aderência medicamentosa'],red:['DÉFICIT FOCAL','DOR TORÁCICA','DISPNEIA/EDEMA AGUDO','ALTERAÇÃO VISUAL','CONFUSÃO','IRA/OLIGÚRIA','PA PERSISTENTEMENTE MUITO ELEVADA','GESTAÇÃO'],hd:'ELEVAÇÃO PRESSÓRICA A ESCLARECER\nEMERGÊNCIA HIPERTENSIVA A DESCARTAR',cond:'REAVALIAR PA, PESQUISAR LESÃO DE ÓRGÃO ALVO E TRATAR CONFORME PRESENÇA DE EMERGÊNCIA HIPERTENSIVA.'},
-'PALPITAÇÕES':{hint:'ECG, instabilidade, síncope, tireoide, eletrólitos e medicações',fields:['Ritmo percebido','Duração','Síncope/dor/dispneia','Estimulantes/medicações'],red:['INSTABILIDADE HEMODINÂMICA','SÍNCOPE','DOR TORÁCICA','DISPNEIA','FC MUITO ELEVADA','ECG ALTERADO','CARDIOPATIA','DISTÚRBIO ELETROLÍTICO'],hd:'PALPITAÇÕES A ESCLARECER\nARRITMIA A DESCARTAR',cond:'ECG, MONITORIZAÇÃO SE SINTOMÁTICO, ELETRÓLITOS CONFORME CONTEXTO E CONDUTA CONFORME RITMO DOCUMENTADO.'},
-'ALTERAÇÃO NEUROLÓGICA FOCAL':{hint:'Última vez bem, NIHSS, anticoagulação e fluxo AVC',fields:['Última vez visto bem','Déficits observados','Anticoagulação','Glicemia/convulsão'],red:['DÉFICIT FOCAL ATUAL','JANELA DE REPERFUSÃO','REBAIXAMENTO SENSORIAL','ANTICOAGULAÇÃO','CEFALEIA SÚBITA','CRISE CONVULSIVA','PA CRÍTICA','HIPOGLICEMIA/HIPERGLICEMIA'],hd:'DÉFICIT NEUROLÓGICO FOCAL\nAVC ISQUÊMICO OU HEMORRÁGICO A DESCARTAR',cond:'ACIONAR FLUXO DE AVC CONFORME JANELA. GLICEMIA, TC DE CRÂNIO E EXAMES. MONITORIZAÇÃO E REAVALIAÇÃO NEUROLÓGICA.'},
-'HIPERGLICEMIA':{hint:'CAD/EHH, cetose, osmolaridade, infecção e adesão',fields:['HGT inicial','Sintomas osmóticos','Cetona/acidose','Fator precipitante'],red:['CETOSE/ACIDOSE','REBAIXAMENTO SENSORIAL','DESIDRATAÇÃO','VÔMITOS','INFECÇÃO','HGT MUITO ELEVADO','IRA','GESTAÇÃO'],hd:'HIPERGLICEMIA A ESCLARECER\nCETOACIDOSE/EHH A DESCARTAR',cond:'HIDRATAÇÃO, ELETRÓLITOS, CETONAS/GASOMETRIA SE INDICADO E INSULINOTERAPIA CONFORME PROTOCOLO.'},
-'TRAUMA':{hint:'Mecanismo, anticoagulação, dor focal, neuro e imagem',fields:['Mecanismo','Local da dor','Perda de consciência','Anticoagulação'],red:['INSTABILIDADE','REBAIXAMENTO SENSORIAL','DÉFICIT FOCAL','DOR CERVICAL','ANTICOAGULAÇÃO','TRAUMA DE ALTA ENERGIA','DOR TORACOABDOMINAL','FRATURA EXPOSTA'],hd:'TRAUMA A ESCLARECER\nLESÃO SIGNIFICATIVA A DESCARTAR',cond:'AVALIAÇÃO PRIMÁRIA, ANALGESIA, IMOBILIZAÇÃO/IMAGEM CONFORME MECANISMO E ACHADOS. REAVALIAÇÃO SERIADA.'},
-'CELULITE':{hint:'Extensão, porta de entrada, sepse, diabetes e falha oral',fields:['Local e extensão','Porta de entrada','Febre/sistêmicos','DM/imunossupressão'],red:['SEPSE','PROGRESSÃO RÁPIDA','DOR DESPROPORCIONAL','IMUNOSSUPRESSÃO','DIABETES DESCOMPENSADO','FALHA ANTIBIÓTICO ORAL','FACE/MÃOS/GENITAL','ABSCESSO'],hd:'INFECÇÃO DE PELE E PARTES MOLES\nCELULITE A ESCLARECER',cond:'DEMARCAR ÁREA, ANALGESIA, ANTIBIOTICOTERAPIA CONFORME GRAVIDADE E AVALIAR DRENAGEM/INTERNAÇÃO SE CRITÉRIOS.'},
-'DOR OROFACIAL':{hint:'Abscesso, trismo, disfagia, via aérea e odontogênica',fields:['Localização','Edema/trismo','Febre/disfagia','Procedimento odontológico'],red:['TRISMO','DISFAGIA','DISPNEIA','EDEMA CERVICAL','FEBRE/SEPSE','IMUNOSSUPRESSÃO','DOR REFRATÁRIA','RISCO DE VIA AÉREA'],hd:'DOR OROFACIAL A ESCLARECER\nINFECÇÃO ODONTOGÊNICA A DESCARTAR',cond:'ANALGESIA, AVALIAR SINAIS DE INFECÇÃO PROFUNDA E PARECER/IMAGEM SE RED FLAGS.'},
-'QUEDA':{hint:'Mecanismo, síncope, anticoagulação, fratura e funcionalidade',fields:['Mecanismo da queda','Trauma craniano','Dor/função','Anticoagulação/síncope'],red:['ANTICOAGULAÇÃO','TRAUMA CRANIANO','PERDA DE CONSCIÊNCIA','DÉFICIT FOCAL','DOR INCAPACITANTE','FRAGILIDADE/IDOSO','SUSPEITA FRATURA','SÍNCOPE ASSOCIADA'],hd:'QUEDA A ESCLARECER\nTRAUMA SIGNIFICATIVO A DESCARTAR',cond:'ANALGESIA, AVALIAÇÃO FUNCIONAL, IMAGEM CONFORME DOR/MECANISMO E INVESTIGAR SÍNCOPE SE APLICÁVEL.'},
-'EDEMA':{hint:'IC, renal, hepático, TVP, assimetria e dispneia',fields:['Localização/simetria','Dispneia/ortopneia','Dor em panturrilha','Doença renal/cardiaca'],red:['DISPNEIA','EDEMA ASSIMÉTRICO','DOR PANTURRILHA','HIPÓXIA','ANASARCA','IRA','DOR TORÁCICA','GESTAÇÃO/PUERPÉRIO'],hd:'EDEMA A ESCLARECER\nINSUFICIÊNCIA CARDÍACA/TVP/CAUSA RENAL A DESCARTAR',cond:'EXAME DIRECIONADO, LABORATÓRIO/IMAGEM CONFORME HIPÓTESE E DEFINIÇÃO DE NECESSIDADE DE OBSERVAÇÃO OU INTERNAÇÃO.'},
-'INFECÇÃO URINÁRIA':{hint:'Pielonefrite, sepse, gestação, obstrução e comorbidades',fields:['Disúria/polaciúria','Dor lombar','Febre/calafrios','Gestação/uropatia'],red:['FEBRE ALTA','DOR LOMBAR','SEPSE','VÔMITOS','GESTAÇÃO','HOMEM/UROPATIA','IMUNOSSUPRESSÃO','FALHA TERAPÊUTICA'],hd:'INFECÇÃO URINÁRIA A ESCLARECER\nPIELONEFRITE/SEPSE URINÁRIA A DESCARTAR',cond:'EAS/UROCULTURA CONFORME CASO, ANALGESIA, HIDRATAÇÃO E ANTIMICROBIANO CONFORME GRAVIDADE E PROTOCOLO.'}
+  'DOR TORÁCICA':{
+    hint:'ECG, troponina, equivalentes anginosos e estratificação',
+    fields:['Característica da dor','Irradiação','Dispneia/sudorese/náuseas','Fatores de risco DAC'],
+    red:['ECG ALTERADO','DOR EM REPOUSO OU PROGRESSIVA','INSTABILIDADE HEMODINÂMICA','SÍNCOPE','DISPNEIA ASSOCIADA','TROPONINA ALTERADA','DAC/IAM PRÉVIO','DOR REFRATÁRIA'],
+    hd:'DOR TORÁCICA A ESCLARECER\nSÍNDROME CORONARIANA AGUDA A DESCARTAR',
+    cond:'ECG IMEDIATO E TROPONINA SERIADA CONFORME PROTOCOLO. MONITORIZAÇÃO CLÍNICA, ANALGESIA E REAVALIAÇÃO. DEFINIR DESTINO APÓS ESTRATIFICAÇÃO.'
+  },
+  'DISPNEIA':{
+    hint:'SatO2, esforço respiratório, IC, DPOC, pneumonia e TEP',
+    fields:['Início e progressão','Tosse/febre/dor torácica','Ortopneia/edema','Antecedente pulmonar/cardiaco'],
+    red:['SATO2 BAIXA','USO DE MUSCULATURA ACESSÓRIA','CIANOSE','HIPOTENSÃO','DOR TORÁCICA ASSOCIADA','HEMOPTISE','RISCO DE TEP','ALTERAÇÃO DO SENSÓRIO'],
+    hd:'DISPNEIA A ESCLARECER\nINSUFICIÊNCIA RESPIRATÓRIA A DESCARTAR',
+    cond:'OXIGENOTERAPIA SE NECESSÁRIO. SOLICITO EXAMES CONFORME HIPÓTESE E GRAVIDADE. MANTER REAVALIAÇÃO RESPIRATÓRIA E HEMODINÂMICA.'
+  },
+  'DOR ABDOMINAL':{
+    hint:'Localização, peritonite, vômitos, abdome agudo e falha terapêutica',
+    fields:['Localização/irradiação','Vômitos/diarreia/febre','Relação alimentar/urinária','Cirurgias prévias/gestação'],
+    red:['SINAIS PERITONEAIS','DOR REFRATÁRIA','VÔMITOS INCOERCÍVEIS','FEBRE OU SEPSE','SANGRAMENTO DIGESTIVO','DISTENSÃO IMPORTANTE','IDOSO FRÁGIL','FALHA TERAPÊUTICA AMBULATORIAL'],
+    hd:'DOR ABDOMINAL A ESCLARECER\nABDOME AGUDO A DESCARTAR',
+    cond:'ANALGESIA, ANTIEMÉTICO E HIDRATAÇÃO CONFORME NECESSIDADE. LABORATÓRIO E IMAGEM CONFORME EXAME FÍSICO. REAVALIAÇÃO SERIADA.'
+  },
+  'CEFALEIA':{
+    hint:'Início súbito, sinais neurológicos, febre, trauma e anticoagulação',
+    fields:['Padrão e intensidade','Início súbito?','Sintomas neurológicos','Febre/rigidez/trauma'],
+    red:['INÍCIO SÚBITO','DÉFICIT FOCAL','RIGIDEZ DE NUCA','FEBRE','REBAIXAMENTO SENSORIAL','TRAUMA','ANTICOAGULAÇÃO','IMUNOSSUPRESSÃO'],
+    hd:'CEFALEIA A ESCLARECER\nCAUSA SECUNDÁRIA A DESCARTAR',
+    cond:'ANALGESIA E REAVALIAÇÃO. CONSIDERAR TC DE CRÂNIO E INVESTIGAÇÃO COMPLEMENTAR SE RED FLAGS OU ALTERAÇÃO NEUROLÓGICA.'
+  },
+  'FEBRE / SEPSE':{
+    hint:'Foco presumido, qSOFA, lactato, culturas e antimicrobiano',
+    fields:['Foco provável','Tempo de febre','Sintomas associados','Antibiótico prévio/imunossupressão'],
+    red:['HIPOTENSÃO','TAQUIPNEIA','REBAIXAMENTO SENSORIAL','LACTATO ELEVADO','IMUNOSSUPRESSÃO','FOCO INDEFINIDO','OLIGÚRIA','PIORA CLÍNICA RÁPIDA'],
+    hd:'SÍNDROME INFECCIOSA A ESCLARECER\nSEPSE A DESCARTAR',
+    cond:'RASTREIO INFECCIOSO, COLETAS CONFORME INDICAÇÃO E ANTIBIOTICOTERAPIA CONFORME FOCO/PROTOCOLO. REAVALIAÇÃO HEMODINÂMICA SERIADA.'
+  },
+  'NÁUSEAS E VÔMITOS':{
+    hint:'Desidratação, distúrbio hidroeletrolítico e tolerância oral',
+    fields:['Número de episódios','Aceitação oral','Dor abdominal/cefaleia','Diurese e sinais de desidratação'],
+    red:['VÔMITOS INCOERCÍVEIS','DESIDRATAÇÃO CLÍNICA','ALTERAÇÃO NEUROLÓGICA','DOR ABDOMINAL IMPORTANTE','DISTÚRBIO HIDROELETROLÍTICO','GESTAÇÃO','IDOSO FRÁGIL','FALHA DE ACEITAÇÃO ORAL'],
+    hd:'VÔMITOS A ESCLARECER\nDESIDRATAÇÃO OU DISTÚRBIO HIDROELETROLÍTICO A DESCARTAR',
+    cond:'ANTIEMÉTICO, HIDRATAÇÃO E CORREÇÃO DE DISTÚRBIOS SE PRESENTES. TESTE DE ACEITAÇÃO ORAL E REAVALIAÇÃO.'
+  },
+  'DIARREIA':{
+    hint:'Desidratação, sangue, febre, antibiótico recente e risco',
+    fields:['Frequência/tempo','Sangue ou muco','Febre/dor abdominal','Viagem/antibiótico recente'],
+    red:['SANGUE NAS FEZES','DESIDRATAÇÃO','FEBRE PERSISTENTE','DOR ABDOMINAL INTENSA','IMUNOSSUPRESSÃO','IDOSO FRÁGIL','HIPOTENSÃO','INSUFICIÊNCIA RENAL'],
+    hd:'DIARREIA AGUDA A ESCLARECER\nDESIDRATAÇÃO A DESCARTAR',
+    cond:'HIDRATAÇÃO, SINTOMÁTICOS E EXAMES CONFORME GRAVIDADE. ORIENTAR SINAIS DE ALARME E REAVALIAR.'
+  },
+  'LOMBALGIA':{
+    hint:'Déficit neurológico, febre, trauma, neoplasia e retenção urinária',
+    fields:['Irradiação','Força/sensibilidade','Esfíncteres','Trauma/febre/neoplasia'],
+    red:['DÉFICIT MOTOR','ANESTESIA EM SELA','RETENÇÃO OU INCONTINÊNCIA','FEBRE','TRAUMA','NEOPLASIA','IMUNOSSUPRESSÃO','DOR NOTURNA/REFRATÁRIA'],
+    hd:'LOMBALGIA A ESCLARECER\nSINAIS DE ALARME A AVALIAR',
+    cond:'ANALGESIA ESCALONADA, EXAME NEUROLÓGICO DIRECIONADO E IMAGEM SE RED FLAGS. REAVALIAÇÃO FUNCIONAL.'
+  },
+  'SÍNCOPE':{
+    hint:'Pródromos, ECG, cardiopatia, trauma e risco arrítmico',
+    fields:['Pródromos','Contexto/postura','Trauma associado','Cardiopatia/palpitações'],
+    red:['ECG ALTERADO','SEM PRÓDROMOS','DURANTE ESFORÇO','CARDIOPATIA','DOR TORÁCICA','DISPNEIA','HIPOTENSÃO','TRAUMA IMPORTANTE'],
+    hd:'SÍNCOPE A ESCLARECER\nETIOLOGIA CARDIOGÊNICA A DESCARTAR',
+    cond:'ECG, SINAIS VITAIS ORTOSTÁTICOS QUANDO INDICADO, EXAMES CONFORME RISCO E MONITORIZAÇÃO SE CRITÉRIOS DE GRAVIDADE.'
+  },
+  'CRISE HIPERTENSIVA':{
+    hint:'Lesão de órgão alvo, dor torácica, neuro, renal e retina',
+    fields:['PA inicial e repetida','Sintomas neurológicos','Dor torácica/dispneia','Aderência medicamentosa'],
+    red:['DÉFICIT FOCAL','DOR TORÁCICA','DISPNEIA/EDEMA AGUDO','ALTERAÇÃO VISUAL','CONFUSÃO','IRA/OLIGÚRIA','PA PERSISTENTEMENTE MUITO ELEVADA','GESTAÇÃO'],
+    hd:'ELEVAÇÃO PRESSÓRICA A ESCLARECER\nEMERGÊNCIA HIPERTENSIVA A DESCARTAR',
+    cond:'REAVALIAR PA, PESQUISAR LESÃO DE ÓRGÃO ALVO E TRATAR CONFORME PRESENÇA DE EMERGÊNCIA HIPERTENSIVA.'
+  },
+  'PALPITAÇÕES':{
+    hint:'ECG, instabilidade, síncope, tireoide, eletrólitos e medicações',
+    fields:['Ritmo percebido','Duração','Síncope/dor/dispneia','Estimulantes/medicações'],
+    red:['INSTABILIDADE HEMODINÂMICA','SÍNCOPE','DOR TORÁCICA','DISPNEIA','FC MUITO ELEVADA','ECG ALTERADO','CARDIOPATIA','DISTÚRBIO ELETROLÍTICO'],
+    hd:'PALPITAÇÕES A ESCLARECER\nARRITMIA A DESCARTAR',
+    cond:'ECG, MONITORIZAÇÃO SE SINTOMÁTICO, ELETRÓLITOS CONFORME CONTEXTO E CONDUTA CONFORME RITMO DOCUMENTADO.'
+  },
+  'ALTERAÇÃO NEUROLÓGICA FOCAL':{
+    hint:'Última vez bem, NIHSS, anticoagulação e fluxo AVC',
+    fields:['Última vez visto bem','Déficits observados','Anticoagulação','Glicemia/convulsão'],
+    red:['DÉFICIT FOCAL ATUAL','JANELA DE REPERFUSÃO','REBAIXAMENTO SENSORIAL','ANTICOAGULAÇÃO','CEFALEIA SÚBITA','CRISE CONVULSIVA','PA CRÍTICA','HIPOGLICEMIA/HIPERGLICEMIA'],
+    hd:'DÉFICIT NEUROLÓGICO FOCAL\nAVC ISQUÊMICO OU HEMORRÁGICO A DESCARTAR',
+    cond:'ACIONAR FLUXO DE AVC CONFORME JANELA. GLICEMIA, TC DE CRÂNIO E EXAMES. MONITORIZAÇÃO E REAVALIAÇÃO NEUROLÓGICA.'
+  },
+  'HIPERGLICEMIA':{
+    hint:'CAD/EHH, cetose, osmolaridade, infecção e adesão',
+    fields:['HGT inicial','Sintomas osmóticos','Cetona/acidose','Fator precipitante'],
+    red:['CETOSE/ACIDOSE','REBAIXAMENTO SENSORIAL','DESIDRATAÇÃO','VÔMITOS','INFECÇÃO','HGT MUITO ELEVADO','IRA','GESTAÇÃO'],
+    hd:'HIPERGLICEMIA A ESCLARECER\nCETOACIDOSE/EHH A DESCARTAR',
+    cond:'HIDRATAÇÃO, ELETRÓLITOS, CETONAS/GASOMETRIA SE INDICADO E INSULINOTERAPIA CONFORME PROTOCOLO.'
+  },
+  'TRAUMA':{
+    hint:'Mecanismo, anticoagulação, dor focal, neuro e imagem',
+    fields:['Mecanismo','Local da dor','Perda de consciência','Anticoagulação'],
+    red:['INSTABILIDADE','REBAIXAMENTO SENSORIAL','DÉFICIT FOCAL','DOR CERVICAL','ANTICOAGULAÇÃO','TRAUMA DE ALTA ENERGIA','DOR TORACOABDOMINAL','FRATURA EXPOSTA'],
+    hd:'TRAUMA A ESCLARECER\nLESÃO SIGNIFICATIVA A DESCARTAR',
+    cond:'AVALIAÇÃO PRIMÁRIA, ANALGESIA, IMOBILIZAÇÃO/IMAGEM CONFORME MECANISMO E ACHADOS. REAVALIAÇÃO SERIADA.'
+  },
+  'CELULITE':{
+    hint:'Extensão, porta de entrada, sepse, diabetes e falha oral',
+    fields:['Local e extensão','Porta de entrada','Febre/sistêmicos','DM/imunossupressão'],
+    red:['SEPSE','PROGRESSÃO RÁPIDA','DOR DESPROPORCIONAL','IMUNOSSUPRESSÃO','DIABETES DESCOMPENSADO','FALHA ANTIBIÓTICO ORAL','FACE/MÃOS/GENITAL','ABSCESSO'],
+    hd:'INFECÇÃO DE PELE E PARTES MOLES\nCELULITE A ESCLARECER',
+    cond:'DEMARCAR ÁREA, ANALGESIA, ANTIBIOTICOTERAPIA CONFORME GRAVIDADE E AVALIAR DRENAGEM/INTERNAÇÃO SE CRITÉRIOS.'
+  },
+  'DOR OROFACIAL':{
+    hint:'Abscesso, trismo, disfagia, via aérea e odontogênica',
+    fields:['Localização','Edema/trismo','Febre/disfagia','Procedimento odontológico'],
+    red:['TRISMO','DISFAGIA','DISPNEIA','EDEMA CERVICAL','FEBRE/SEPSE','IMUNOSSUPRESSÃO','DOR REFRATÁRIA','RISCO DE VIA AÉREA'],
+    hd:'DOR OROFACIAL A ESCLARECER\nINFECÇÃO ODONTOGÊNICA A DESCARTAR',
+    cond:'ANALGESIA, AVALIAR SINAIS DE INFECÇÃO PROFUNDA E PARECER/IMAGEM SE RED FLAGS.'
+  },
+  'QUEDA':{
+    hint:'Mecanismo, síncope, anticoagulação, fratura e funcionalidade',
+    fields:['Mecanismo da queda','Trauma craniano','Dor/função','Anticoagulação/síncope'],
+    red:['ANTICOAGULAÇÃO','TRAUMA CRANIANO','PERDA DE CONSCIÊNCIA','DÉFICIT FOCAL','DOR INCAPACITANTE','FRAGILIDADE/IDOSO','SUSPEITA FRATURA','SÍNCOPE ASSOCIADA'],
+    hd:'QUEDA A ESCLARECER\nTRAUMA SIGNIFICATIVO A DESCARTAR',
+    cond:'ANALGESIA, AVALIAÇÃO FUNCIONAL, IMAGEM CONFORME DOR/MECANISMO E INVESTIGAR SÍNCOPE SE APLICÁVEL.'
+  },
+  'EDEMA':{
+    hint:'IC, renal, hepático, TVP, assimetria e dispneia',
+    fields:['Localização/simetria','Dispneia/ortopneia','Dor em panturrilha','Doença renal/cardiaca'],
+    red:['DISPNEIA','EDEMA ASSIMÉTRICO','DOR PANTURRILHA','HIPÓXIA','ANASARCA','IRA','DOR TORÁCICA','GESTAÇÃO/PUERPÉRIO'],
+    hd:'EDEMA A ESCLARECER\nINSUFICIÊNCIA CARDÍACA/TVP/CAUSA RENAL A DESCARTAR',
+    cond:'EXAME DIRECIONADO, LABORATÓRIO/IMAGEM CONFORME HIPÓTESE E DEFINIÇÃO DE NECESSIDADE DE OBSERVAÇÃO OU INTERNAÇÃO.'
+  },
+  'INFECÇÃO URINÁRIA':{
+    hint:'Pielonefrite, sepse, gestação, obstrução e comorbidades',
+    fields:['Disúria/polaciúria','Dor lombar','Febre/calafrios','Gestação/uropatia'],
+    red:['FEBRE ALTA','DOR LOMBAR','SEPSE','VÔMITOS','GESTAÇÃO','HOMEM/UROPATIA','IMUNOSSUPRESSÃO','FALHA TERAPÊUTICA'],
+    hd:'INFECÇÃO URINÁRIA A ESCLARECER\nPIELONEFRITE/SEPSE URINÁRIA A DESCARTAR',
+    cond:'EAS/UROCULTURA CONFORME CASO, ANALGESIA, HIDRATAÇÃO E ANTIMICROBIANO CONFORME GRAVIDADE E PROTOCOLO.'
+  }
 };
-const auditCriteria=['PERSISTÊNCIA DE SINTOMAS APÓS MEDIDAS INICIAIS','NECESSIDADE DE MEDICAÇÃO ENDOVENOSA','NECESSIDADE DE MONITORIZAÇÃO SERIADA','FALHA TERAPÊUTICA AMBULATORIAL','EXAME PENDENTE COM IMPACTO EM CONDUTA','RISCO DE DETERIORAÇÃO CLÍNICA','COMORBIDADES RELEVANTES','IMPOSSIBILIDADE DE CONDUÇÃO AMBULATORIAL SEGURA','PARECER ESPECIALIZADO NECESSÁRIO','DOR OU SINTOMA REFRATÁRIO'];
+
+const auditCriteria=[
+  'PERSISTÊNCIA DE SINTOMAS APÓS MEDIDAS INICIAIS',
+  'NECESSIDADE DE MEDICAÇÃO ENDOVENOSA',
+  'NECESSIDADE DE MONITORIZAÇÃO SERIADA',
+  'FALHA TERAPÊUTICA AMBULATORIAL',
+  'EXAME PENDENTE COM IMPACTO EM CONDUTA',
+  'RISCO DE DETERIORAÇÃO CLÍNICA',
+  'COMORBIDADES RELEVANTES',
+  'IMPOSSIBILIDADE DE CONDUÇÃO AMBULATORIAL SEGURA',
+  'PARECER ESPECIALIZADO NECESSÁRIO',
+  'DOR OU SINTOMA REFRATÁRIO'
+];
+
 const models={
-'Exame físico normal':'REG, LOTE, ACIANÓTICO, ANICTÉRICO, AFEBRIL, HIDRATADO, EUPNEICO EM AR AMBIENTE, SEM SINAIS DE INSTABILIDADE CLÍNICA IMEDIATA. ACV RCR EM 2T, BNF, SEM SOPROS. AR MVF SEM RUÍDOS ADVENTÍCIOS. ABDOME FLÁCIDO, INDOLOR, SEM SINAIS DE PERITONITE. MMII SEM EDEMA OU SINAIS DE TVP.',
-'Reavaliação melhora':'PACIENTE REAVALIADO APÓS MEDIDAS INICIAIS, COM MELHORA CLÍNICA REFERIDA, HEMODINAMICAMENTE ESTÁVEL, SEM NOVOS SINAIS DE ALARME NO MOMENTO.',
-'Alta segura':'PACIENTE COM MELHORA CLÍNICA, SINAIS VITAIS ESTÁVEIS E SEM CRITÉRIOS DE GRAVIDADE NO MOMENTO. ORIENTO SINAIS DE ALARME, RETORNO IMEDIATO SE PIORA E SEGUIMENTO AMBULATORIAL.',
-'Parecer cardiologia':'SOLICITO AVALIAÇÃO DA CARDIOLOGIA PARA ESTRATIFICAÇÃO DE RISCO, DEFINIÇÃO DE NECESSIDADE DE MONITORIZAÇÃO/INTERNAÇÃO E ORIENTAÇÃO DE CONDUTA.',
-'Observação clínica':'MANTENHO EM OBSERVAÇÃO CLÍNICA PARA REAVALIAÇÃO SERIADA, CONTROLE SINTOMÁTICO, ACOMPANHAMENTO DE EXAMES E DEFINIÇÃO SEGURA DE DESTINO.',
-'Internação clínica':'INDICO INTERNAÇÃO CLÍNICA POR PERSISTÊNCIA DO QUADRO, NECESSIDADE DE TERAPIA ENDOVENOSA, MONITORIZAÇÃO, INVESTIGAÇÃO COMPLEMENTAR E IMPOSSIBILIDADE DE MANEJO AMBULATORIAL SEGURO.'
+  'Exame físico normal':'REG, LOTE, ACIANÓTICO, ANICTÉRICO, AFEBRIL, HIDRATADO, EUPNEICO EM AR AMBIENTE, SEM SINAIS DE INSTABILIDADE CLÍNICA IMEDIATA. ACV RCR EM 2T, BNF, SEM SOPROS. AR MVF SEM RUÍDOS ADVENTÍCIOS. ABDOME FLÁCIDO, INDOLOR, SEM SINAIS DE PERITONITE. MMII SEM EDEMA OU SINAIS DE TVP.',
+  'Reavaliação melhora':'PACIENTE REAVALIADO APÓS MEDIDAS INICIAIS, COM MELHORA CLÍNICA REFERIDA, HEMODINAMICAMENTE ESTÁVEL, SEM NOVOS SINAIS DE ALARME NO MOMENTO.',
+  'Alta segura':'PACIENTE COM MELHORA CLÍNICA, SINAIS VITAIS ESTÁVEIS E SEM CRITÉRIOS DE GRAVIDADE NO MOMENTO. ORIENTO SINAIS DE ALARME, RETORNO IMEDIATO SE PIORA E SEGUIMENTO AMBULATORIAL.',
+  'Parecer cardiologia':'SOLICITO AVALIAÇÃO DA CARDIOLOGIA PARA ESTRATIFICAÇÃO DE RISCO, DEFINIÇÃO DE NECESSIDADE DE MONITORIZAÇÃO/INTERNAÇÃO E ORIENTAÇÃO DE CONDUTA.',
+  'Observação clínica':'MANTENHO EM OBSERVAÇÃO CLÍNICA PARA REAVALIAÇÃO SERIADA, CONTROLE SINTOMÁTICO, ACOMPANHAMENTO DE EXAMES E DEFINIÇÃO SEGURA DE DESTINO.',
+  'Internação clínica':'INDICO INTERNAÇÃO CLÍNICA POR PERSISTÊNCIA DO QUADRO, NECESSIDADE DE TERAPIA ENDOVENOSA, MONITORIZAÇÃO, INVESTIGAÇÃO COMPLEMENTAR E IMPOSSIBILIDADE DE MANEJO AMBULATORIAL SEGURO.'
 };
-const fields=['paciente','destino','tempo','hda','pa','fc','fr','sat','tax','hgt','dor','score','exame','exames','hd','conduta','emtempo','necessidade','altoCusto','exameHipotese','exameImpacto','exameInsuf','just'];
-function val(id){return ($(id)?.value||'').trim()}function cleanLines(t){return String(t||'').split(/\n+/).map(x=>x.replace(/^[-•\s]+/,'').trim()).filter(Boolean).join('\n')}function upper(t){return cleanLines(t).toUpperCase()}function checked(sel){return [...document.querySelectorAll(sel+' input:checked')].map(i=>i.value)}
-function renderQps(){let box=$('qpList');box.innerHTML='';Object.keys(scenarios).forEach(name=>{let b=document.createElement('button');b.className='qp';b.innerHTML='<b>'+name+'</b><span>'+scenarios[name].hint+'</span>';b.onclick=()=>setScenario(name);box.appendChild(b)})}
-function setScenario(name){SC=name;let s=scenarios[name];$('scenarioTitle').textContent=name;$('scenarioHint').textContent=s.hint;if(!val('hd'))$('hd').value=s.hd;if(!val('conduta'))$('conduta').value=s.cond;if(!val('hda'))$('hda').value='PACIENTE COMPARECE AO PRONTO-SOCORRO COM QUEIXA DE '+name+', NECESSITANDO AVALIAÇÃO CLÍNICA DIRECIONADA, ESTRATIFICAÇÃO DE RISCO, PESQUISA DE SINAIS DE ALARME E DEFINIÇÃO DE CONDUTA CONFORME EVOLUÇÃO.';renderScenarioFields();renderRedFlags();document.querySelectorAll('.qp').forEach(b=>b.classList.toggle('on',b.querySelector('b').textContent===name));gen(true)}
-function renderScenarioFields(){let box=$('scenarioFields');box.innerHTML='';scenarios[SC].fields.forEach((f,i)=>{let d=document.createElement('div');d.innerHTML='<label>'+f+'</label><input id="sf'+i+'" placeholder="Registrar '+f.toLowerCase()+'">';box.appendChild(d);d.querySelector('input').oninput=()=>gen()})}
-function renderRedFlags(){let box=$('redFlags');box.innerHTML='';scenarios[SC].red.forEach(f=>{let l=document.createElement('label');l.className='check flag';l.innerHTML='<input type="checkbox" value="'+f+'"><span>'+f+'</span>';l.querySelector('input').onchange=()=>{gen();updateQuality()};box.appendChild(l)})}
-function renderAudit(){let box=$('auditChecks');box.innerHTML='';auditCriteria.forEach(f=>{let l=document.createElement('label');l.className='check audit';l.innerHTML='<input type="checkbox" value="'+f+'"><span>'+f+'</span>';l.querySelector('input').onchange=()=>{buildAudit(false);gen();updateQuality()};box.appendChild(l)})}
-function renderModels(){let box=$('modelList');box.innerHTML='';Object.keys(models).forEach(k=>{let b=document.createElement('button');b.className='model';b.innerHTML='<b>'+k+'</b><span>Inserir bloco clínico reutilizável</span>';b.onclick=()=>{let target=/Exame/.test(k)?'exame':/Alta|Reavaliação/.test(k)?'emtempo':'conduta';$(target).value+=(val(target)?'\n':'')+models[k];gen()};box.appendChild(b)})}
-function buildAudit(force=true){let c=checked('#auditChecks'), flags=checked('#redFlags'), alto=val('altoCusto'), txt=[];txt.push(val('necessidade')+' JUSTIFICADA NO CONTEXTO DE '+SC+'.');if(c.length)txt.push('CRITÉRIOS OBJETIVOS DOCUMENTADOS: '+c.join(', ')+'.');if(flags.length)txt.push('SINAIS DE ALERTA OU RISCO ASSOCIADO: '+flags.join(', ')+'.');if(alto)txt.push('EXAME DE ALTO CUSTO SOLICITADO: '+alto+'. HIPÓTESE A AVALIAR: '+(val('exameHipotese')||'A DEFINIR')+'. IMPACTO ESPERADO NA CONDUTA: '+(val('exameImpacto')||'DEFINIÇÃO DE DESTINO E TRATAMENTO')+'. MÉTODOS MAIS SIMPLES SÃO INSUFICIENTES NESTE CONTEXTO POR: '+(val('exameInsuf')||'RISCO CLÍNICO E NECESSIDADE DE MAIOR ACURÁCIA DIAGNÓSTICA')+'.');txt.push('A CONDUTA VISA REDUZIR RISCO DE DETERIORAÇÃO, EVITAR ALTA INSEGURA E DOCUMENTAR DECISÃO ALINHADA À ESTRATIFICAÇÃO CLÍNICA.');if(force||!val('just'))$('just').value=txt.join(' ')}
-function section(title,content){let c=upper(content);return c?title.toUpperCase()+'\n'+c:''}function vitals(){return ['PA '+(val('pa')||'NA'),'FC '+(val('fc')||'NA'),'FR '+(val('fr')||'NA'),'SATO2 '+(val('sat')||'NA'),'TAX '+(val('tax')||'NA'),val('hgt')&&'HGT '+val('hgt'),val('dor')&&'DOR '+val('dor'),val('score')&&'SCORE '+val('score')].filter(Boolean).join('\n')}
-function scenarioDetails(){return scenarios[SC].fields.map((f,i)=>val('sf'+i)?f.toUpperCase()+': '+val('sf'+i):'').filter(Boolean).join('\n')}
-function base(){let parts=['EVOLUÇÃO PRONTO SOCORRO HOSPITAL MERIDIONAL SERRA'];if(val('paciente'))parts.push('PACIENTE\n'+val('paciente'));parts.push('QUEIXA PRINCIPAL\n'+SC);parts.push(section('HISTÓRIA DA DOENÇA ATUAL',val('hda')+'\n'+(val('tempo')?'TEMPO: '+val('tempo'):'')+'\n'+scenarioDetails()));parts.push(section('HISTÓRIA PATOLÓGICA PREGRESSA','COMORBIDADES, MEDICAÇÕES, ALERGIAS E ANTECEDENTES CONFORME REGISTRO CLÍNICO DISPONÍVEL.'));parts.push(section('SINAIS VITAIS',vitals()));parts.push(section('EXAME FÍSICO DIRECIONADO',val('exame')));parts.push(section('EXAMES COMPLEMENTARES',val('exames')));parts.push(section('HIPÓTESES DIAGNÓSTICAS',val('hd')));let flags=checked('#redFlags');if(flags.length)parts.push(section('RED FLAGS DOCUMENTADAS',flags.join('\n')));if(val('just'))parts.push(section('JUSTIFICATIVA TÉCNICA PARA AUDITORIA',val('just')));parts.push(section('CONDUTA MÉDICA',val('conduta')));if(val('emtempo'))parts.push(section('EM TEMPO / REAVALIAÇÃO',val('emtempo')));parts.push('DESTINO PROVÁVEL\n'+val('destino'));return parts.filter(Boolean).join('\n\n').toUpperCase()}
-function gen(force=false){if(!edited||force){$('out').value=base();edited=false}$('oePrompt').value='Paciente adulto no PS com '+SC+'. HDA: '+val('hda')+'. Red flags: '+checked('#redFlags').join(', ')+'. HD: '+val('hd').replace(/\n/g,'; ')+'. Quais diretrizes, critérios de gravidade, indicação de exame/internação e critérios de alta segura se aplicam? Não há identificadores do paciente.';save();updateQuality();checkConsistency()}
-function checkConsistency(){let w=[];if(!val('hda'))w.push('HDA ausente ou fraca.');if(!(val('pa')||val('fc')||val('sat')))w.push('Sinais vitais não documentados.');if(!val('hd'))w.push('Hipótese diagnóstica ausente.');if(!val('conduta'))w.push('Conduta ausente.');if(/DOR TORÁCICA/.test(SC)&&!/ECG/i.test(val('exames')+' '+val('conduta')))w.push('Dor torácica sem ECG registrado.');if(/DISPNEIA/.test(SC)&&!val('sat'))w.push('Dispneia sem saturação documentada.');if(/SEPSE|FEBRE/.test(SC)&&!/FOCO|URIN|PULMON|ABDOM|PELE/i.test(val('hda')+' '+val('hd')+' '+val('exames')))w.push('Síndrome infecciosa sem foco presumido descrito.');if(val('altoCusto')&&(!val('exameHipotese')||!val('exameImpacto')||!val('exameInsuf')))w.push('Exame de alto custo sem hipótese, impacto e insuficiência de método simples completos.');if(/INTERNAÇÃO/.test(val('destino')+' '+val('necessidade'))&&!val('just'))w.push('Internação sem justificativa formal.');$('warnings').innerHTML=w.length?w.map(x=>'<div class="warnitem">'+x+'</div>').join(''):'<div class="warnitem okitem">Sem inconsistências críticas detectadas para cópia.</div>';$('kpiPend').textContent=w.length;return w}
-function updateQuality(){let items=[val('hda'),val('hd'),val('conduta'),(val('pa')||val('fc')||val('sat')),val('exame'),val('just')||checked('#auditChecks').length];let pct=Math.round(items.filter(Boolean).length/items.length*100);$('kpiCompleto').textContent=pct+'%';$('kpiRisco').textContent=checked('#redFlags').length}
-function save(){let o={MODE,SC};fields.forEach(id=>o[id]=val(id));try{localStorage.setItem('hms_station_v1',JSON.stringify(o))}catch(e){}}
-function load(){try{let o=JSON.parse(localStorage.getItem('hms_station_v1')||'{}');if(o.MODE)MODE=o.MODE;if(o.SC)SC=o.SC;fields.forEach(id=>{if(o[id]!=null&&$(id))$(id).value=o[id]})}catch(e){}}
-document.querySelectorAll('[data-layer]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-layer]').forEach(x=>x.classList.toggle('on',x===b));document.querySelectorAll('.layer').forEach(x=>x.classList.add('hidden'));$(b.dataset.layer).classList.remove('hidden')});document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{MODE=b.dataset.mode;document.querySelectorAll('[data-mode]').forEach(x=>x.classList.toggle('on',x===b));$('necessidade').value=MODE==='internacao'?'INTERNAÇÃO CLÍNICA':MODE==='parecer'?'PARECER ESPECIALISTA':MODE==='exame'?'EXAME DE ALTO CUSTO':'OBSERVAÇÃO CLÍNICA';buildAudit(false);gen(true)});fields.forEach(id=>$(id)?.addEventListener('input',()=>gen()));$('out').addEventListener('input',()=>edited=true);$('btnBuildAudit').onclick=$('btnAuditTop').onclick=()=>{buildAudit(true);gen(true)};$('regen').onclick=()=>gen(true);$('finalCheck').onclick=()=>{document.querySelector('[data-layer="consistencia"]').click();checkConsistency()};$('copy').onclick=$('copyTop').onclick=async()=>{checkConsistency();try{await navigator.clipboard.writeText($('out').value)}catch(e){$('out').select();document.execCommand('copy')}};$('copyOE').onclick=async()=>{try{await navigator.clipboard.writeText($('oePrompt').value)}catch(e){$('oePrompt').select();document.execCommand('copy')}};$('newCase').onclick=()=>{if(confirm('Limpar dados e iniciar nova evolução?')){localStorage.removeItem('hms_station_v1');location.reload()}};$('duplicateCase').onclick=()=>{localStorage.setItem('hms_station_v1_copy',localStorage.getItem('hms_station_v1')||'{}');alert('Rascunho duplicado no navegador.')};
-load();renderQps();renderAudit();renderModels();setScenario(SC);document.querySelector('[data-mode="'+MODE+'"]').classList.add('on');gen(true);
+
+const fields=[
+  'paciente','destino','tempo','hda','pa','fc','fr','sat','tax','hgt','dor','score',
+  'exame','exames','hd','conduta','emtempo','necessidade','altoCusto',
+  'exameHipotese','exameImpacto','exameInsuf','just'
+];
+
+function val(id){return ($(id)?.value||'').trim()}
+function cleanLines(t){return String(t||'').split(/\n+/).map(x=>x.replace(/^[-•\s]+/,'').trim()).filter(Boolean).join('\n')}
+function upper(t){return cleanLines(t).toUpperCase()}
+function checked(sel){return [...document.querySelectorAll(sel+' input:checked')].map(i=>i.value)}
+
+function renderQps(){
+  let box=$('qpList');
+  box.innerHTML='';
+  Object.keys(scenarios).forEach(name=>{
+    let b=document.createElement('button');
+    b.className='qp';
+    b.innerHTML='<b>'+name+'</b><span>'+scenarios[name].hint+'</span>';
+    b.onclick=()=>setScenario(name);
+    box.appendChild(b);
+  });
+}
+
+function setScenario(name){
+  SC=name;
+  let s=scenarios[name];
+  $('scenarioTitle').textContent=name;
+  $('scenarioHint').textContent=s.hint;
+  if(!val('hd')) $('hd').value=s.hd;
+  if(!val('conduta')) $('conduta').value=s.cond;
+  if(!val('hda')) $('hda').value='PACIENTE COMPARECE AO PRONTO-SOCORRO COM QUEIXA DE '+name+', NECESSITANDO AVALIAÇÃO CLÍNICA DIRECIONADA, ESTRATIFICAÇÃO DE RISCO, PESQUISA DE SINAIS DE ALARME E DEFINIÇÃO DE CONDUTA CONFORME EVOLUÇÃO.';
+  renderScenarioFields();
+  renderRedFlags();
+  document.querySelectorAll('.qp').forEach(b=>b.classList.toggle('on',b.querySelector('b').textContent===name));
+  gen(true);
+}
+
+function renderScenarioFields(){
+  let box=$('scenarioFields');
+  box.innerHTML='';
+  scenarios[SC].fields.forEach((f,i)=>{
+    let d=document.createElement('div');
+    d.innerHTML='<label>'+f+'</label><input id="sf'+i+'" placeholder="Registrar '+f.toLowerCase()+'">';
+    box.appendChild(d);
+    d.querySelector('input').oninput=()=>gen();
+  });
+}
+
+function renderRedFlags(){
+  let box=$('redFlags');
+  box.innerHTML='';
+  scenarios[SC].red.forEach(f=>{
+    let l=document.createElement('label');
+    l.className='check flag';
+    l.innerHTML='<input type="checkbox" value="'+f+'"><span>'+f+'</span>';
+    l.querySelector('input').onchange=()=>{
+      gen();
+      updateQuality();
+    };
+    box.appendChild(l);
+  });
+}
+
+function renderAudit(){
+  let box=$('auditChecks');
+  box.innerHTML='';
+  auditCriteria.forEach(f=>{
+    let l=document.createElement('label');
+    l.className='check audit';
+    l.innerHTML='<input type="checkbox" value="'+f+'"><span>'+f+'</span>';
+    l.querySelector('input').onchange=()=>{
+      buildAudit(false);
+      gen();
+      updateQuality();
+    };
+    box.appendChild(l);
+  });
+}
+
+function renderModels(){
+  let box=$('modelList');
+  box.innerHTML='';
+  Object.keys(models).forEach(k=>{
+    let b=document.createElement('button');
+    b.className='model';
+    b.innerHTML='<b>'+k+'</b><span>Inserir bloco clínico reutilizável</span>';
+    b.onclick=()=>{
+      let target=/Exame/.test(k)?'exame':/Alta|Reavaliação/.test(k)?'emtempo':'conduta';
+      $(target).value+=(val(target)?'\n':'')+models[k];
+      gen();
+    };
+    box.appendChild(b);
+  });
+}
+
+function buildAudit(force=true){
+  let c=checked('#auditChecks');
+  let flags=checked('#redFlags');
+  let alto=val('altoCusto');
+  let txt=[];
+  txt.push(val('necessidade')+' JUSTIFICADA NO CONTEXTO DE '+SC+'.');
+  if(c.length) txt.push('CRITÉRIOS OBJETIVOS DOCUMENTADOS: '+c.join(', ')+'.');
+  if(flags.length) txt.push('SINAIS DE ALERTA OU RISCO ASSOCIADO: '+flags.join(', ')+'.');
+  if(alto){
+    txt.push(
+      'EXAME DE ALTO CUSTO SOLICITADO: '+alto+
+      '. HIPÓTESE A AVALIAR: '+(val('exameHipotese')||'A DEFINIR')+
+      '. IMPACTO ESPERADO NA CONDUTA: '+(val('exameImpacto')||'DEFINIÇÃO DE DESTINO E TRATAMENTO')+
+      '. MÉTODOS MAIS SIMPLES SÃO INSUFICIENTES NESTE CONTEXTO POR: '+(val('exameInsuf')||'RISCO CLÍNICO E NECESSIDADE DE MAIOR ACURÁCIA DIAGNÓSTICA')+'.'
+    );
+  }
+  txt.push('A CONDUTA VISA REDUZIR RISCO DE DETERIORAÇÃO, EVITAR ALTA INSEGURA E DOCUMENTAR DECISÃO ALINHADA À ESTRATIFICAÇÃO CLÍNICA.');
+  if(force || !val('just')) $('just').value=txt.join(' ');
+}
+
+function section(title,content){
+  let c=upper(content);
+  return c ? title.toUpperCase()+'\n'+c : '';
+}
+
+function vitals(){
+  return [
+    'PA '+(val('pa')||'NA'),
+    'FC '+(val('fc')||'NA'),
+    'FR '+(val('fr')||'NA'),
+    'SATO2 '+(val('sat')||'NA'),
+    'TAX '+(val('tax')||'NA'),
+    val('hgt') && 'HGT '+val('hgt'),
+    val('dor') && 'DOR '+val('dor'),
+    val('score') && 'SCORE '+val('score')
+  ].filter(Boolean).join('\n');
+}
+
+function scenarioDetails(){
+  return scenarios[SC].fields.map((f,i)=>
+    val('sf'+i) ? f.toUpperCase()+': '+val('sf'+i) : ''
+  ).filter(Boolean).join('\n');
+}
+
+function base(){
+  let parts=['EVOLUÇÃO PRONTO SOCORRO HOSPITAL MERIDIONAL SERRA'];
+  if(val('paciente')) parts.push('PACIENTE\n'+val('paciente'));
+  parts.push('QUEIXA PRINCIPAL\n'+SC);
+  parts.push(section('HISTÓRIA DA DOENÇA ATUAL', val('hda')+'\n'+(val('tempo')?'TEMPO: '+val('tempo'):'')+'\n'+scenarioDetails()));
+  parts.push(section('HISTÓRIA PATOLÓGICA PREGRESSA', 'COMORBIDADES, MEDICAÇÕES, ALERGIAS E ANTECEDENTES CONFORME REGISTRO CLÍNICO DISPONÍVEL.'));
+  parts.push(section('SINAIS VITAIS', vitals()));
+  parts.push(section('EXAME FÍSICO DIRECIONADO', val('exame')));
+  parts.push(section('EXAMES COMPLEMENTARES', val('exames')));
+  parts.push(section('HIPÓTESES DIAGNÓSTICAS', val('hd')));
+
+  let flags=checked('#redFlags');
+  if(flags.length) parts.push(section('RED FLAGS DOCUMENTADAS', flags.join('\n')));
+  if(val('just')) parts.push(section('JUSTIFICATIVA TÉCNICA PARA AUDITORIA', val('just')));
+  parts.push(section('CONDUTA MÉDICA', val('conduta')));
+  if(val('emtempo')) parts.push(section('EM TEMPO / REAVALIAÇÃO', val('emtempo')));
+  parts.push('DESTINO PROVÁVEL\n'+val('destino'));
+
+  return parts.filter(Boolean).join('\n\n').toUpperCase();
+}
+
+function gen(force=false){
+  if(!edited || force){
+    $('out').value=base();
+    edited=false;
+  }
+
+  $('oePrompt').value=
+    'Paciente adulto no PS com '+SC+
+    '. HDA: '+val('hda')+
+    '. Red flags: '+checked('#redFlags').join(', ')+
+    '. HD: '+val('hd').replace(/\n/g,'; ')+
+    '. Quais diretrizes, critérios de gravidade, indicação de exame/internação e critérios de alta segura se aplicam? Não há identificadores do paciente.';
+
+  save();
+  updateQuality();
+  checkConsistency();
+}
+
+function checkConsistency(){
+  let w=[];
+  if(!val('hda')) w.push('HDA ausente ou fraca.');
+  if(!(val('pa')||val('fc')||val('sat'))) w.push('Sinais vitais não documentados.');
+  if(!val('hd')) w.push('Hipótese diagnóstica ausente.');
+  if(!val('conduta')) w.push('Conduta ausente.');
+  if(/DOR TORÁCICA/.test(SC) && !/ECG/i.test(val('exames')+' '+val('conduta'))) w.push('Dor torácica sem ECG registrado.');
+  if(/DISPNEIA/.test(SC) && !val('sat')) w.push('Dispneia sem saturação documentada.');
+  if(/SEPSE|FEBRE/.test(SC) && !/FOCO|URIN|PULMON|ABDOM|PELE/i.test(val('hda')+' '+val('hd')+' '+val('exames'))) w.push('Síndrome infecciosa sem foco presumido descrito.');
+  if(val('altoCusto') && (!val('exameHipotese')||!val('exameImpacto')||!val('exameInsuf'))) w.push('Exame de alto custo sem hipótese, impacto e insuficiência de método simples completos.');
+  if(/INTERNAÇÃO/.test(val('destino')+' '+val('necessidade')) && !val('just')) w.push('Internação sem justificativa formal.');
+
+  $('warnings').innerHTML = w.length
+    ? w.map(x=>'<div class="warnitem">'+x+'</div>').join('')
+    : '<div class="warnitem okitem">Sem inconsistências críticas detectadas para cópia.</div>';
+
+  $('kpiPend').textContent=w.length;
+  return w;
+}
+
+function updateQuality(){
+  let items=[
+    val('hda'),
+    val('hd'),
+    val('conduta'),
+    (val('pa')||val('fc')||val('sat')),
+    val('exame'),
+    val('just') || checked('#auditChecks').length
+  ];
+  let pct=Math.round(items.filter(Boolean).length/items.length*100);
+  $('kpiCompleto').textContent=pct+'%';
+  $('kpiRisco').textContent=checked('#redFlags').length;
+}
+
+function save(){
+  let o={MODE,SC};
+  fields.forEach(id=>o[id]=val(id));
+  try{ localStorage.setItem('hms_station_v1',JSON.stringify(o)); }catch(e){}
+}
+
+function load(){
+  try{
+    let o=JSON.parse(localStorage.getItem('hms_station_v1')||'{}');
+    if(o.MODE) MODE=o.MODE;
+    if(o.SC) SC=o.SC;
+    fields.forEach(id=>{
+      if(o[id]!=null && $(id)) $(id).value=o[id];
+    });
+  }catch(e){}
+}
+
+document.querySelectorAll('[data-layer]').forEach(b=>{
+  b.onclick=()=>{
+    document.querySelectorAll('[data-layer]').forEach(x=>x.classList.toggle('on',x===b));
+    document.querySelectorAll('.layer').forEach(x=>x.classList.add('hidden'));
+    $(b.dataset.layer).classList.remove('hidden');
+  };
+});
+
+document.querySelectorAll('[data-mode]').forEach(b=>{
+  b.onclick=()=>{
+    MODE=b.dataset.mode;
+    document.querySelectorAll('[data-mode]').forEach(x=>x.classList.toggle('on',x===b));
+    $('necessidade').value =
+      MODE==='internacao' ? 'INTERNAÇÃO CLÍNICA' :
+      MODE==='parecer' ? 'PARECER ESPECIALISTA' :
+      MODE==='exame' ? 'EXAME DE ALTO CUSTO' :
+      'OBSERVAÇÃO CLÍNICA';
+    buildAudit(false);
+    gen(true);
+  };
+});
+
+fields.forEach(id=>{
+  $(id)?.addEventListener('input',()=>gen());
+});
+
+$('out').addEventListener('input',()=>edited=true);
+
+$('btnBuildAudit').onclick = $('btnAuditTop').onclick = ()=>{
+  buildAudit(true);
+  gen(true);
+};
+
+$('regen').onclick=()=>gen(true);
+
+$('finalCheck').onclick=()=>{
+  document.querySelector('[data-layer="consistencia"]').click();
+  checkConsistency();
+};
+
+$('copy').onclick = $('copyTop').onclick = async ()=>{
+  checkConsistency();
+  try{
+    await navigator.clipboard.writeText($('out').value);
+  }catch(e){
+    $('out').select();
+    document.execCommand('copy');
+  }
+};
+
+$('copyOE').onclick = async ()=>{
+  try{
+    await navigator.clipboard.writeText($('oePrompt').value);
+  }catch(e){
+    $('oePrompt').select();
+    document.execCommand('copy');
+  }
+};
+
+$('newCase').onclick=()=>{
+  if(confirm('Limpar dados e iniciar nova evolução?')){
+    localStorage.removeItem('hms_station_v1');
+    location.reload();
+  }
+};
+
+$('duplicateCase').onclick=()=>{
+  localStorage.setItem('hms_station_v1_copy',localStorage.getItem('hms_station_v1')||'{}');
+  alert('Rascunho duplicado no navegador.');
+};
+
+load();
+renderQps();
+renderAudit();
+renderModels();
+setScenario(SC);
+const activeModeBtn=document.querySelector('[data-mode="'+MODE+'"]');
+if(activeModeBtn) activeModeBtn.classList.add('on');
+gen(true);
 </script>
 </body>
 </html>
